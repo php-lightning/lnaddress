@@ -45,8 +45,8 @@ Once the web server is configured to rewrite url requests `.well-known/lnurlp/an
 
 Then, the script needs to be in the subdirectory `.well-known/lnurlp/` of your web root directory of your web server such as https://www.yourwebsite.dne/.well-known/lnurlp/ points to your `$WEBROOT/.well-known/lnurlp/` directory.
 
-## Set API Key
-Please change the script line 15 `'api_key' => ''` in order to set your LNbits **invoice/read key**, it should then look like `'api_key' => 'deadbeefc0ffee1337abcdef01234567'`
+## Set API endpoint & API Key
+Please change the script line 14 to set the `api_endpoint`, then line 15 `api_key` in order to set your LNbits **invoice/read key**.
 
 ## Customization
 You might want to change some of the script variables, the following variable can be changed 
