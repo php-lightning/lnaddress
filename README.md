@@ -9,7 +9,6 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
     + [Nginx](#nginx)
     + [Apache](#apache)
   * [Without rewriting URL](#without-rewriting-url)
-    + [Apache](#apache-1)
 - [Usage](#usage)
   * [Rename & move the script to the right directory](#rename--move-the-script-to-the-right-directory)
   * [Set API endpoint & API Key](#set-api-endpoint--api-key)
@@ -57,9 +56,6 @@ Please note that `.htaccess` file will not be read if the Apache configuration d
 
 ## Without rewriting URL
 You might be able to configure your web server to let the PHP backend handle specific files, in that way the script can be named without `.php` extension and URL rewriting is thus not needed.
-
-### Apache
-*Apache example to be added (.htaccess file)*
 
 # Usage
 ## Rename & move the script to the right directory
