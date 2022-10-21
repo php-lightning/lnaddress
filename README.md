@@ -1,9 +1,14 @@
 # PHP Lightning Address
 PHP Lightning Address is an easy way to get a [lightning address](https://lightningaddress.com/) just with one php script file.
 
+# Table of contents
+*ToC to be added*
+
 # Prerequisite
 - [x] Web server with PHP backend
 - [x] LNbits Lightning implementation backend
+- Please note that **LNbits doesn't need to be on the same server**
+- *You can use https://legend.lnbits.com/ for testing purpose*
 - [x] Web server **must** be able to be configured :
   - [x] to rewrite URL requests **OR**
   - [x] to let the PHP backend handle specific file(s) that don't have a `.php` extension
@@ -39,6 +44,9 @@ Please note that `.htaccess` file will not be read if the Apache configuration d
 ## Without rewriting URL
 You might be able to configure your web server to let the PHP backend handle specific files, in that way the script can be named without `.php` extension and URL rewriting is thus not needed.
 
+### Apache
+*Apache example to be added (.htaccess file)*
+
 # Usage
 ## Rename & move the script to the right directory
 Once the web server is configured to rewrite url requests `.well-known/lnurlp/anything` to `.well-known/lnurlp/anything.php`,  `lnaddress.php` script needs to be renamed with the wanted username part of the [lightning address](https://lightningaddress.com/), such as for a wanted ln address `ben@anything.dne`, the script must be named `ben.php`.
@@ -47,6 +55,13 @@ Then, the script needs to be in the subdirectory `.well-known/lnurlp/` of your w
 
 ## Set API endpoint & API Key
 Please change the script line 14 to set the `api_endpoint`, then line 15 `api_key` in order to set your LNbits **invoice/read key**.
+```php
+$backend_options['lnbits'] = [
+        'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
+        'api_key' => ''                             // put your lnbits read key here
+];
+```
+
 
 ## Customization
 You might want to change some of the script variables, the following variable can be changed 
