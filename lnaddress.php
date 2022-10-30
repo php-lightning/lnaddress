@@ -22,7 +22,11 @@ $username = str_replace('.php', '', basename(__FILE__));
 $ln_address = $username.'@'.$_SERVER['HTTP_HOST'];
 
 // Modify the description if you want to custom it
+// This will be the description on the wallet that pays your ln address
 $description = 'Pay to '.$ln_address;
+
+// Success payment message, this is the confirmation message that the person who paid will see once your ln address has received sats
+$success_msg = 'Payment received!';
 
 // min & max amount, in msat (sat/1000)
 $minSendable = 100000; // default min sendable : 100 sats minimum
@@ -106,7 +110,7 @@ if(!$_GET['amount']) {
                 if($backend_data->status == 'OK') {
                         $resp_payload['pr'] = $backend_data->pr;
                         $resp_payload['status'] = 'OK';
-                        $resp_payload['successAction'] = ['tag' => 'message', 'message' => 'Payment received!'];
+                        $resp_payload['successAction'] = ['tag' => 'message', 'message' => $success_msg];
                         $resp_payload['routes'] = array();
                         $resp_payload['disposable'] = false;
                 } else {

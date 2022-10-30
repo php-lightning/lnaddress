@@ -78,6 +78,7 @@ The following variable can be changed
 |     Variable    |                   comment                  |       default value      |
 | :------------- | :----------------------------------------  | :----------------------- |
 | `$description` | Description of the payment for the sender   | Pay to *user@domain.tld* |
+| `$success_msg` | Confirmation message to display on payment success | Payment received! |
 | `$minSendable` | Minimum amount of **millisats** to send      | 100000 |
 | `$maxSendable` | Maximum amount of **millisats** to send      | 10000000000 |
 | `$image_file`  | Path to a JPG picture, it will be displayed on the sender confirmation screen | *no picture* |
