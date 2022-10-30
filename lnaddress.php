@@ -8,7 +8,8 @@ header("Content-Type: application/json");
 # better error handling
 # support other backends
 
-$backend = 'lnbits';    // lnbits is the only supported backend for now
+// Backend settings, for now lnbits is the only backend supported, please set api_endpoint & api_key below
+$backend = 'lnbits';    
 $backend_options = array();
 $backend_options['lnbits'] = [
         'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
@@ -27,15 +28,18 @@ $description = 'Pay to '.$ln_address;
 $minSendable = 100000; // default min sendable : 100 sats minimum
 $maxSendable = 10000000000; // default max sendable : 10 000 000 sats max
 
-// Modify the following line with the picture you want to use, if you don't want to show a picture, leave an empty string
+// Modify the following line with the path to the picture you want to display, if you don't want to show a picture, leave an empty string
+// Beware that a heavy picture will make the wallet fails to execute lightning address process! 136536 bytes maximum for base64 encoded picture data
 $image_file = '';
 
 // From this line, except if you know what you're doing, you don't need to change anything.
 
-// comment feature not yet implemented
+// Comment feature not yet implemented, future use
 $allow_comment = false;
 $max_comment_length = 0;
 
+// requestinvoice($backend, $backend_options, $amount, $metadata, $lnaddr, $comment_allowed, $comment)
+// This function handles flows with the backend
 function requestinvoice($backend='lnbits', $backend_options, $amount, $metadata, $lnaddr, $comment_allowed=false, $comment=NULL) {
         if($backend == 'lnbits') {
                 $http_method = 'POST';
@@ -70,13 +74,15 @@ function requestinvoice($backend='lnbits', $backend_options, $amount, $metadata,
         }
 }
 
-$metadata = '[["text/plain","'.$description.'"],["text/identifier","'.$ln_address.'"]';
-
 if(!empty($image_file)) {
-        $metadata .= ',["image/jpeg;base64","'.base64_encode(file_get_contents($image_file)).'"]';
+        $img_metadata = ',["image/jpeg;base64","'.base64_encode(file_get_contents($image_file)).'"]';
+} else {
+        $img_metadata = '';
 }
-$metadata .= ']';
 
+$metadata = '[["text/plain","'.$description.'"],["text/identifier","'.$ln_address.'"]'.$img_metadata.']';
+
+// payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
 $data = [
         "callback" => 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
         "maxSendable" => $maxSendable,
