@@ -14,7 +14,7 @@ header("Content-Type: application/json");
 
 // Backend settings, for now lnbits is the only backend supported, please set api_endpoint & api_key below
 $backend = 'lnbits';
-$backend_options = array();
+$backend_options = [];
 $backend_options['lnbits'] = [
     'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
     'api_key' => ''                             // put your lnbits read key here

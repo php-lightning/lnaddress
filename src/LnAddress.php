@@ -6,6 +6,8 @@ namespace PhpLightning;
 
 final class LnAddress
 {
+    private const DEFAULT_BACKEND = 'lnbits';
+
     private HttpApiInterface $httpApi;
 
     public function __construct(HttpApiInterface $httpApi)
@@ -19,9 +21,9 @@ final class LnAddress
      *     api_endpoint: string,
      *     api_key?: string,
      *   }
-     * } $backend_options
+     * } $backendOptions
      */
-    public function generateInvoice(string $backend = 'lnbits', array $backend_options = []): void
+    public function generateInvoice(string $backend = self::DEFAULT_BACKEND, array $backendOptions = []): void
     {
 ## Written by Benjamin Phạm-Bachelart
 ## Feel free to copy, change, redistribute
@@ -72,7 +74,7 @@ final class LnAddress
                 $http_method = 'POST';
                 $api_route = '/api/v1/payments';
 
-                $http_body = array();
+                $http_body = [];
                 $http_body['out'] = false;
                 $http_body['amount'] = $amount;
                 $http_body['unhashed_description'] = bin2hex($metadata);
@@ -96,8 +98,9 @@ final class LnAddress
                     $json_response = json_decode($req_result);
                     return (json_encode(['status' => 'OK', 'pr' => $json_response->payment_request]));
                 }
-                // backend handled
             }
+            // backend handled
+            return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
         };
 
         if (!empty($image_file)) {
@@ -123,15 +126,15 @@ final class LnAddress
         } else {
             $amount = filter_var($_GET['amount'], FILTER_VALIDATE_INT);
             if ($amount < $minSendable || $amount > $maxSendable) {
-                $resp_payload = array();
+                $resp_payload = [];
                 $resp_payload['status'] = 'ERROR';
                 $resp_payload['reason'] = 'Amount is not between minimum and maximum sendable amount';
             } else {
-                $resp_payload = array();
+                $resp_payload = [];
                 $backend_data = json_decode(
                     $requestinvoice(
                         $backend,
-                        $backend_options['lnbits'],
+                        $backendOptions[$backend] ?? [],
                         $amount / 1000,
                         $metadata,
                         $ln_address
@@ -141,7 +144,7 @@ final class LnAddress
                     $resp_payload['pr'] = $backend_data->pr;
                     $resp_payload['status'] = 'OK';
                     $resp_payload['successAction'] = ['tag' => 'message', 'message' => $success_msg];
-                    $resp_payload['routes'] = array();
+                    $resp_payload['routes'] = [];
                     $resp_payload['disposable'] = false;
                 } else {
                     $resp_payload['status'] = $backend_data->status;
