@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace tests;
 
+use PhpLightning\ConfigInterface;
 use PhpLightning\HttpApiInterface;
 use PhpLightning\LnAddress;
 use PHPUnit\Framework\TestCase;
@@ -21,14 +22,12 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 123456;
-
+        $amount = 123456;
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice('unknow', $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, 'unknow', $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -47,9 +46,7 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 123456;
+        $amount = 123456;
 
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
@@ -57,8 +54,9 @@ final class LnAddressTest extends TestCase
                 'payment_request' => 'any payment_request',
             ], JSON_THROW_ON_ERROR)
         );
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice(self::BACKEND, $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -83,9 +81,7 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 123456;
+        $amount = 123456;
 
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
@@ -93,8 +89,9 @@ final class LnAddressTest extends TestCase
                 'payment_request' => 'any payment_request',
             ], JSON_THROW_ON_ERROR)
         );
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice('unknown', $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, 'unknown', $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -113,9 +110,7 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 0;
+        $amount = 0;
 
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
@@ -123,8 +118,9 @@ final class LnAddressTest extends TestCase
                 'payment_request' => 'any payment_request',
             ], JSON_THROW_ON_ERROR)
         );
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice(self::BACKEND, $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -150,14 +146,13 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 123456;
+        $amount = 123456;
 
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice(self::BACKEND, $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -176,14 +171,13 @@ final class LnAddressTest extends TestCase
             ]
         ];
 
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $_SERVER['REQUEST_URI'] = '/ping';
-        $_GET['amount'] = 0;
+        $amount = 0;
 
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
-        $lnAddress = new LnAddress($httpApi);
-        $lnAddress->generateInvoice(self::BACKEND, $backend_options);
+
+        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
+        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
 
         $this->expectOutputString(
             json_encode([
@@ -198,5 +192,14 @@ final class LnAddressTest extends TestCase
                 'commentAllowed' => 0,
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
         );
+    }
+
+    private function stubConfig(): ConfigInterface
+    {
+        $config = $this->createStub(ConfigInterface::class);
+        $config->method('getHttpHost')->willReturn('localhost');
+        $config->method('getRequestUri')->willReturn('/ping');
+
+        return $config;
     }
 }

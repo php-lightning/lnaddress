@@ -8,11 +8,19 @@ final class LnAddress
 {
     private const DEFAULT_BACKEND = 'lnbits';
 
-    private HttpApiInterface $httpApi;
+    /** @var int 100 Minimum in msat (sat/1000) */
+    private const DEFAULT_MIN_SENDABLE = 100_000;
 
-    public function __construct(HttpApiInterface $httpApi)
+    /** @var int 10 000 000 Max in msat (sat/1000) */
+    private const DEFAULT_MAX_SENDABLE = 10_000_000_000;
+
+    private HttpApiInterface $httpApi;
+    private ConfigInterface $config;
+
+    public function __construct(HttpApiInterface $httpApi, ConfigInterface $config)
     {
         $this->httpApi = $httpApi;
+        $this->config = $config;
     }
 
     /**
@@ -23,20 +31,11 @@ final class LnAddress
      *   }
      * } $backendOptions
      */
-    public function generateInvoice(string $backend = self::DEFAULT_BACKEND, array $backendOptions = []): void
+    public function generateInvoice(int $amount, string $backend = self::DEFAULT_BACKEND, array $backendOptions = []): void
     {
-## Written by Benjamin Phạm-Bachelart
-## Feel free to copy, change, redistribute
-## CC License BY-NC-SA
-
-## Todo
-# better error handling
-# support other backends
-
-
 // automatically define the ln address based on filename & host, this shouldn't be changed
         $username = str_replace('.php', '', basename(__FILE__));
-        $ln_address = $username . '@' . $_SERVER['HTTP_HOST'] ?? '';
+        $ln_address = $username . '@' . $this->config->getHttpHost();
 
 // Modify the description if you want to custom it
 // This will be the description on the wallet that pays your ln address
@@ -45,9 +44,8 @@ final class LnAddress
 // Success payment message, this is the confirmation message that the person who paid will see once your ln address has received sats
         $success_msg = 'Payment received!';
 
-// min & max amount, in msat (sat/1000)
-        $minSendable = 100000; // default min sendable : 100 sats minimum
-        $maxSendable = 10000000000; // default max sendable : 10 000 000 sats max
+        $minSendable = self::DEFAULT_MIN_SENDABLE;
+        $maxSendable = self::DEFAULT_MAX_SENDABLE;
 
 // Modify the following line with the path to the picture you want to display, if you don't want to show a picture, leave an empty string
 // Beware that a heavy picture will make the wallet fails to execute lightning address process! 136536 bytes maximum for base64 encoded picture data
@@ -72,7 +70,7 @@ final class LnAddress
 
 // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
         $data = [
-            "callback" => 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+            "callback" => 'https://' . $this->config->getHttpHost() . $this->config->getRequestUri(),
             "maxSendable" => $maxSendable,
             "minSendable" => $minSendable,
             "metadata" => $metadata,
@@ -80,10 +78,9 @@ final class LnAddress
             "commentAllowed" => $allow_comment ? $max_comment_length : 0
         ];
 
-        if (!$_GET['amount']) {
+        if ($amount === 0) {
             print(json_encode($data, JSON_UNESCAPED_SLASHES));
         } else {
-            $amount = filter_var($_GET['amount'], FILTER_VALIDATE_INT);
             if ($amount < $minSendable || $amount > $maxSendable) {
                 $resp_payload = [];
                 $resp_payload['status'] = 'ERROR';

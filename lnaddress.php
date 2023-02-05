@@ -2,6 +2,7 @@
 
 use PhpLightning\HttpApi;
 use PhpLightning\LnAddress;
+use PhpLightning\ServerConfig;
 
 $cwd = (string)getcwd();
 if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
@@ -20,8 +21,11 @@ $backend_options['lnbits'] = [
     'api_key' => ''                             // put your lnbits read key here
 ];
 
+$amount = filter_var($_GET['amount'] ?? 0, FILTER_VALIDATE_INT);
+
 $lnAddress = new LnAddress(
-    new HttpApi()
+    new HttpApi(),
+    new ServerConfig()
 );
 
-$lnAddress->generateInvoice($backend, $backend_options);
+$lnAddress->generateInvoice($amount, $backend, $backend_options);
