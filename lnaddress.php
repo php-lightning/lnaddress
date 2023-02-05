@@ -28,4 +28,6 @@ $lnAddress = new LnAddress(
     new ServerConfig()
 );
 
-$lnAddress->generateInvoice($amount, $backend, $backend_options);
+$invoice = $lnAddress->generateInvoice($amount, $backend, $backend_options);
+
+echo json_encode($invoice, JSON_THROW_ON_ERROR);

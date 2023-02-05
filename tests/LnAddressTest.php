@@ -19,14 +19,12 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'status' => 'ERROR',
-                'reason' => 'Backend is unreachable',
-            ], JSON_THROW_ON_ERROR),
-        );
+        self::assertSame([
+            'status' => 'ERROR',
+            'reason' => 'Backend is unreachable',
+        ], $actual);
     }
 
     public function test_successful_payment_request_with_amount(): void
@@ -39,20 +37,18 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'pr' => 'any payment_request',
-                'status' => 'OK',
-                'successAction' => [
-                    'tag' => 'message',
-                    'message' => 'Payment received!',
-                ],
-                'routes' => [],
-                'disposable' => false,
-            ], JSON_THROW_ON_ERROR),
-        );
+        self::assertSame([
+            'pr' => 'any payment_request',
+            'status' => 'OK',
+            'successAction' => [
+                'tag' => 'message',
+                'message' => 'Payment received!',
+            ],
+            'routes' => [],
+            'disposable' => false,
+        ], $actual);
     }
 
     public function test_successful_payment_request_with_amount_not_ok(): void
@@ -65,14 +61,12 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'status' => 'ERROR',
-                'reason' => 'Backend is unreachable',
-            ], JSON_THROW_ON_ERROR),
-        );
+        self::assertSame([
+            'status' => 'ERROR',
+            'reason' => 'Backend is unreachable',
+        ], $actual);
     }
 
     public function test_successful_payment_request_without_amount(): void
@@ -85,21 +79,19 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'callback' => 'https://localhost/ping',
-                'maxSendable' => 10000000000,
-                'minSendable' => 100000,
-                'metadata' => json_encode([
-                    ['text/plain', 'Pay to LnAddress@localhost'],
-                    ['text/identifier', 'LnAddress@localhost'],
-                ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-                'tag' => 'payRequest',
-                'commentAllowed' => 0,
+        self::assertSame([
+            'callback' => 'https://localhost/ping',
+            'maxSendable' => 10000000000,
+            'minSendable' => 100000,
+            'metadata' => json_encode([
+                ['text/plain', 'Pay to LnAddress@localhost'],
+                ['text/identifier', 'LnAddress@localhost'],
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-        );
+            'tag' => 'payRequest',
+            'commentAllowed' => 0,
+        ], $actual);
     }
 
     public function test_error_payment_request_with_amount(): void
@@ -108,14 +100,12 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'status' => 'ERROR',
-                'reason' => 'Backend is unreachable',
-            ], JSON_THROW_ON_ERROR),
-        );
+        self::assertSame([
+            'status' => 'ERROR',
+            'reason' => 'Backend is unreachable',
+        ], $actual);
     }
 
     public function test_error_payment_request_without_amount(): void
@@ -124,21 +114,19 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
 
-        $this->expectOutputString(
-            json_encode([
-                'callback' => 'https://localhost/ping',
-                'maxSendable' => 10000000000,
-                'minSendable' => 100000,
-                'metadata' => json_encode([
-                    ['text/plain', 'Pay to LnAddress@localhost'],
-                    ['text/identifier', 'LnAddress@localhost'],
-                ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-                'tag' => 'payRequest',
-                'commentAllowed' => 0,
+        self::assertSame([
+            'callback' => 'https://localhost/ping',
+            'maxSendable' => 10000000000,
+            'minSendable' => 100000,
+            'metadata' => json_encode([
+                ['text/plain', 'Pay to LnAddress@localhost'],
+                ['text/identifier', 'LnAddress@localhost'],
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
-        );
+            'tag' => 'payRequest',
+            'commentAllowed' => 0,
+        ], $actual);
     }
 
     private function stubConfig(): ConfigInterface
