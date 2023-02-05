@@ -90,11 +90,10 @@ final class LnAddress
                 $req_context = stream_context_create($http_req);
                 $req_result = $this->httpApi->get($backend_options['api_endpoint'] . $api_route, $req_context);
 
-                $json_response = json_decode($req_result);
-
-                if ($req_result === false) {
+                if ($req_result === null) {
                     return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
                 } else {
+                    $json_response = json_decode($req_result);
                     return (json_encode(['status' => 'OK', 'pr' => $json_response->payment_request]));
                 }
                 // backend handled

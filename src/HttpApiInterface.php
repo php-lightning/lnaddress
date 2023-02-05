@@ -8,6 +8,8 @@ interface HttpApiInterface
 {
     /**
      * @param ?resource $context
+     *
+     * @return ?string null if occurred an error in the backend
      */
-    public function get(string $uri, $context = null): string;
+    public function get(string $uri, $context = null): ?string;
 }
