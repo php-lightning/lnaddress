@@ -9,4 +9,12 @@ interface ConfigInterface
     public function getHttpHost(): string;
 
     public function getRequestUri(): string;
+
+    /**
+     * @return array{
+     *     api_endpoint: string,
+     *     api_key: string,
+     * }
+     */
+    public function getBackendOptionsFor(string $backend): array;
 }

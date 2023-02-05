@@ -19,11 +19,11 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, 'unknown?');
 
         self::assertSame([
             'status' => 'ERROR',
-            'reason' => 'Backend is unreachable',
+            'reason' => 'Unknown Backend: unknown?',
         ], $actual);
     }
 
@@ -37,7 +37,7 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, self::BACKEND);
 
         self::assertSame([
             'pr' => 'any payment_request',
@@ -51,24 +51,6 @@ final class LnAddressTest extends TestCase
         ], $actual);
     }
 
-    public function test_successful_payment_request_with_amount_not_ok(): void
-    {
-        $httpApi = $this->createStub(HttpApiInterface::class);
-        $httpApi->method('get')->willReturn(
-            json_encode([
-                'payment_request' => 'any payment_request',
-            ], JSON_THROW_ON_ERROR),
-        );
-
-        $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
-
-        self::assertSame([
-            'status' => 'ERROR',
-            'reason' => 'Backend is unreachable',
-        ], $actual);
-    }
-
     public function test_successful_payment_request_without_amount(): void
     {
         $httpApi = $this->createStub(HttpApiInterface::class);
@@ -79,12 +61,12 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(0, self::BACKEND);
 
         self::assertSame([
             'callback' => 'https://localhost/ping',
-            'maxSendable' => 10000000000,
-            'minSendable' => 100000,
+            'maxSendable' => LnAddress::MAX_SENDABLE,
+            'minSendable' => LnAddress::MIN_SENDABLE,
             'metadata' => json_encode([
                 ['text/plain', 'Pay to LnAddress@localhost'],
                 ['text/identifier', 'LnAddress@localhost'],
@@ -100,7 +82,7 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(123456, self::BACKEND);
 
         self::assertSame([
             'status' => 'ERROR',
@@ -114,12 +96,12 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $actual = $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
+        $actual = $lnAddress->generateInvoice(0, self::BACKEND);
 
         self::assertSame([
             'callback' => 'https://localhost/ping',
-            'maxSendable' => 10000000000,
-            'minSendable' => 100000,
+            'maxSendable' => LnAddress::MAX_SENDABLE,
+            'minSendable' => LnAddress::MIN_SENDABLE,
             'metadata' => json_encode([
                 ['text/plain', 'Pay to LnAddress@localhost'],
                 ['text/identifier', 'LnAddress@localhost'],
@@ -134,6 +116,7 @@ final class LnAddressTest extends TestCase
         $config = $this->createStub(ConfigInterface::class);
         $config->method('getHttpHost')->willReturn('localhost');
         $config->method('getRequestUri')->willReturn('/ping');
+        $config->method('getBackendOptionsFor')->willReturn($this->backendOptions());
 
         return $config;
     }
@@ -148,10 +131,8 @@ final class LnAddressTest extends TestCase
     private function backendOptions(): array
     {
         return [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => '',
-            ],
+            'api_endpoint' => 'http://localhost:5000',
+            'api_key' => '',
         ];
     }
 }
