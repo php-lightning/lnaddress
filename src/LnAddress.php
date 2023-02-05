@@ -61,47 +61,6 @@ final class LnAddress
 
 // requestinvoice($backend, $backend_options, $amount, $metadata, $lnaddr, $comment_allowed, $comment)
 // This function handles flows with the backend
-        $requestinvoice = function (
-            $backend,
-            $backend_options,
-            $amount,
-            $metadata,
-            $lnaddr,
-            $comment_allowed = false,
-            $comment = null
-        ) {
-            if ($backend == 'lnbits') {
-                $http_method = 'POST';
-                $api_route = '/api/v1/payments';
-
-                $http_body = [];
-                $http_body['out'] = false;
-                $http_body['amount'] = $amount;
-                $http_body['unhashed_description'] = bin2hex($metadata);
-                //$http_body['description_hash'] = hash('sha256', $metadata);
-
-                $http_req = [
-                    'http' => [
-                        'method' => 'POST',
-                        'header' => "Content-Length: " . strlen(json_encode($http_body))
-                            . "\r\nContent-Type: application/json\r\nX-Api-Key: " . $backend_options["api_key"] . "\r\n",
-                        'content' => json_encode($http_body)
-                    ]
-                ];
-
-                $req_context = stream_context_create($http_req);
-                $req_result = $this->httpApi->get($backend_options['api_endpoint'] . $api_route, $req_context);
-
-                if ($req_result === null) {
-                    return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
-                } else {
-                    $json_response = json_decode($req_result);
-                    return (json_encode(['status' => 'OK', 'pr' => $json_response->payment_request]));
-                }
-            }
-            // backend handled
-            return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
-        };
 
         if (!empty($image_file)) {
             $img_metadata = ',["image/jpeg;base64","' . base64_encode($this->httpApi->get($image_file)) . '"]';
@@ -132,7 +91,7 @@ final class LnAddress
             } else {
                 $resp_payload = [];
                 $backend_data = json_decode(
-                    $requestinvoice(
+                    $this->requestinvoice(
                         $backend,
                         $backendOptions[$backend] ?? [],
                         $amount / 1000,
@@ -153,5 +112,47 @@ final class LnAddress
             }
             print(json_encode($resp_payload));
         }
+    }
+
+    private function requestinvoice(
+        $backend,
+        $backend_options,
+        $amount,
+        $metadata,
+        $lnaddr,
+        $comment_allowed = false,
+        $comment = null
+    ) {
+        if ($backend === self::DEFAULT_BACKEND) {
+            $http_method = 'POST';
+            $api_route = '/api/v1/payments';
+
+            $http_body = [];
+            $http_body['out'] = false;
+            $http_body['amount'] = $amount;
+            $http_body['unhashed_description'] = bin2hex($metadata);
+            //$http_body['description_hash'] = hash('sha256', $metadata);
+
+            $http_req = [
+                'http' => [
+                    'method' => 'POST',
+                    'header' => "Content-Length: " . strlen(json_encode($http_body))
+                        . "\r\nContent-Type: application/json\r\nX-Api-Key: " . $backend_options["api_key"] . "\r\n",
+                    'content' => json_encode($http_body)
+                ]
+            ];
+
+            $req_context = stream_context_create($http_req);
+            $req_result = $this->httpApi->get($backend_options['api_endpoint'] . $api_route, $req_context);
+
+            if ($req_result === null) {
+                return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
+            } else {
+                $json_response = json_decode($req_result);
+                return (json_encode(['status' => 'OK', 'pr' => $json_response->payment_request]));
+            }
+        }
+        // backend handled
+        return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
     }
 }
