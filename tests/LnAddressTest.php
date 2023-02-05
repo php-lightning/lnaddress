@@ -25,7 +25,7 @@ final class LnAddressTest extends TestCase
             json_encode([
                 'status' => 'ERROR',
                 'reason' => 'Backend is unreachable',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
     }
 
@@ -35,7 +35,7 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(
             json_encode([
                 'payment_request' => 'any payment_request',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
@@ -43,15 +43,15 @@ final class LnAddressTest extends TestCase
 
         $this->expectOutputString(
             json_encode([
-                "pr" => "any payment_request",
-                "status" => "OK",
-                "successAction" => [
-                    "tag" => "message",
-                    "message" => "Payment received!",
+                'pr' => 'any payment_request',
+                'status' => 'OK',
+                'successAction' => [
+                    'tag' => 'message',
+                    'message' => 'Payment received!',
                 ],
-                "routes" => [],
-                "disposable" => false,
-            ], JSON_THROW_ON_ERROR)
+                'routes' => [],
+                'disposable' => false,
+            ], JSON_THROW_ON_ERROR),
         );
     }
 
@@ -61,7 +61,7 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(
             json_encode([
                 'payment_request' => 'any payment_request',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
@@ -69,9 +69,9 @@ final class LnAddressTest extends TestCase
 
         $this->expectOutputString(
             json_encode([
-                "status" => "ERROR",
-                "reason" => "Backend is unreachable",
-            ], JSON_THROW_ON_ERROR)
+                'status' => 'ERROR',
+                'reason' => 'Backend is unreachable',
+            ], JSON_THROW_ON_ERROR),
         );
     }
 
@@ -81,7 +81,7 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(
             json_encode([
                 'payment_request' => 'any payment_request',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
@@ -98,7 +98,7 @@ final class LnAddressTest extends TestCase
                 ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
                 'tag' => 'payRequest',
                 'commentAllowed' => 0,
-            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
+            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
         );
     }
 
@@ -114,7 +114,7 @@ final class LnAddressTest extends TestCase
             json_encode([
                 'status' => 'ERROR',
                 'reason' => 'Backend is unreachable',
-            ], JSON_THROW_ON_ERROR)
+            ], JSON_THROW_ON_ERROR),
         );
     }
 
@@ -137,7 +137,7 @@ final class LnAddressTest extends TestCase
                 ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
                 'tag' => 'payRequest',
                 'commentAllowed' => 0,
-            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
+            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
         );
     }
 
@@ -162,8 +162,8 @@ final class LnAddressTest extends TestCase
         return [
             self::BACKEND => [
                 'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
+                'api_key' => '',
+            ],
         ];
     }
 }
