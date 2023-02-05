@@ -45,8 +45,8 @@ final class ServerConfig implements ConfigInterface
     {
         return [
             'lnbits' => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => '',
+                'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
+                'api_key' => ''                             // put your lnbits read key here
             ],
             // ...
         ];
