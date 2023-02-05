@@ -15,19 +15,11 @@ final class LnAddressTest extends TestCase
 
     public function test_unknown_backend(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 123456;
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, 'unknow', $backend_options);
+        $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -39,15 +31,6 @@ final class LnAddressTest extends TestCase
 
     public function test_successful_payment_request_with_amount(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 123456;
-
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
             json_encode([
@@ -56,7 +39,7 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
+        $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -74,15 +57,6 @@ final class LnAddressTest extends TestCase
 
     public function test_successful_payment_request_with_amount_not_ok(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 123456;
-
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
             json_encode([
@@ -91,7 +65,7 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, 'unknown', $backend_options);
+        $lnAddress->generateInvoice(123456, 'unknown', $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -103,15 +77,6 @@ final class LnAddressTest extends TestCase
 
     public function test_successful_payment_request_without_amount(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 0;
-
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(
             json_encode([
@@ -120,7 +85,7 @@ final class LnAddressTest extends TestCase
         );
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
+        $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -139,20 +104,11 @@ final class LnAddressTest extends TestCase
 
     public function test_error_payment_request_with_amount(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 123456;
-
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
+        $lnAddress->generateInvoice(123456, self::BACKEND, $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -164,20 +120,11 @@ final class LnAddressTest extends TestCase
 
     public function test_error_payment_request_without_amount(): void
     {
-        $backend_options = [
-            self::BACKEND => [
-                'api_endpoint' => 'http://localhost:5000',
-                'api_key' => ''
-            ]
-        ];
-
-        $amount = 0;
-
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('get')->willReturn(null);
 
         $lnAddress = new LnAddress($httpApi, $this->stubConfig());
-        $lnAddress->generateInvoice($amount, self::BACKEND, $backend_options);
+        $lnAddress->generateInvoice(0, self::BACKEND, $this->backendOptions());
 
         $this->expectOutputString(
             json_encode([
@@ -201,5 +148,22 @@ final class LnAddressTest extends TestCase
         $config->method('getRequestUri')->willReturn('/ping');
 
         return $config;
+    }
+
+    /**
+     * @return array{
+     *   lnbits: array{
+     *     api_endpoint: string,
+     *     api_key?: string,
+     *   }
+     */
+    private function backendOptions(): array
+    {
+        return [
+            self::BACKEND => [
+                'api_endpoint' => 'http://localhost:5000',
+                'api_key' => ''
+            ]
+        ];
     }
 }
