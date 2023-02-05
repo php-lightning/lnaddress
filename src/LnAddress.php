@@ -97,17 +97,20 @@ final class LnAddress
                         $amount / 1000,
                         $metadata,
                         $ln_address
-                    )
+                    ),
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
                 );
-                if ($backend_data->status == 'OK') {
-                    $resp_payload['pr'] = $backend_data->pr;
+                if ($backend_data['status'] === 'OK') {
+                    $resp_payload['pr'] = $backend_data['pr'];
                     $resp_payload['status'] = 'OK';
                     $resp_payload['successAction'] = ['tag' => 'message', 'message' => $success_msg];
                     $resp_payload['routes'] = [];
                     $resp_payload['disposable'] = false;
                 } else {
-                    $resp_payload['status'] = $backend_data->status;
-                    $resp_payload['reason'] = $backend_data->reason;
+                    $resp_payload['status'] = $backend_data['status'];
+                    $resp_payload['reason'] = $backend_data['reason'];
                 }
             }
             print(json_encode($resp_payload));
@@ -148,8 +151,8 @@ final class LnAddress
             if ($req_result === null) {
                 return (json_encode(['status' => 'ERROR', 'reason' => 'Backend is unreachable']));
             } else {
-                $json_response = json_decode($req_result);
-                return (json_encode(['status' => 'OK', 'pr' => $json_response->payment_request]));
+                $json_response = json_decode($req_result, true, 512, JSON_THROW_ON_ERROR);
+                return (json_encode(['status' => 'OK', 'pr' => $json_response['payment_request']]));
             }
         }
         // backend handled
