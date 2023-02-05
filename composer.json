@@ -1,0 +1,47 @@
+{
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "PhpLightning\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.13",
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.9",
+        "psalm/plugin-phpunit": "^0.18",
+        "symfony/var-dumper": "^5.4",
+        "vimeo/psalm": "^5.4"
+    },
+    "scripts": {
+        "ctal": [
+            "@static-clear-cache",
+            "@csfix",
+            "@test-all"
+        ],
+        "test-all": [
+            "@quality",
+            "@phpunit"
+        ],
+        "quality": [
+            "@csrun",
+            "@psalm",
+            "@phpstan"
+        ],
+        "phpunit": [
+            "@test-phpunit"
+        ],
+        "static-clear-cache": [
+            "XDEBUG_MODE=off vendor/bin/psalm --clear-cache",
+            "XDEBUG_MODE=off vendor/bin/phpstan clear-result-cache"
+        ],
+        "test-phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit",
+        "psalm": "XDEBUG_MODE=off ./vendor/bin/psalm",
+        "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
+        "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
+        "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run"
+    }
+}

@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.phpbench/
+.cache/
+coverage/
+data/
+vendor/
+
+*.cache
+composer.lock
