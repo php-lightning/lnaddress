@@ -1,5 +1,6 @@
 <?php
 
+use PhpLightning\HttpApi;
 use PhpLightning\LnAddress;
 
 $cwd = (string)getcwd();
@@ -19,5 +20,8 @@ $backend_options['lnbits'] = [
     'api_key' => ''                             // put your lnbits read key here
 ];
 
-$lnAddress = new LnAddress();
+$lnAddress = new LnAddress(
+    new HttpApi()
+);
+
 $lnAddress->generateInvoice($backend, $backend_options);

@@ -27,13 +27,22 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(
             json_encode([
                 'payment_request' => 'any payment_request',
-            ])
+            ], JSON_THROW_ON_ERROR)
         );
         $lnAddress = new LnAddress($httpApi);
         $lnAddress->generateInvoice($backend, $backend_options);
 
-        self::expectOutputString(
-            '{"pr":"any payment_request","status":"OK","successAction":{"tag":"message","message":"Payment received!"},"routes":[],"disposable":false}'
+        $this->expectOutputString(
+            json_encode([
+                "pr" => "any payment_request",
+                "status" => "OK",
+                "successAction" => [
+                    "tag" => "message",
+                    "message" => "Payment received!",
+                ],
+                "routes" => [],
+                "disposable" => false,
+            ], JSON_THROW_ON_ERROR)
         );
     }
 
@@ -54,13 +63,23 @@ final class LnAddressTest extends TestCase
         $httpApi->method('get')->willReturn(
             json_encode([
                 'payment_request' => 'any payment_request',
-            ])
+            ], JSON_THROW_ON_ERROR)
         );
         $lnAddress = new LnAddress($httpApi);
         $lnAddress->generateInvoice($backend, $backend_options);
 
-        self::expectOutputString(
-            '{"callback":"https://localhost/ping","maxSendable":10000000000,"minSendable":100000,"metadata":"[[\"text/plain\",\"Pay to LnAddress@localhost\"],[\"text/identifier\",\"LnAddress@localhost\"]]","tag":"payRequest","commentAllowed":0}'
+        $this->expectOutputString(
+            json_encode([
+                'callback' => 'https://localhost/ping',
+                'maxSendable' => 10000000000,
+                'minSendable' => 100000,
+                'metadata' => json_encode([
+                    ['text/plain', 'Pay to LnAddress@localhost'],
+                    ['text/identifier', 'LnAddress@localhost'],
+                ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
+                'tag' => 'payRequest',
+                'commentAllowed' => 0,
+            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
         );
     }
 
@@ -82,8 +101,11 @@ final class LnAddressTest extends TestCase
         $lnAddress = new LnAddress($httpApi);
         $lnAddress->generateInvoice($backend, $backend_options);
 
-        self::expectOutputString(
-            '{"status":"ERROR","reason":"Backend is unreachable"}'
+        $this->expectOutputString(
+            json_encode([
+                'status' => 'ERROR',
+                'reason' => 'Backend is unreachable',
+            ], JSON_THROW_ON_ERROR)
         );
     }
 
@@ -105,8 +127,18 @@ final class LnAddressTest extends TestCase
         $lnAddress = new LnAddress($httpApi);
         $lnAddress->generateInvoice($backend, $backend_options);
 
-        self::expectOutputString(
-            '{"callback":"https://localhost/ping","maxSendable":10000000000,"minSendable":100000,"metadata":"[[\"text/plain\",\"Pay to LnAddress@localhost\"],[\"text/identifier\",\"LnAddress@localhost\"]]","tag":"payRequest","commentAllowed":0}'
+        $this->expectOutputString(
+            json_encode([
+                'callback' => 'https://localhost/ping',
+                'maxSendable' => 10000000000,
+                'minSendable' => 100000,
+                'metadata' => json_encode([
+                    ['text/plain', 'Pay to LnAddress@localhost'],
+                    ['text/identifier', 'LnAddress@localhost'],
+                ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
+                'tag' => 'payRequest',
+                'commentAllowed' => 0,
+            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
         );
     }
 }
