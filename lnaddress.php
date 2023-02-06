@@ -1,6 +1,6 @@
 <?php
 
-use PhpLightning\HttpApi;
+use PhpLightning\FakeHttpApi;
 use PhpLightning\LnAddress;
 use PhpLightning\ServerConfig;
 
@@ -17,13 +17,15 @@ header("Content-Type: application/json");
 // Backend settings, for now lnbits is the only backend supported, please set api_endpoint & api_key below
 $backend = 'lnbits';
 
-$amount = filter_var($_GET['amount'] ?? 0, FILTER_VALIDATE_INT);
+$amount = $argv[1] ?? $_GET['amount'] ?? 0;
+$amount = filter_var($amount, FILTER_VALIDATE_INT);
 
 $lnAddress = new LnAddress(
-    new HttpApi(),
+//    new HttpApi(),   # This is the real http-api client
+    new FakeHttpApi(), # This is for local testing purposes
     new ServerConfig()
 );
 
 $invoice = $lnAddress->generateInvoice($amount, $backend);
 
-echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . PHP_EOL;
