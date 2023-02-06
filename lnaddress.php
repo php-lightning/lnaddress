@@ -26,4 +26,4 @@ $lnAddress = new LnAddress(
 
 $invoice = $lnAddress->generateInvoice($amount, $backend);
 
-echo json_encode($invoice, JSON_THROW_ON_ERROR);
+echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
