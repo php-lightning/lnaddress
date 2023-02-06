@@ -1,8 +1,8 @@
 <?php
 
-use PhpLightning\FakeHttpApi;
-use PhpLightning\LnAddress;
-use PhpLightning\ServerConfig;
+use Gacela\Framework\Bootstrap\GacelaConfig;
+use Gacela\Framework\Gacela;
+use PhpLightning\Lightning;
 
 $cwd = (string)getcwd();
 if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
@@ -11,21 +11,15 @@ if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
 
 require $autoloadPath;
 
-header("Content-Type: application/json");
+Gacela::bootstrap(__DIR__, GacelaConfig::withPhpConfigDefault());
 
-// @see ServerConfig::getAllBackendOptions() to change the api_endpoint and api_key
-// Backend settings, for now lnbits is the only backend supported, please set api_endpoint & api_key below
+// @see `config/default.php` to change the api_endpoint and api_key
+// Backend settings, for now lnbits is the only backend supported
 $backend = 'lnbits';
 
 $amount = $argv[1] ?? $_GET['amount'] ?? 0;
 $amount = filter_var($amount, FILTER_VALIDATE_INT);
 
-$lnAddress = new LnAddress(
-//    new HttpApi(),   # This is the real http-api client
-    new FakeHttpApi(), # This is for local testing purposes
-    new ServerConfig()
-);
-
-$invoice = $lnAddress->generateInvoice($amount, $backend);
+$invoice = Lightning::generateInvoice($amount, $backend);
 
 echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . PHP_EOL;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning;
+namespace PhpLightning\Http\Domain;
 
 interface HttpApiInterface
 {

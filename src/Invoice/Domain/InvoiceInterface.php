@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice;
+namespace PhpLightning\Invoice\Domain;
 
 interface InvoiceInterface
 {

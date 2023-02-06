@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice;
+namespace PhpLightning\Invoice\Domain;
 
-use PhpLightning\HttpApiInterface;
+use PhpLightning\Http\HttpFacadeInterface;
 
 use function strlen;
 
-final class LnBitsInvoice implements InvoiceInterface
+final class LnbitsInvoice implements InvoiceInterface
 {
-    private HttpApiInterface $httpApi;
+    private HttpFacadeInterface $httpFacade;
 
     /** @var array{api_key:string, api_endpoint:string} */
     private array $options;
@@ -18,9 +18,11 @@ final class LnBitsInvoice implements InvoiceInterface
     /**
      * @param array{api_key:string, api_endpoint:string} $options
      */
-    public function __construct(HttpApiInterface $httpApi, array $options)
-    {
-        $this->httpApi = $httpApi;
+    public function __construct(
+        HttpFacadeInterface $httpFacade,
+        array $options,
+    ) {
+        $this->httpFacade = $httpFacade;
         $this->options = $options;
     }
 
@@ -52,7 +54,7 @@ final class LnBitsInvoice implements InvoiceInterface
         ];
 
         $req_context = stream_context_create($http_req);
-        $response = $this->httpApi->get($this->options['api_endpoint'] . $api_route, $req_context);
+        $response = $this->httpFacade->get($this->options['api_endpoint'] . $api_route, $req_context);
 
         if ($response !== null) {
             /** @var array{payment_request?: string} $responseJson */
