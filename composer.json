@@ -2,7 +2,7 @@
     "type": "library",
     "require": {
         "php": ">=7.4",
-        "gacela-project/gacela": "^1.0"
+        "gacela-project/gacela": "^0.32"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.13",
@@ -49,5 +49,11 @@
         "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
         "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run"
-    }
-}
+    },
+    "config": {
+        "preferred-install": "dist",
+        "platform": {
+            "php": "7.4"
+        }
+     }
+ }
