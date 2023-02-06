@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLightning;
 
-use PhpLightning\Invoice\LnBitsInvoice;
+use PhpLightning\Invoice\BackendInvoiceFactory;
 
 final class LnAddress
 {
@@ -15,8 +15,6 @@ final class LnAddress
 
     /** @var int 10 000 000 Max in msat (sat/1000) */
     public const MAX_SENDABLE = 10_000_000_000;
-
-    private const BACKEND_LNBITS = 'lnbits';
 
     private const TAG_PAY_REQUEST = 'payRequest';
 
@@ -35,7 +33,7 @@ final class LnAddress
      */
     public function generateInvoice(
         int $amount,
-        string $backend = self::BACKEND_LNBITS,
+        string $backend = BackendInvoiceFactory::BACKEND_LNBITS,
         string $image_file = '',
     ): array {
         // automatically define the ln address based on filename & host, this shouldn't be changed
@@ -97,19 +95,11 @@ final class LnAddress
 
     private function requestInvoice(string $backend, float $amount, string $metadata): array
     {
-        if ($backend === self::BACKEND_LNBITS) {
-            $lnbits = new LnBitsInvoice(
-                $this->httpApi,
-                $this->config->getBackendOptionsFor($backend),
-            );
+        $invoiceFactory = new BackendInvoiceFactory($this->httpApi, $this->config);
 
-            return $lnbits->requestInvoice($amount, $metadata);
-        }
-
-        return [
-            'status' => 'ERROR',
-            'reason' => 'Unknown Backend: ' . $backend,
-        ];
+        return $invoiceFactory
+            ->createBackend($backend)
+            ->requestInvoice($amount, $metadata);
     }
 
     private function callback(): string

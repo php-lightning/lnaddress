@@ -8,7 +8,7 @@ use PhpLightning\HttpApiInterface;
 
 use function strlen;
 
-final class LnBitsInvoice
+final class LnBitsInvoice implements InvoiceInterface
 {
     private HttpApiInterface $httpApi;
 
@@ -24,6 +24,12 @@ final class LnBitsInvoice
         $this->options = $options;
     }
 
+    /**
+     * @return array {
+     *   status: string,
+     *   reason: string,
+     * }
+     */
     public function requestInvoice(float $amount, string $metadata): array
     {
         $api_route = '/api/v1/payments';
@@ -60,7 +66,7 @@ final class LnBitsInvoice
 
         return [
             'status' => 'ERROR',
-            'reason' => 'Backend is unreachable',
+            'reason' => 'Backend "LnBits" unreachable',
         ];
     }
 }

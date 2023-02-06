@@ -86,7 +86,7 @@ final class LnAddressTest extends TestCase
 
         self::assertSame([
             'status' => 'ERROR',
-            'reason' => 'Backend is unreachable',
+            'reason' => 'Backend "LnBits" unreachable',
         ], $actual);
     }
 
