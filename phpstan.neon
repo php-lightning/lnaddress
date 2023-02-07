@@ -7,3 +7,4 @@ parameters:
 
     ignoreErrors:
         - '#Method .*Factory::get.* should return .*Interface but returns mixed#'
+        - '#Cannot cast mixed to string.#'

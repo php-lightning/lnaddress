@@ -10,7 +10,6 @@ final class HttpConfig extends AbstractConfig
 {
     public function isProd(): bool
     {
-        dump($this->get('mode'));
-        return $this->get('mode') === 'prod';
+        return (string)$this->get('mode') === 'prod';
     }
 }
