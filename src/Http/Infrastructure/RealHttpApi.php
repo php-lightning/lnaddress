@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning;
+namespace PhpLightning\Http\Infrastructure;
 
-final class HttpApi implements HttpApiInterface
+use PhpLightning\Http\Domain\HttpApiInterface;
+
+final class RealHttpApi implements HttpApiInterface
 {
     /**
      * @param ?resource $context

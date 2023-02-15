@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning;
+namespace PhpLightning\Http\Domain;
 
 final class FakeHttpApi implements HttpApiInterface
 {
@@ -13,7 +13,7 @@ final class FakeHttpApi implements HttpApiInterface
      */
     public function get(string $uri, $context = null): ?string
     {
-        return json_encode([
+        return (string)json_encode([
             '$uri' => $uri,
             '$context' => (string)$context,
         ]);

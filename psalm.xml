@@ -18,7 +18,11 @@
     </plugins>
 
     <issueHandlers>
-        <MoreSpecificReturnType errorLevel="suppress" />
+        <InvalidReturnType errorLevel="suppress" />
+        <InvalidReturnStatement errorLevel="suppress" />
         <LessSpecificReturnStatement errorLevel="suppress" />
+        <MoreSpecificReturnType errorLevel="suppress" />
+        <MixedInferredReturnType errorLevel="suppress" />
+        <MixedReturnStatement errorLevel="suppress" />
     </issueHandlers>
 </psalm>

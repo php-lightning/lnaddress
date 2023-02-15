@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning;
+namespace PhpLightning\LnAddress\Domain;
 
-use PhpLightning\Invoice\BackendInvoiceFactory;
+use PhpLightning\Http\HttpFacadeInterface;
+use PhpLightning\Invoice\InvoiceFacadeInterface;
 
-final class LnAddress
+final class InvoiceGenerator
 {
     public const MESSAGE_PAYMENT_RECEIVED = 'Payment received!';
 
@@ -18,13 +19,26 @@ final class LnAddress
 
     private const TAG_PAY_REQUEST = 'payRequest';
 
-    private HttpApiInterface $httpApi;
-    private ConfigInterface $config;
+    private const DEFAULT_BACKEND = 'lnbits';
 
-    public function __construct(HttpApiInterface $httpApi, ConfigInterface $config)
-    {
-        $this->httpApi = $httpApi;
-        $this->config = $config;
+    private InvoiceFacadeInterface $invoiceFacade;
+
+    private HttpFacadeInterface $httpFacade;
+
+    private string $httpHost;
+
+    private string $callback;
+
+    public function __construct(
+        InvoiceFacadeInterface $invoiceFacade,
+        HttpFacadeInterface $httpFacade,
+        string $httpHost,
+        string $callback,
+    ) {
+        $this->invoiceFacade = $invoiceFacade;
+        $this->httpFacade = $httpFacade;
+        $this->httpHost = $httpHost;
+        $this->callback = $callback;
     }
 
     /**
@@ -33,7 +47,7 @@ final class LnAddress
      */
     public function generateInvoice(
         int $amount,
-        string $backend = BackendInvoiceFactory::BACKEND_LNBITS,
+        string $backend = self::DEFAULT_BACKEND,
         string $imageFile = '',
     ): array {
         $lnAddress = $this->generateLnAddress();
@@ -49,7 +63,7 @@ final class LnAddress
         if ($amount === 0) {
             // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
             return [
-                'callback' => $this->generateCallback(),
+                'callback' => $this->callback,
                 'maxSendable' => self::MAX_SENDABLE,
                 'minSendable' => self::MIN_SENDABLE,
                 'metadata' => $metadata,
@@ -65,7 +79,8 @@ final class LnAddress
             ];
         }
 
-        $invoice = $this->requestInvoice($backend, $amount / 1000, $metadata);
+        $invoice = $this->invoiceFacade
+            ->requestInvoice($backend, $amount / 1000, $metadata);
 
         if ($invoice['status'] === 'OK') {
             return $this->okResponse($invoice);
@@ -79,7 +94,7 @@ final class LnAddress
         // automatically define the ln address based on filename & host, this shouldn't be changed
         $username = str_replace('.php', '', basename(__FILE__));
 
-        return $username . '@' . $this->config->getHttpHost();
+        return $username . '@' . $this->httpHost;
     }
 
     private function generateImageMetadata(string $imageFile): string
@@ -87,7 +102,7 @@ final class LnAddress
         if ($imageFile === '') {
             return '';
         }
-        $response = $this->httpApi->get($imageFile);
+        $response = $this->httpFacade->get($imageFile);
         if ($response === null) {
             return '';
         }
@@ -95,24 +110,10 @@ final class LnAddress
         return ',["image/jpeg;base64","' . base64_encode($response) . '"]';
     }
 
-    private function generateCallback(): string
-    {
-        return 'https://' . $this->config->getHttpHost() . $this->config->getRequestUri();
-    }
-
     private function isValidAmount(int $amount): bool
     {
         return $amount >= self::MIN_SENDABLE
             && $amount <= self::MAX_SENDABLE;
-    }
-
-    private function requestInvoice(string $backend, float $amount, string $metadata): array
-    {
-        $invoiceFactory = new BackendInvoiceFactory($this->httpApi, $this->config);
-
-        return $invoiceFactory
-            ->createBackend($backend)
-            ->requestInvoice($amount, $metadata);
     }
 
     private function okResponse(array $invoice): array
