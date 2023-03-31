@@ -1,0 +1,10 @@
+parameters:
+    level: max
+    paths:
+        - %currentWorkingDirectory%/src/
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+
+    ignoreErrors:
+        - '#Method .*Factory::get.* should return .*Interface but returns mixed#'
+        - '#Cannot cast mixed to string.#'
