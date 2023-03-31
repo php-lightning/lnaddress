@@ -7,7 +7,12 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
 composer require php-lightning/lightning-address
 ```
 
+Then you can use it directly from your vendor like:
+```bash
+vendor/bin/lnaddress 100_000
+```
 
+----
 
 ## Table of contents
 - [Prerequisite](#prerequisite)

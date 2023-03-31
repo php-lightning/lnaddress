@@ -23,6 +23,9 @@
             "PhpLightningTest\\": "tests/"
         }
     },
+    "bin": [
+        "lnaddress"
+    ],
     "scripts": {
         "ctal": [
             "@static-clear-cache",
