@@ -21,24 +21,12 @@ final class InvoiceGenerator
 
     private const DEFAULT_BACKEND = 'lnbits';
 
-    private InvoiceFacadeInterface $invoiceFacade;
-
-    private HttpFacadeInterface $httpFacade;
-
-    private string $httpHost;
-
-    private string $callback;
-
     public function __construct(
-        InvoiceFacadeInterface $invoiceFacade,
-        HttpFacadeInterface $httpFacade,
-        string $httpHost,
-        string $callback,
+        private InvoiceFacadeInterface $invoiceFacade,
+        private HttpFacadeInterface $httpFacade,
+        private LnAddressGeneratorInterface $lnAddressGenerator,
+        private string $callback,
     ) {
-        $this->invoiceFacade = $invoiceFacade;
-        $this->httpFacade = $httpFacade;
-        $this->httpHost = $httpHost;
-        $this->callback = $callback;
     }
 
     /**
@@ -50,7 +38,7 @@ final class InvoiceGenerator
         string $backend = self::DEFAULT_BACKEND,
         string $imageFile = '',
     ): array {
-        $lnAddress = $this->generateLnAddress();
+        $lnAddress = $this->lnAddressGenerator->generateLnAddress();
 
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
@@ -87,14 +75,6 @@ final class InvoiceGenerator
         }
 
         return $this->errorResponse($invoice);
-    }
-
-    private function generateLnAddress(): string
-    {
-        // automatically define the ln address based on filename & host, this shouldn't be changed
-        $username = str_replace('.php', '', basename(__FILE__));
-
-        return $username . '@' . $this->httpHost;
     }
 
     private function generateImageMetadata(string $imageFile): string

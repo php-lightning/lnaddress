@@ -7,6 +7,7 @@ namespace PhpLightningTest\LnAddress\Domain;
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\InvoiceFacadeInterface;
 use PhpLightning\LnAddress\Domain\InvoiceGenerator;
+use PhpLightning\LnAddress\Domain\LnAddressGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class InvoiceGeneratorTest extends TestCase
@@ -23,8 +24,11 @@ final class InvoiceGeneratorTest extends TestCase
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);
 
-        $lnAddress = new InvoiceGenerator($invoiceFacade, $httpFacade, self::HTTP_HOST, self::HTTP_CALLBACK);
-        $actual = $lnAddress->generateInvoice(123456, 'unknown?');
+        $lnAddress = $this->createStub(LnAddressGeneratorInterface::class);
+        $lnAddress->method('generateLnAddress')->willReturn(self::HTTP_HOST);
+
+        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, $lnAddress, self::HTTP_CALLBACK);
+        $actual = $invoice->generateInvoice(123456, 'unknown?');
 
         self::assertSame([
             'status' => 'ERROR',
@@ -40,17 +44,19 @@ final class InvoiceGeneratorTest extends TestCase
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);
 
-        $lnAddress = new InvoiceGenerator($invoiceFacade, $httpFacade, self::HTTP_HOST, self::HTTP_CALLBACK);
+        $lnAddress = $this->createStub(LnAddressGeneratorInterface::class);
+        $lnAddress->method('generateLnAddress')->willReturn('ln@address');
 
-        $actual = $lnAddress->generateInvoice(0, self::BACKEND);
+        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, $lnAddress, self::HTTP_CALLBACK);
+        $actual = $invoice->generateInvoice(0, self::BACKEND);
 
         self::assertSame([
             'callback' => 'https://localhost/ping',
             'maxSendable' => InvoiceGenerator::MAX_SENDABLE,
             'minSendable' => InvoiceGenerator::MIN_SENDABLE,
             'metadata' => json_encode([
-                ['text/plain', 'Pay to InvoiceGenerator@localhost'],
-                ['text/identifier', 'InvoiceGenerator@localhost'],
+                ['text/plain', 'Pay to ln@address'],
+                ['text/identifier', 'ln@address'],
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
             'tag' => 'payRequest',
             'commentAllowed' => 0,
@@ -72,9 +78,11 @@ final class InvoiceGeneratorTest extends TestCase
             ], JSON_THROW_ON_ERROR),
         );
 
-        $lnAddress = new InvoiceGenerator($invoiceFacade, $httpFacade, self::HTTP_HOST, self::HTTP_CALLBACK);
+        $lnAddress = $this->createStub(LnAddressGeneratorInterface::class);
+        $lnAddress->method('generateLnAddress')->willReturn('ln@address');
 
-        $actual = $lnAddress->generateInvoice(123456, self::BACKEND);
+        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, $lnAddress, self::HTTP_CALLBACK);
+        $actual = $invoice->generateInvoice(123456, self::BACKEND);
 
         self::assertSame([
             'pr' => 'any payment_request',
@@ -96,9 +104,11 @@ final class InvoiceGeneratorTest extends TestCase
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);
 
-        $lnAddress = new InvoiceGenerator($invoiceFacade, $httpFacade, self::HTTP_HOST, self::HTTP_CALLBACK);
+        $lnAddress = $this->createStub(LnAddressGeneratorInterface::class);
+        $lnAddress->method('generateLnAddress')->willReturn('ln@address');
 
-        $actual = $lnAddress->generateInvoice(100, self::BACKEND);
+        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, $lnAddress, self::HTTP_CALLBACK);
+        $actual = $invoice->generateInvoice(100, self::BACKEND);
 
         self::assertSame([
             'status' => 'ERROR',
