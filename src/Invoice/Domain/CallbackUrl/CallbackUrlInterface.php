@@ -16,5 +16,5 @@ interface CallbackUrlInterface
      *     commentAllowed: bool,
      * }
      */
-    public function getCallbackUrl(string $imageFile = ''): array;
+    public function getCallbackUrl(): array;
 }

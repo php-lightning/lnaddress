@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 
-use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
 use PhpLightning\Invoice\Domain\Transfer\SendableRange;
@@ -19,11 +18,7 @@ final class InvoiceGeneratorTest extends TestCase
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn(['status' => 'ERROR', 'reason' => 'some reason']);
 
-        $httpFacade = $this->createStub(HttpFacadeInterface::class);
-        $httpFacade->method('get')->willReturn(null);
-
         $invoice = new InvoiceGenerator(
-            $httpFacade,
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
@@ -44,15 +39,7 @@ final class InvoiceGeneratorTest extends TestCase
             'pr' => 'any payment_request',
         ]);
 
-        $httpFacade = $this->createStub(HttpFacadeInterface::class);
-        $httpFacade->method('get')->willReturn(
-            json_encode([
-                'payment_request' => 'any payment_request',
-            ], JSON_THROW_ON_ERROR),
-        );
-
         $invoice = new InvoiceGenerator(
-            $httpFacade,
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
@@ -76,11 +63,7 @@ final class InvoiceGeneratorTest extends TestCase
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn([]);
 
-        $httpFacade = $this->createStub(HttpFacadeInterface::class);
-        $httpFacade->method('get')->willReturn(null);
-
         $invoice = new InvoiceGenerator(
-            $httpFacade,
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Domain\LnAddress;
 
-use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\Transfer\SendableRange;
 
@@ -13,18 +12,13 @@ final class InvoiceGenerator
     public const MESSAGE_PAYMENT_RECEIVED = 'Payment received!';
 
     public function __construct(
-        private HttpFacadeInterface $httpFacade,
         private BackendInvoiceInterface $backendInvoice,
         private SendableRange $sendableRange,
         private string $lnAddress,
     ) {
     }
 
-    /**
-     * @param string $imageFile The picture you want to display, if you don't want to show a picture, leave an empty string.
-     *                          Beware that a heavy picture will make the wallet fails to execute lightning address process! 136536 bytes maximum for base64 encoded picture data
-     */
-    public function generateInvoice(int $milliSats, string $imageFile = ''): array
+    public function generateInvoice(int $milliSats): array
     {
         if (!$this->sendableRange->contains($milliSats)) {
             return [
@@ -37,7 +31,8 @@ final class InvoiceGenerator
         // TODO: Make this customizable from some external configuration file
         $description = 'Pay to ' . $this->lnAddress;
 
-        $imageMetadata = $this->generateImageMetadata($imageFile);
+        // TODO: images not implemented yet
+        $imageMetadata = '';
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
         $invoice = $this->backendInvoice->requestInvoice($milliSats / 1000, $metadata);
@@ -47,19 +42,6 @@ final class InvoiceGenerator
         }
 
         return $this->errorResponse($invoice);
-    }
-
-    private function generateImageMetadata(string $imageFile): string
-    {
-        if ($imageFile === '') {
-            return '';
-        }
-        $response = $this->httpFacade->get($imageFile);
-        if ($response === null) {
-            return '';
-        }
-
-        return ',["image/jpeg;base64","' . base64_encode($response) . '"]';
     }
 
     private function okResponse(array $invoice): array

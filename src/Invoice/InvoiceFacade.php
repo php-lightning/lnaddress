@@ -18,10 +18,10 @@ final class InvoiceFacade extends AbstractFacade implements InvoiceFacadeInterfa
             ->getCallbackUrl();
     }
 
-    public function generate(int $milliSats, string $backend): array
+    public function generateInvoice(int $milliSats, string $backend): array
     {
         return $this->getFactory()
             ->createInvoiceGenerator($backend)
-            ->generateInvoice($milliSats, $backend);
+            ->generateInvoice($milliSats);
     }
 }
