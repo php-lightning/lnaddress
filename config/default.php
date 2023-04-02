@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-// This is the default config loaded, no need to have any APP_ENV env variable
-// eg: php lnaddress.php
-
 return [
     'mode' => 'test',
+    'domain' => 'your-domain.com',
+    'receiver' => 'custom-receiver',
     'backends' => [
         'lnbits' => [
             'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
