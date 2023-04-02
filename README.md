@@ -44,6 +44,9 @@ vendor/bin/lnaddress 100_000
 
 More Lightning implementation will be supported in the future.
 
+## Lightning Address flowchart
+<img src="images/lnaddr_workflow.png"  width="30%" height="30%">
+
 # Prerequisite web server configuration
 ## Configure web server to rewrite URL
 ### Nginx
@@ -89,7 +92,7 @@ $backend_options['lnbits'] = [
 ```
 
 ### Customization
-```
+
 The following variable can be changed 
 |     Variable    |                   comment                         |       default value      |
 | :------------- | :------------------------------------------------  | :----------------------- |
@@ -98,7 +101,6 @@ The following variable can be changed
 | `$minSendable` | Minimum amount of **millisats** to send            | 100000                   |
 | `$maxSendable` | Maximum amount of **millisats** to send            | 10000000000              |
 | `$image_file`  | Path to a JPG picture, displayed on the sender confirmation screen | *no picture* |
-```
 
 > **Please note that `$minSendable` and `$maxSendable` do not reflect the actual min/max sendable amount, it depends on the capacity of your LN backend**
 
