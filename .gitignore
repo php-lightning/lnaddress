@@ -8,3 +8,4 @@ vendor/
 
 *.cache
 composer.lock
+config/default-local.php

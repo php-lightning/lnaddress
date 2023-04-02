@@ -16,9 +16,9 @@ final class HttpFactory extends AbstractFactory
 {
     public function createHttpApi(): HttpApiInterface
     {
-        if ($this->getConfig()->isProd()) {
-            return new RealHttpApi();
-        }
+//        if ($this->getConfig()->isProd()) {
+//            return new RealHttpApi(); # TODO: Use Symfony HttpClient instead
+//        }
 
         return new FakeHttpApi();
     }
