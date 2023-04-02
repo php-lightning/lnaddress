@@ -12,27 +12,46 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class GetCallbackUrlFeatureTest extends TestCase
 {
-    protected function setUp(): void
+    public function test_default_values(): void
+    {
+        Gacela::bootstrap(__DIR__, static function (GacelaConfig $config): void {
+            $config->resetInMemoryCache();
+        });
+
+        $tester = new CommandTester(new CallbackUrlCommand());
+        $tester->execute([]);
+        $outputAsJson = json_decode($tester->getDisplay(), true);
+
+        self::assertEquals([
+            'callback' => 'https://localhost/unknown-receiver',
+            'maxSendable' => 10000000000,
+            'minSendable' => 100000,
+            'metadata' => '[["text/plain","Pay to unknown-receiver@localhost"],["text/identifier","unknown-receiver@localhost"]]',
+            'tag' => 'payRequest',
+            'commentAllowed' => false,
+        ], $outputAsJson);
+    }
+
+    public function test_custom_config_values(): void
     {
         Gacela::bootstrap(__DIR__, static function (GacelaConfig $config): void {
             $config->resetInMemoryCache();
             $config->addAppConfigKeyValues([
                 'domain' => 'custom-domain',
                 'receiver' => 'custom-receiver',
+                'min-sendable' => 1_000,
+                'max-sendable' => 2_000,
             ]);
         });
-    }
 
-    public function test_default_values(): void
-    {
         $tester = new CommandTester(new CallbackUrlCommand());
         $tester->execute([]);
         $outputAsJson = json_decode($tester->getDisplay(), true);
 
         self::assertEquals([
             'callback' => 'https://custom-domain/custom-receiver',
-            'maxSendable' => 10_000_000_000,
-            'minSendable' => 100_000,
+            'maxSendable' => 2_000,
+            'minSendable' => 1_000,
             'metadata' => '[["text/plain","Pay to custom-receiver@custom-domain"],["text/identifier","custom-receiver@custom-domain"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,

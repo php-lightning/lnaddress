@@ -22,6 +22,7 @@ final class InvoiceFactory extends AbstractFactory
     {
         return new CallbackUrl(
             $this->getHttpFacade(),
+            $this->getConfig()->getSendableRange(),
             $this->getConfig()->getLnAddress(),
             $this->getConfig()->getCallback(),
         );
@@ -30,8 +31,9 @@ final class InvoiceFactory extends AbstractFactory
     public function createInvoiceGenerator(string $backend): InvoiceGenerator
     {
         return new InvoiceGenerator(
-            $this->createBackend($backend),
             $this->getHttpFacade(),
+            $this->createBackend($backend),
+            $this->getConfig()->getSendableRange(),
             $this->getConfig()->getLnAddress(),
         );
     }
@@ -39,16 +41,16 @@ final class InvoiceFactory extends AbstractFactory
     private function createBackend(string $backend): BackendInvoiceInterface
     {
         return match ($backend) {
-            'lnbits' => $this->createLnBitsBackendInvoice($backend),
+            'lnbits' => $this->createLnBitsBackendInvoice(),
             default => $this->createEmptyBackendInvoice($backend),
         };
     }
 
-    private function createLnBitsBackendInvoice(string $backend): LnbitsBackendInvoice
+    private function createLnBitsBackendInvoice(): LnbitsBackendInvoice
     {
         return new LnbitsBackendInvoice(
             $this->getHttpFacade(),
-            $this->getConfig()->getBackendOptionsFor($backend),
+            $this->getConfig()->getBackendOptionsFor('lnbits'),
         );
     }
 

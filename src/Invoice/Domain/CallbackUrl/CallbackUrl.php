@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\CallbackUrl;
 
 use PhpLightning\Http\HttpFacadeInterface;
+use PhpLightning\Invoice\Domain\Transfer\SendableRange;
 
 final class CallbackUrl implements CallbackUrlInterface
 {
-    /** @var int 100 Minimum in msat (sat/1000) */
-    public const MIN_SENDABLE = 100_000;
-
-    /** @var int 10 000 000 Max in msat (sat/1000) */
-    public const MAX_SENDABLE = 10_000_000_000;
-
     private const TAG_PAY_REQUEST = 'payRequest';
 
     public function __construct(
         private HttpFacadeInterface $httpFacade,
+        private SendableRange $sendableRange,
         private string $lnAddress,
         private string $callback,
     ) {
@@ -36,8 +32,8 @@ final class CallbackUrl implements CallbackUrlInterface
         // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
         return [
             'callback' => $this->callback,
-            'maxSendable' => self::MAX_SENDABLE,
-            'minSendable' => self::MIN_SENDABLE,
+            'maxSendable' => $this->sendableRange->max(),
+            'minSendable' => $this->sendableRange->min(),
             'metadata' => $metadata,
             'tag' => self::TAG_PAY_REQUEST,
             'commentAllowed' => false, // TODO: Not implemented yet

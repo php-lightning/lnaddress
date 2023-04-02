@@ -6,7 +6,7 @@ parameters:
     checkMissingIterableValueType: false
 
     ignoreErrors:
-        - '#Cannot cast mixed to string.#'
+        - '#Cannot cast mixed to .*.#'
         - '#Method PhpLightning\\.*::.* should return array<.*> but returns array#'
         - '#Method PhpLightning\\.*::.* should return array{.*} but returns array#'
         - '#Method PhpLightning\\.*::.* should return .*Interface but returns mixed#'
