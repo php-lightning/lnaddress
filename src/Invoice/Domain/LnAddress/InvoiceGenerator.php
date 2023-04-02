@@ -24,9 +24,9 @@ final class InvoiceGenerator
      * @param string $imageFile The picture you want to display, if you don't want to show a picture, leave an empty string.
      *                          Beware that a heavy picture will make the wallet fails to execute lightning address process! 136536 bytes maximum for base64 encoded picture data
      */
-    public function generateInvoice(int $amount, string $imageFile = ''): array
+    public function generateInvoice(int $milliSats, string $imageFile = ''): array
     {
-        if (!$this->sendableRange->contains($amount)) {
+        if (!$this->sendableRange->contains($milliSats)) {
             return [
                 'status' => 'ERROR',
                 'reason' => 'Amount is not between minimum and maximum sendable amount',
@@ -40,7 +40,7 @@ final class InvoiceGenerator
         $imageMetadata = $this->generateImageMetadata($imageFile);
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
-        $invoice = $this->backendInvoice->requestInvoice($amount / 1000, $metadata);
+        $invoice = $this->backendInvoice->requestInvoice($milliSats / 1000, $metadata);
 
         if ($invoice['status'] === 'OK') {
             return $this->okResponse($invoice);

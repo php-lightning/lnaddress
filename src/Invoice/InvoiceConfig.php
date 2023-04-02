@@ -11,10 +11,10 @@ use RuntimeException;
 final class InvoiceConfig extends AbstractConfig
 {
     /** @var int 100 Minimum in msat (sat/1000) */
-    public const DEFAULT_MIN_SENDABLE = 100_000;
+    private const DEFAULT_MIN_SENDABLE_IN_MILLISATS = 100_000;
 
     /** @var int 10 000 000 Max in msat (sat/1000) */
-    public const DEFAULT_MAX_SENDABLE = 10_000_000_000;
+    private const DEFAULT_MAX_SENDABLE_IN_MILLISATS = 10_000_000_000;
 
     public function getCallback(): string
     {
@@ -46,17 +46,10 @@ final class InvoiceConfig extends AbstractConfig
 
     public function getSendableRange(): SendableRange
     {
-        return SendableRange::withMinMax($this->getMinSendable(), $this->getMaxSendable());
-    }
-
-    private function getMinSendable(): int
-    {
-        return (int)$this->get('min-sendable', self::DEFAULT_MIN_SENDABLE);
-    }
-
-    private function getMaxSendable(): int
-    {
-        return (int)$this->get('max-sendable', self::DEFAULT_MAX_SENDABLE);
+        return SendableRange::withMinMax(
+            (int)$this->get('min-sendable', self::DEFAULT_MIN_SENDABLE_IN_MILLISATS),
+            (int)$this->get('max-sendable', self::DEFAULT_MAX_SENDABLE_IN_MILLISATS),
+        );
     }
 
     private function getDomain(): string

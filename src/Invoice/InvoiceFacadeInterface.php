@@ -24,5 +24,5 @@ interface InvoiceFacadeInterface
      *   reason: string,
      * }
      */
-    public function generate(int $amount, string $backend): array;
+    public function generate(int $milliSats, string $backend): array;
 }
