@@ -5,7 +5,6 @@ declare(strict_types=1);
 use PhpLightning\Invoice\InvoiceConfig;
 
 return [
-    'mode' => 'test',
     'domain' => 'your-domain.com',
     'receiver' => 'custom-receiver',
     'min-sendable' => InvoiceConfig::DEFAULT_MIN_SENDABLE,
