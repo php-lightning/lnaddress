@@ -34,27 +34,23 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
      */
     public function requestInvoice(float $satsAmount, string $metadata): array
     {
-        $api_route = '/api/v1/payments';
+        $endpoint = $this->options['api_endpoint'] . '/api/v1/payments';
 
-        $http_body = [
+        $content = [
             'out' => false,
             'amount' => $satsAmount,
             'unhashed_description' => bin2hex($metadata),
             // 'description_hash' => hash('sha256', $metadata),
         ];
 
-        $http_req = [
-            'http' => [
-                'method' => 'POST',
-                'header' => 'Content-Length: ' . strlen((string)json_encode($http_body)) . "\r\n"
-                    . "Content-Type: application/json\r\n"
-                    . 'X-Api-Key: ' . $this->options['api_key'] . "\r\n",
-                'content' => json_encode($http_body),
+        $response = $this->httpFacade->post($endpoint, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Content-Length' => strlen((string)json_encode($content)),
+                'X-Api-Key' => $this->options['api_key'],
             ],
-        ];
-
-        $req_context = stream_context_create($http_req);
-        $response = $this->httpFacade->post($this->options['api_endpoint'] . $api_route, $req_context);
+            'body' => json_encode($content),
+        ]);
 
         if ($response !== null) {
             /** @var array{payment_request?: string} $responseJson */

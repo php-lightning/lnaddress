@@ -12,14 +12,12 @@ use Gacela\Framework\AbstractFacade;
 final class HttpFacade extends AbstractFacade implements HttpFacadeInterface
 {
     /**
-     * @param ?resource $context
-     *
      * @return ?string null if occurred an error in the backend
      */
-    public function post(string $uri, $context = null): ?string
+    public function post(string $uri, array $options = []): ?string
     {
         return $this->getFactory()
             ->createHttpApi()
-            ->post($uri, $context);
+            ->post($uri, $options);
     }
 }
