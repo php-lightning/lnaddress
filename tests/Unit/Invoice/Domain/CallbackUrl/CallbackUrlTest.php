@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightningTest\Invoice\Domain\CallbackUrl;
+namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;

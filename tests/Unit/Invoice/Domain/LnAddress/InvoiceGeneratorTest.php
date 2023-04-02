@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightningTest\Invoice\Domain\LnAddress;
+namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
