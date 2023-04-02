@@ -9,8 +9,16 @@ composer require php-lightning/lightning-address
 
 Then you can use it directly from your vendor like:
 ```bash
-vendor/bin/lnaddress 100_000
+vendor/bin/lnaddress callback-url
+vendor/bin/lnaddress request-invoice 100_000
 ```
+
+
+---
+
+Current picture gao
+
+<img src="" width="" height="">
 
 ----
 

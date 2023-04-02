@@ -17,13 +17,10 @@ final class InvoiceGenerator
     /** @var int 10 000 000 Max in msat (sat/1000) */
     public const MAX_SENDABLE = 10_000_000_000;
 
-    private const TAG_PAY_REQUEST = 'payRequest';
-
     public function __construct(
         private BackendInvoiceInterface $backendInvoice,
         private HttpFacadeInterface $httpFacade,
-        private LnAddressGeneratorInterface $lnAddressGenerator,
-        private string $callback,
+        private LnAddressGeneratorInterface $lnAddressGenerator
     ) {
     }
 
@@ -44,18 +41,6 @@ final class InvoiceGenerator
 
         $imageMetadata = $this->generateImageMetadata($imageFile);
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
-
-        if ($amount === 0) {
-            // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
-            return [
-                'callback' => $this->callback,
-                'maxSendable' => self::MAX_SENDABLE,
-                'minSendable' => self::MIN_SENDABLE,
-                'metadata' => $metadata,
-                'tag' => self::TAG_PAY_REQUEST,
-                'commentAllowed' => 0, // TODO: Not implemented yet
-            ];
-        }
 
         if (!$this->isValidAmount($amount)) {
             return [
