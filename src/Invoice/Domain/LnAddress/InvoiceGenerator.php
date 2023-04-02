@@ -20,7 +20,7 @@ final class InvoiceGenerator
     public function __construct(
         private BackendInvoiceInterface $backendInvoice,
         private HttpFacadeInterface $httpFacade,
-        private LnAddressGeneratorInterface $lnAddressGenerator
+        private string $lnAddress,
     ) {
     }
 
@@ -32,15 +32,13 @@ final class InvoiceGenerator
         int $amount,
         string $imageFile = '',
     ): array {
-        $lnAddress = $this->lnAddressGenerator->generateLnAddress();
-
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $lnAddress;
+        $description = 'Pay to ' . $this->lnAddress;
 
         $imageMetadata = $this->generateImageMetadata($imageFile);
-        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
+        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
         if (!$this->isValidAmount($amount)) {
             return [

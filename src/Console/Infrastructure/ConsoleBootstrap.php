@@ -15,6 +15,9 @@ final class ConsoleBootstrap extends Application
 {
     use DocBlockResolverAwareTrait;
 
+    /**
+     * @psalm-suppress PossiblyNullArrayOffset
+     */
     protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();

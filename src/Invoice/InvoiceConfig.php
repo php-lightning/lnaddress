@@ -11,12 +11,12 @@ final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string
     {
-        return 'https://' . $this->getHttpHost() . $this->getRequestUri();
+        return sprintf('https://%s/%s', $this->getDomain(), $this->getReceiver());
     }
 
-    public function getHttpHost(): string
+    public function getLnAddress(): string
     {
-        return $_SERVER['HTTP_HOST'] ?? 'localhost';
+        return sprintf('%s@%s', $this->getReceiver(), $this->getDomain());
     }
 
     /**
@@ -37,8 +37,13 @@ final class InvoiceConfig extends AbstractConfig
         return $result;
     }
 
-    private function getRequestUri(): string
+    private function getDomain(): string
     {
-        return $_SERVER['REQUEST_URI'] ?? '/ping';
+        return (string)$this->get('domain', $_SERVER['HTTP_HOST'] ?? 'localhost');
+    }
+
+    private function getReceiver(): string
+    {
+        return (string)$this->get('receiver', $_SERVER['REQUEST_URI'] ?? '"no REQUEST_URI found?"');
     }
 }

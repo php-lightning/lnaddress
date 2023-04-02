@@ -14,8 +14,12 @@ final class GetCallbackUrlFeatureTest extends TestCase
 {
     protected function setUp(): void
     {
-        Gacela::bootstrap(__DIR__, static function (GacelaConfig $config) {
+        Gacela::bootstrap(__DIR__, static function (GacelaConfig $config): void {
             $config->resetInMemoryCache();
+            $config->addAppConfigKeyValues([
+                'domain' => 'custom-domain',
+                'receiver' => 'custom-receiver',
+            ]);
         });
     }
 
@@ -26,12 +30,12 @@ final class GetCallbackUrlFeatureTest extends TestCase
         $outputAsJson = json_decode($tester->getDisplay(), true);
 
         self::assertEquals([
-            "callback" => "https://localhost/ping",
-            "maxSendable" => 10000000000,
-            "minSendable" => 100000,
-            "metadata" => "[[\"text/plain\",\"Pay to FileBaseNameLnAddressGenerator@localhost\"],[\"text/identifier\",\"FileBaseNameLnAddressGenerator@localhost\"]]",
-            "tag" => "payRequest",
-            "commentAllowed" => false
+            'callback' => 'https://custom-domain/custom-receiver',
+            'maxSendable' => 10_000_000_000,
+            'minSendable' => 100_000,
+            'metadata' => '[["text/plain","Pay to custom-receiver@custom-domain"],["text/identifier","custom-receiver@custom-domain"]]',
+            'tag' => 'payRequest',
+            'commentAllowed' => false,
         ], $outputAsJson);
     }
 }

@@ -11,9 +11,7 @@ use PhpLightning\Invoice\Domain\BackendInvoice\EmptyBackendInvoice;
 use PhpLightning\Invoice\Domain\BackendInvoice\LnbitsBackendInvoice;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
-use PhpLightning\Invoice\Domain\LnAddress\FileBaseNameLnAddressGenerator;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
-use PhpLightning\Invoice\Domain\LnAddress\LnAddressGeneratorInterface;
 
 /**
  * @method InvoiceConfig getConfig()
@@ -24,7 +22,7 @@ final class InvoiceFactory extends AbstractFactory
     {
         return new CallbackUrl(
             $this->getHttpFacade(),
-            $this->createLnAddressGenerator(),
+            $this->getConfig()->getLnAddress(),
             $this->getConfig()->getCallback(),
         );
     }
@@ -34,15 +32,7 @@ final class InvoiceFactory extends AbstractFactory
         return new InvoiceGenerator(
             $this->createBackend($backend),
             $this->getHttpFacade(),
-            $this->createLnAddressGenerator(),
-            $this->getConfig()->getCallback(),
-        );
-    }
-
-    private function createLnAddressGenerator(): LnAddressGeneratorInterface
-    {
-        return new FileBaseNameLnAddressGenerator(
-            $this->getConfig()->getHttpHost(),
+            $this->getConfig()->getLnAddress(),
         );
     }
 

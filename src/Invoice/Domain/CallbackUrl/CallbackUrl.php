@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\CallbackUrl;
 
 use PhpLightning\Http\HttpFacadeInterface;
-use PhpLightning\Invoice\Domain\LnAddress\LnAddressGeneratorInterface;
 
 final class CallbackUrl implements CallbackUrlInterface
 {
@@ -19,22 +18,20 @@ final class CallbackUrl implements CallbackUrlInterface
 
     public function __construct(
         private HttpFacadeInterface $httpFacade,
-        private LnAddressGeneratorInterface $lnAddressGenerator,
+        private string $lnAddress,
         private string $callback,
     ) {
     }
 
     public function getCallbackUrl(string $imageFile = ''): array
     {
-        $lnAddress = $this->lnAddressGenerator->generateLnAddress();
-
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $lnAddress;
+        $description = 'Pay to ' . $this->lnAddress;
 
         $imageMetadata = $this->generateImageMetadata($imageFile);
-        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
+        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
         // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
         return [
