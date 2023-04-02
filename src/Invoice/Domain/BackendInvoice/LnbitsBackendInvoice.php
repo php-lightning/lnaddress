@@ -6,8 +6,6 @@ namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Http\HttpFacadeInterface;
 
-use function strlen;
-
 final class LnbitsBackendInvoice implements BackendInvoiceInterface
 {
     private HttpFacadeInterface $httpFacade;
@@ -46,10 +44,9 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
         $response = $this->httpFacade->post($endpoint, [
             'headers' => [
                 'Content-Type' => 'application/json',
-                'Content-Length' => strlen((string)json_encode($content)),
                 'X-Api-Key' => $this->options['api_key'],
             ],
-            'body' => json_encode($content),
+            'body' => json_encode($content, JSON_THROW_ON_ERROR),
         ]);
 
         if ($response !== null) {
