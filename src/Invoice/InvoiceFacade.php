@@ -11,7 +11,14 @@ use Gacela\Framework\AbstractFacade;
  */
 final class InvoiceFacade extends AbstractFacade implements InvoiceFacadeInterface
 {
-    public function generate(int $amount, string $backend = InvoiceFactory::BACKEND_LNBITS): array
+    public function getCallbackUrl(): array
+    {
+        return $this->getFactory()
+            ->createCallbackUrl()
+            ->getCallbackUrl();
+    }
+
+    public function generate(int $amount, string $backend): array
     {
         return $this->getFactory()
             ->createInvoiceGenerator($backend)

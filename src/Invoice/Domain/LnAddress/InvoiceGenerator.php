@@ -17,13 +17,10 @@ final class InvoiceGenerator
     /** @var int 10 000 000 Max in msat (sat/1000) */
     public const MAX_SENDABLE = 10_000_000_000;
 
-    private const TAG_PAY_REQUEST = 'payRequest';
-
     public function __construct(
         private BackendInvoiceInterface $backendInvoice,
         private HttpFacadeInterface $httpFacade,
-        private LnAddressGeneratorInterface $lnAddressGenerator,
-        private string $callback,
+        private string $lnAddress,
     ) {
     }
 
@@ -35,27 +32,13 @@ final class InvoiceGenerator
         int $amount,
         string $imageFile = '',
     ): array {
-        $lnAddress = $this->lnAddressGenerator->generateLnAddress();
-
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $lnAddress;
+        $description = 'Pay to ' . $this->lnAddress;
 
         $imageMetadata = $this->generateImageMetadata($imageFile);
-        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
-
-        if ($amount === 0) {
-            // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
-            return [
-                'callback' => $this->callback,
-                'maxSendable' => self::MAX_SENDABLE,
-                'minSendable' => self::MIN_SENDABLE,
-                'metadata' => $metadata,
-                'tag' => self::TAG_PAY_REQUEST,
-                'commentAllowed' => 0, // TODO: Not implemented yet
-            ];
-        }
+        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
         if (!$this->isValidAmount($amount)) {
             return [

@@ -26,8 +26,39 @@ composer require php-lightning/lightning-address
 ```
 
 Then you can use it directly from your vendor like:
+
+#### get a callback-url 
 ```bash
-vendor/bin/lnaddress 100_000
+vendor/bin/lnaddress callback-url
+
+OUTPUT example:
+{
+    "callback": "https:\/\/your-domain.com\/custom-receiver",
+    "maxSendable": 10000000000,
+    "minSendable": 100000,
+    "metadata": "[[\"text\/plain\",\"Pay to custom-receiver@your-domain.com\"],[\"text\/identifier\",\"custom-receiver@your-domain.com\"]]",
+    "tag": "payRequest",
+    "commentAllowed": false
+}
+
+```
+
+#### request an invoice
+```bash
+php index.php 10000000
+
+OUTPUT example:
+{
+    "pr": "No payment_request found",
+    "status": "OK",
+    "successAction": {
+        "tag": "message",
+        "message": "Payment received!"
+    },
+    "routes": [],
+    "disposable": false
+}
+
 ```
 
 ----
