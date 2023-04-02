@@ -18,11 +18,18 @@ final class BackendsConfig implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     *
+     * @return array<string,array>
+     */
     public function jsonSerialize(): array
     {
+        /**  @var array<string,array> $result */
         $result = [];
 
         foreach ($this->configs as $config) {
+            /** @psalm-suppress MixedAssignment */
             $result[$config->getBackendName()] = $config->jsonSerialize();
         }
 

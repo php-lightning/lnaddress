@@ -26,6 +26,12 @@ final class LnBitsBackendConfig implements BackendConfigInterface
         return 'lnbits';
     }
 
+    /**
+     * @return array{
+     *     api_endpoint: string,
+     *     api_key: string
+     * }
+     */
     public function jsonSerialize(): array
     {
         return [
