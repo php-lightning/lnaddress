@@ -10,7 +10,7 @@ use PhpLightning\Invoice\Infrastructure\Command\CallbackUrlCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-final class GetCallbackUrlFeatureTest extends TestCase
+final class GetCallbackUrlFeature extends TestCase
 {
     public function test_default_values(): void
     {
