@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice\Domain;
+namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
-final class EmptyInvoice implements InvoiceInterface
+final class EmptyBackendInvoice implements BackendInvoiceInterface
 {
     private string $name;
 

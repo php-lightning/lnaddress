@@ -9,6 +9,16 @@ use RuntimeException;
 
 final class InvoiceConfig extends AbstractConfig
 {
+    public function getCallback(): string
+    {
+        return 'https://' . $this->getHttpHost() . $this->getRequestUri();
+    }
+
+    public function getHttpHost(): string
+    {
+        return $_SERVER['HTTP_HOST'] ?? 'localhost';
+    }
+
     /**
      * @return array{
      *     api_endpoint: string,
@@ -25,5 +35,10 @@ final class InvoiceConfig extends AbstractConfig
         }
 
         return $result;
+    }
+
+    private function getRequestUri(): string
+    {
+        return $_SERVER['REQUEST_URI'] ?? '/ping';
     }
 }

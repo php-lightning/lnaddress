@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice\Domain;
+namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Http\HttpFacadeInterface;
 
 use function strlen;
 
-final class LnbitsInvoice implements InvoiceInterface
+final class LnbitsBackendInvoice implements BackendInvoiceInterface
 {
     private HttpFacadeInterface $httpFacade;
 

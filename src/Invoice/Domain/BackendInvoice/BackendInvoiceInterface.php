@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice\Domain;
+namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
-interface InvoiceInterface
+interface BackendInvoiceInterface
 {
+    public const DEFAULT_BACKEND = 'lnbits';
+
     /**
      * @return array {
      *   status: string,

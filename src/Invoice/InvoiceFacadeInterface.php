@@ -12,5 +12,5 @@ interface InvoiceFacadeInterface
      *   reason: string,
      * }
      */
-    public function requestInvoice(string $backend, float $amount, string $metadata);
+    public function generate(int $amount, string $backend): array;
 }

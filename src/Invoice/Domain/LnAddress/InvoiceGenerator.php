@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\LnAddress\Domain;
+namespace PhpLightning\Invoice\Domain\LnAddress;
 
 use PhpLightning\Http\HttpFacadeInterface;
-use PhpLightning\Invoice\InvoiceFacadeInterface;
+use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 
 final class InvoiceGenerator
 {
@@ -19,10 +19,8 @@ final class InvoiceGenerator
 
     private const TAG_PAY_REQUEST = 'payRequest';
 
-    private const DEFAULT_BACKEND = 'lnbits';
-
     public function __construct(
-        private InvoiceFacadeInterface $invoiceFacade,
+        private BackendInvoiceInterface $backendInvoice,
         private HttpFacadeInterface $httpFacade,
         private LnAddressGeneratorInterface $lnAddressGenerator,
         private string $callback,
@@ -35,7 +33,6 @@ final class InvoiceGenerator
      */
     public function generateInvoice(
         int $amount,
-        string $backend = self::DEFAULT_BACKEND,
         string $imageFile = '',
     ): array {
         $lnAddress = $this->lnAddressGenerator->generateLnAddress();
@@ -67,8 +64,7 @@ final class InvoiceGenerator
             ];
         }
 
-        $invoice = $this->invoiceFacade
-            ->requestInvoice($backend, $amount / 1000, $metadata);
+        $invoice = $this->backendInvoice->requestInvoice($amount / 1000, $metadata);
 
         if ($invoice['status'] === 'OK') {
             return $this->okResponse($invoice);

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpLightningTest\LnAddress\Domain;
+namespace PhpLightningTest\Invoice\Domain\LnAddress;
 
 use PhpLightning\Http\HttpFacadeInterface;
-use PhpLightning\Invoice\InvoiceFacadeInterface;
-use PhpLightning\LnAddress\Domain\InvoiceGenerator;
-use PhpLightning\LnAddress\Domain\LnAddressGeneratorInterface;
+use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
+use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
+use PhpLightning\Invoice\Domain\LnAddress\LnAddressGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class InvoiceGeneratorTest extends TestCase
@@ -18,7 +18,7 @@ final class InvoiceGeneratorTest extends TestCase
 
     public function test_unknown_backend(): void
     {
-        $invoiceFacade = $this->createStub(InvoiceFacadeInterface::class);
+        $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn(['status' => 'ERROR', 'reason' => 'some reason']);
 
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
@@ -38,7 +38,7 @@ final class InvoiceGeneratorTest extends TestCase
 
     public function test_without_amount(): void
     {
-        $invoiceFacade = $this->createStub(InvoiceFacadeInterface::class);
+        $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn(['status' => 'OK']);
 
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
@@ -65,7 +65,7 @@ final class InvoiceGeneratorTest extends TestCase
 
     public function test_successful_payment_request_with_amount(): void
     {
-        $invoiceFacade = $this->createStub(InvoiceFacadeInterface::class);
+        $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn([
             'status' => 'OK',
             'pr' => 'any payment_request',
@@ -98,8 +98,8 @@ final class InvoiceGeneratorTest extends TestCase
 
     public function test_invalid_amount(): void
     {
-        $invoiceFacade = $this->createStub(InvoiceFacadeInterface::class);
-        $invoiceFacade->method('requestInvoice')->willReturn(null);
+        $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
+        $invoiceFacade->method('requestInvoice')->willReturn([]);
 
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);

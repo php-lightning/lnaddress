@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\LnAddress\Domain;
+namespace PhpLightning\Invoice\Domain\LnAddress;
 
 interface LnAddressGeneratorInterface
 {
