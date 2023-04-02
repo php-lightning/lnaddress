@@ -19,15 +19,24 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
   </a>
 </p>
 
-### Installation
+## Installation
 
 ```bash
 composer require php-lightning/lightning-address
 ```
 
+Set up the config for the project. You can start copying the default config:
+
+```bash
+mkdir config && cp vendor/php-lightning/lightning-address/config/default.php config/
+```
+
+> HINT: Do not forget adding your LnBits Api Key.
+
 Then you can use it directly from your vendor like:
 
-#### get a callback-url 
+### Get a callback url
+
 ```bash
 vendor/bin/lnaddress callback-url
 
@@ -43,7 +52,14 @@ OUTPUT example:
 
 ```
 
-#### request an invoice
+### Request an invoice
+
+1) copy the index.php from vendor into the root of your project: 
+```bash
+cp vendor/php-lightning/lightning-address/index.php .
+```
+
+2) you can run the index.php server as if it was yours
 ```bash
 php index.php 10000000
 
@@ -58,7 +74,6 @@ OUTPUT example:
     "routes": [],
     "disposable": false
 }
-
 ```
 
 ----
