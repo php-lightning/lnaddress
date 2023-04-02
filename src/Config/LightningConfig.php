@@ -9,6 +9,7 @@ use PhpLightning\Config\Backend\BackendConfigInterface;
 
 final class LightningConfig implements JsonSerializable
 {
+    private string $mode = 'test';
     private ?string $domain = null;
     private ?string $receiver = null;
     private ?int $minSendable = null;
@@ -18,6 +19,12 @@ final class LightningConfig implements JsonSerializable
     public function __construct()
     {
         $this->backends = new BackendsConfig();
+    }
+
+    public function setMode(string $mode): self
+    {
+        $this->mode = $mode;
+        return $this;
     }
 
     public function setDomain(string $domain): self
@@ -53,6 +60,7 @@ final class LightningConfig implements JsonSerializable
     public function jsonSerialize(): array
     {
         $result = [
+            'mode' => $this->mode,
             'backends' => $this->backends->jsonSerialize(),
         ];
 

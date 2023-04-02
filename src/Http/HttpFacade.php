@@ -16,10 +16,10 @@ final class HttpFacade extends AbstractFacade implements HttpFacadeInterface
      *
      * @return ?string null if occurred an error in the backend
      */
-    public function get(string $uri, $context = null): ?string
+    public function post(string $uri, $context = null): ?string
     {
         return $this->getFactory()
             ->createHttpApi()
-            ->get($uri, $context);
+            ->post($uri, $context);
     }
 }

@@ -21,7 +21,6 @@ final class InvoiceFactory extends AbstractFactory
     public function createCallbackUrl(): CallbackUrlInterface
     {
         return new CallbackUrl(
-            $this->getHttpFacade(),
             $this->getConfig()->getSendableRange(),
             $this->getConfig()->getLnAddress(),
             $this->getConfig()->getCallback(),
@@ -31,7 +30,6 @@ final class InvoiceFactory extends AbstractFactory
     public function createInvoiceGenerator(string $backend): InvoiceGenerator
     {
         return new InvoiceGenerator(
-            $this->getHttpFacade(),
             $this->createBackend($backend),
             $this->getConfig()->getSendableRange(),
             $this->getConfig()->getLnAddress(),

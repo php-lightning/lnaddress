@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 
-use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\Transfer\SendableRange;
@@ -17,10 +16,7 @@ final class CallbackUrlTest extends TestCase
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')->willReturn(['status' => 'OK']);
 
-        $httpFacade = $this->createStub(HttpFacadeInterface::class);
-
         $callbackUrl = new CallbackUrl(
-            $httpFacade,
             SendableRange::withMinMax(1_000, 5_000),
             'ln@address',
             'https://domain/receiver',

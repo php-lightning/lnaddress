@@ -11,5 +11,5 @@ interface HttpApiInterface
      *
      * @return ?string null if occurred an error in the backend
      */
-    public function get(string $uri, $context = null): ?string;
+    public function post(string $uri, $context = null): ?string;
 }

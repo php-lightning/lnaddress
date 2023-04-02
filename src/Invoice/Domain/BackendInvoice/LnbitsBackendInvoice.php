@@ -54,7 +54,7 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
         ];
 
         $req_context = stream_context_create($http_req);
-        $response = $this->httpFacade->get($this->options['api_endpoint'] . $api_route, $req_context);
+        $response = $this->httpFacade->post($this->options['api_endpoint'] . $api_route, $req_context);
 
         if ($response !== null) {
             /** @var array{payment_request?: string} $responseJson */
