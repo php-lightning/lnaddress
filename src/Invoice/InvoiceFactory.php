@@ -39,13 +39,22 @@ final class InvoiceFactory extends AbstractFactory
 
     private function createBackend(string $backend): BackendInvoiceInterface
     {
-        if ($backend === self::BACKEND_LNBITS) {
-            return new LnbitsBackendInvoice(
-                $this->getHttpFacade(),
-                $this->getConfig()->getBackendOptionsFor($backend),
-            );
-        }
+        return match ($backend) {
+            self::BACKEND_LNBITS => $this->createLnBitsBackendInvoice($backend),
+            default => $this->createEmptyBackendInvoice($backend),
+        };
+    }
 
+    private function createLnBitsBackendInvoice(string $backend): LnbitsBackendInvoice
+    {
+        return new LnbitsBackendInvoice(
+            $this->getHttpFacade(),
+            $this->getConfig()->getBackendOptionsFor($backend),
+        );
+    }
+
+    private function createEmptyBackendInvoice(string $backend): EmptyBackendInvoice
+    {
         return new EmptyBackendInvoice($backend);
     }
 
