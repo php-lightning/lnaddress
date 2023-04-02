@@ -19,7 +19,7 @@ final class EmptyBackendInvoice implements BackendInvoiceInterface
      *   reason: string,
      * }
      */
-    public function requestInvoice(float $amount, string $metadata): array
+    public function requestInvoice(float $satsAmount, string $metadata): array
     {
         return [
             'status' => 'ERROR',

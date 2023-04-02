@@ -32,13 +32,13 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
      *   reason: string,
      * }
      */
-    public function requestInvoice(float $amount, string $metadata): array
+    public function requestInvoice(float $satsAmount, string $metadata): array
     {
         $api_route = '/api/v1/payments';
 
         $http_body = [
             'out' => false,
-            'amount' => $amount,
+            'amount' => $satsAmount,
             'unhashed_description' => bin2hex($metadata),
             // 'description_hash' => hash('sha256', $metadata),
         ];

@@ -7,6 +7,7 @@ namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
+use PhpLightning\Invoice\Domain\Transfer\SendableRange;
 use PHPUnit\Framework\TestCase;
 
 final class InvoiceGeneratorTest extends TestCase
@@ -21,8 +22,13 @@ final class InvoiceGeneratorTest extends TestCase
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);
 
-        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, 'ln@address');
-        $actual = $invoice->generateInvoice(123456, 'unknown?');
+        $invoice = new InvoiceGenerator(
+            $httpFacade,
+            $invoiceFacade,
+            SendableRange::withMinMax(1_000, 3_000),
+            'ln@address',
+        );
+        $actual = $invoice->generateInvoice(2_000, 'unknown?');
 
         self::assertSame([
             'status' => 'ERROR',
@@ -45,8 +51,13 @@ final class InvoiceGeneratorTest extends TestCase
             ], JSON_THROW_ON_ERROR),
         );
 
-        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, 'ln@address');
-        $actual = $invoice->generateInvoice(123456, self::BACKEND);
+        $invoice = new InvoiceGenerator(
+            $httpFacade,
+            $invoiceFacade,
+            SendableRange::withMinMax(1_000, 3_000),
+            'ln@address',
+        );
+        $actual = $invoice->generateInvoice(2_000, self::BACKEND);
 
         self::assertSame([
             'pr' => 'any payment_request',
@@ -68,7 +79,12 @@ final class InvoiceGeneratorTest extends TestCase
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
         $httpFacade->method('get')->willReturn(null);
 
-        $invoice = new InvoiceGenerator($invoiceFacade, $httpFacade, 'ln@address');
+        $invoice = new InvoiceGenerator(
+            $httpFacade,
+            $invoiceFacade,
+            SendableRange::withMinMax(1_000, 3_000),
+            'ln@address',
+        );
         $actual = $invoice->generateInvoice(100, self::BACKEND);
 
         self::assertSame([

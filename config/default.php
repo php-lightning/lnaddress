@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-return [
-    'mode' => 'test',
-    'domain' => 'your-domain.com',
-    'receiver' => 'custom-receiver',
-    'backends' => [
-        'lnbits' => [
-            'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
-            'api_key' => '',                            // put your lnbits read key here
-        ],
-    ],
-];
+use PhpLightning\Config\Backend\LnBitsBackendConfig;
+use PhpLightning\Config\LightningConfig;
+
+return (new LightningConfig())
+    ->setDomain('https://your-domain.com')
+    ->setReceiver('custom-receiver')
+    ->setMinSendable(100_000)
+    ->setMaxSendable(10_000_000_000)
+    ->addBackend(
+        (new LnBitsBackendConfig())
+            ->setApiEndpoint('http://localhost:5000')  // lnbits endpoint : protocol://host:port
+            ->setApiKey('XYZ'),  // put your lnbits read key here
+    );

@@ -7,7 +7,7 @@ namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
-use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
+use PhpLightning\Invoice\Domain\Transfer\SendableRange;
 use PHPUnit\Framework\TestCase;
 
 final class CallbackUrlTest extends TestCase
@@ -19,12 +19,17 @@ final class CallbackUrlTest extends TestCase
 
         $httpFacade = $this->createStub(HttpFacadeInterface::class);
 
-        $callbackUrl = new CallbackUrl($httpFacade, 'ln@address', 'https://domain/receiver');
+        $callbackUrl = new CallbackUrl(
+            $httpFacade,
+            SendableRange::withMinMax(1_000, 5_000),
+            'ln@address',
+            'https://domain/receiver',
+        );
 
-        self::assertSame([
+        self::assertEquals([
             'callback' => 'https://domain/receiver',
-            'maxSendable' => InvoiceGenerator::MAX_SENDABLE,
-            'minSendable' => InvoiceGenerator::MIN_SENDABLE,
+            'minSendable' => 1_000,
+            'maxSendable' => 5_000,
             'metadata' => json_encode([
                 ['text/plain', 'Pay to ln@address'],
                 ['text/identifier', 'ln@address'],

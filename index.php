@@ -20,10 +20,10 @@ header("Access-Control-Allow-Origin: *");
 // Backend settings, for now lnbits is the only backend supported
 $backend = 'lnbits';
 
-$amount = $argv[1] ?? $_GET['amount'] ?? 0;
-$amount = filter_var($amount, FILTER_VALIDATE_INT);
+$milliSats = $argv[1] ?? $_GET['amount'] ?? 0;
+$milliSats = filter_var($milliSats, FILTER_VALIDATE_INT);
 
-$invoice = (new InvoiceFacade())->generate($amount, $backend);
+$invoice = (new InvoiceFacade())->generate($milliSats, $backend);
 
 echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . PHP_EOL;
 

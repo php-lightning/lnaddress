@@ -6,20 +6,16 @@ namespace PhpLightning\Invoice\Domain\LnAddress;
 
 use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
+use PhpLightning\Invoice\Domain\Transfer\SendableRange;
 
 final class InvoiceGenerator
 {
     public const MESSAGE_PAYMENT_RECEIVED = 'Payment received!';
 
-    /** @var int 100 Minimum in msat (sat/1000) */
-    public const MIN_SENDABLE = 100_000;
-
-    /** @var int 10 000 000 Max in msat (sat/1000) */
-    public const MAX_SENDABLE = 10_000_000_000;
-
     public function __construct(
-        private BackendInvoiceInterface $backendInvoice,
         private HttpFacadeInterface $httpFacade,
+        private BackendInvoiceInterface $backendInvoice,
+        private SendableRange $sendableRange,
         private string $lnAddress,
     ) {
     }
@@ -28,10 +24,14 @@ final class InvoiceGenerator
      * @param string $imageFile The picture you want to display, if you don't want to show a picture, leave an empty string.
      *                          Beware that a heavy picture will make the wallet fails to execute lightning address process! 136536 bytes maximum for base64 encoded picture data
      */
-    public function generateInvoice(
-        int $amount,
-        string $imageFile = '',
-    ): array {
+    public function generateInvoice(int $milliSats, string $imageFile = ''): array
+    {
+        if (!$this->sendableRange->contains($milliSats)) {
+            return [
+                'status' => 'ERROR',
+                'reason' => 'Amount is not between minimum and maximum sendable amount',
+            ];
+        }
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
@@ -40,14 +40,7 @@ final class InvoiceGenerator
         $imageMetadata = $this->generateImageMetadata($imageFile);
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
-        if (!$this->isValidAmount($amount)) {
-            return [
-                'status' => 'ERROR',
-                'reason' => 'Amount is not between minimum and maximum sendable amount',
-            ];
-        }
-
-        $invoice = $this->backendInvoice->requestInvoice($amount / 1000, $metadata);
+        $invoice = $this->backendInvoice->requestInvoice($milliSats / 1000, $metadata);
 
         if ($invoice['status'] === 'OK') {
             return $this->okResponse($invoice);
@@ -67,12 +60,6 @@ final class InvoiceGenerator
         }
 
         return ',["image/jpeg;base64","' . base64_encode($response) . '"]';
-    }
-
-    private function isValidAmount(int $amount): bool
-    {
-        return $amount >= self::MIN_SENDABLE
-            && $amount <= self::MAX_SENDABLE;
     }
 
     private function okResponse(array $invoice): array
