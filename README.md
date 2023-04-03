@@ -21,64 +21,12 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
 
 ## Installation
 
-### Demo template
-
-Use the **demo template**: [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
-
----
-
-### Manual installation
-
 ```bash
 composer require php-lightning/lightning-address
 ```
 
-Set up the config for the project. You can start copying the default config:
-
-```bash
-cp -p  vendor/php-lightning/lightning-address/lightning-config.php .
-```
-
-> HINT: Do not forget adding your LnBits Api Key.
-
-Then you can use it directly from your vendor like:
-
-#### Get a callback url
-
-```bash
-vendor/bin/lnaddress callback-url
-
-OUTPUT example:
-{
-    "callback": "https:\/\/your-domain.com\/custom-receiver",
-    "maxSendable": 10000000000,
-    "minSendable": 100000,
-    "metadata": "[[\"text\/plain\",\"Pay to custom-receiver@your-domain.com\"],[\"text\/identifier\",\"custom-receiver@your-domain.com\"]]",
-    "tag": "payRequest",
-    "commentAllowed": false
-}
-
-```
-
-#### Request an invoice
-
-You can use the index.php from the vendor project directly:
-
-```bash
-php vendor/php-lightning/lightning-address/index.php 100000
-
-OUTPUT example:
-{
-    "pr": "lnbc1u1p...z7jh2p",
-    "status": "OK",
-    "successAction": {
-        "tag": "message",
-        "message": "Payment received!"
-    },
-    "routes": [],
-    "disposable": false
-}
-```
+Check the **demo template**: 
+[https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
 
 ----
 
