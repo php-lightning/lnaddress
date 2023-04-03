@@ -61,7 +61,8 @@ Check the **demo template**:
 More Lightning implementation will be supported in the future.
 
 ## Lightning Address flowchart
-<img src="images/lnaddr_workflow.png"  width="30%" height="30%">
+
+<img src="images/lnaddr_workflow.png" alt="Lightning Address flowchart">
 
 # Prerequisite web server configuration
 ## Configure web server to rewrite URL
