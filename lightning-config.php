@@ -7,7 +7,7 @@ use PhpLightning\Config\LightningConfig;
 
 return (new LightningConfig())
     ->setMode('test')
-    ->setDomain('https://your-domain.com')
+    ->setDomain('your-domain.com')
     ->setReceiver('custom-receiver')
     ->setMinSendable(100_000)
     ->setMaxSendable(10_000_000_000)
