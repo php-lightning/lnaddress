@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 use Gacela\Framework\Gacela;
 use PhpLightning\Console\Infrastructure\ConsoleBootstrap;
 use PhpLightning\Lightning;
