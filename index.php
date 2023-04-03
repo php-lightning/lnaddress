@@ -23,7 +23,11 @@ $backend = 'lnbits';
 $milliSats = $argv[1] ?? $_GET['amount'] ?? 0;
 $milliSats = filter_var($milliSats, FILTER_VALIDATE_INT);
 
-$invoice = (new InvoiceFacade())->generateInvoice($milliSats, $backend);
+try {
+    $invoice = (new InvoiceFacade())->generateInvoice($milliSats, $backend);
+} catch (Throwable $e) {
+    dd($e);
+}
 
 echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . PHP_EOL;
 

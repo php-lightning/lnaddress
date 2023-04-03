@@ -51,6 +51,7 @@
             "XDEBUG_MODE=off vendor/bin/phpstan clear-result-cache"
         ],
         "test-phpunit": "XDEBUG_MODE=off ./vendor/bin/phpunit",
+        "test-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --testsuite=unit,feature --coverage-html=data/coverage-html",
         "psalm": "XDEBUG_MODE=off ./vendor/bin/psalm",
         "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
