@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use Gacela\Framework\Bootstrap\GacelaConfig;
 use Gacela\Framework\Gacela;
 use PhpLightning\Console\Infrastructure\ConsoleBootstrap;
+use PhpLightning\Lightning;
 
 $cwd = (string)getcwd();
 if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
@@ -12,7 +12,7 @@ if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
 
 require $autoloadPath;
 
-Gacela::bootstrap(__DIR__, GacelaConfig::withPhpConfigDefault());
+Gacela::bootstrap($cwd, Lightning::configFn());
 
 $bootstrap = new ConsoleBootstrap();
 $bootstrap->run();

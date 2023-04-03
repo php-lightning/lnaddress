@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-use Gacela\Framework\Bootstrap\GacelaConfig;
+header("Access-Control-Allow-Origin: *");
+
 use Gacela\Framework\Gacela;
-use PhpLightning\Invoice\InvoiceFacade;
+use PhpLightning\Lightning;
 
 $cwd = (string)getcwd();
 if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
@@ -12,22 +13,16 @@ if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
 
 require $autoloadPath;
 
-Gacela::bootstrap(__DIR__, GacelaConfig::withPhpConfigDefault());
+Gacela::bootstrap($cwd, Lightning::configFn());
 
-header("Access-Control-Allow-Origin: *");
-
-// @see `config/default.php` to change the api_endpoint and api_key
-// Backend settings, for now lnbits is the only backend supported
+// For now lnbits is the only backend supported
 $backend = 'lnbits';
 
-$milliSats = $argv[1] ?? $_GET['amount'] ?? 0;
-$milliSats = filter_var($milliSats, FILTER_VALIDATE_INT);
+$milliSats = (int)($argv[1] ?? $_GET['amount'] ?? 0);
 
 try {
-    $invoice = (new InvoiceFacade())->generateInvoice($milliSats, $backend);
+    echo Lightning::generateInvoice($milliSats, $backend);
+    echo PHP_EOL;
 } catch (Throwable $e) {
-    dd($e);
+    dd($e); // Intentional to have a better output error in case of exception
 }
-
-echo json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . PHP_EOL;
-

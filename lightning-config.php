@@ -6,6 +6,7 @@ use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 
 return (new LightningConfig())
+    ->setMode('test')
     ->setDomain('https://your-domain.com')
     ->setReceiver('custom-receiver')
     ->setMinSendable(100_000)

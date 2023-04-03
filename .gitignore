@@ -1,6 +1,5 @@
 .idea/
 .vscode/
-.phpbench/
 .cache/
 coverage/
 data/
@@ -8,4 +7,4 @@ vendor/
 
 *.cache
 composer.lock
-config/default-local.php
+lightning-config-local.php
