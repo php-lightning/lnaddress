@@ -99,27 +99,23 @@ Then, the script needs to be in the subdirectory `.well-known/lnurlp/` of your w
 
 ### Set API endpoint & API Key
 
-The following lines (14 & 15) need to be changed according to your `api_endpoint` and `api_key` that your LNbits wallet provides, be sure to use the **invoice/read key**.
+The following need to be changed according to your `api_endpoint` and `api_key` that your LNbits wallet provides, be sure to use the **invoice/read key**.
 
 ```php
-$backend_options['lnbits'] = [
-        'api_endpoint' => 'http://localhost:5000',  // lnbits endpoint : protocol://host:port
-        'api_key' => ''                             // put your lnbits read key here
-];
+# lightning-config.php
+return (new LightningConfig())
+    ->setDomain('your-domain.com')
+    ->setReceiver('custom-receiver')
+    ->setMinSendable(100_000)
+    ->setMaxSendable(10_000_000_000)
+    ->addBackend(
+        (new LnBitsBackendConfig())
+            ->setApiEndpoint('http://localhost:5000') # lnbits endpoint : protocol://host:port
+            ->setApiKey('XYZ'),                       # put your lnbits read key here
+    );
 ```
 
-### Customization
-
-The following variable can be changed 
-|     Variable    |                   comment                         |       default value      |
-| :------------- | :------------------------------------------------  | :----------------------- |
-| `$description` | Description of the payment for the sender          | Pay to *user@domain.tld* |
-| `$success_msg` | Confirmation message to display on payment success | Payment received!        |
-| `$minSendable` | Minimum amount of **millisats** to send            | 100000                   |
-| `$maxSendable` | Maximum amount of **millisats** to send            | 10000000000              |
-| `$image_file`  | Path to a JPG picture, displayed on the sender confirmation screen | *no picture* |
-
-> **Please note that `$minSendable` and `$maxSendable` do not reflect the actual min/max sendable amount, it depends on the capacity of your LN backend**
+> **Please note that `minSendable` and `maxSendable` do not reflect the actual min/max sendable amount, it depends on the capacity of your LN backend**
 
 ## To add a new address
 

@@ -9,7 +9,7 @@ use PhpLightning\Config\Backend\BackendConfigInterface;
 
 final class LightningConfig implements JsonSerializable
 {
-    private string $mode = 'test';
+    private string $mode = 'prod';
     private ?string $domain = null;
     private ?string $receiver = null;
     private ?int $minSendable = null;

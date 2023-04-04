@@ -15,7 +15,7 @@ final class LightningConfigTest extends TestCase
         $config = new LightningConfig();
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
         ], $config->jsonSerialize());
     }
@@ -23,10 +23,10 @@ final class LightningConfigTest extends TestCase
     public function test_mode(): void
     {
         $config = (new LightningConfig())
-            ->setMode('prod');
+            ->setMode('test');
 
         self::assertSame([
-            'mode' => 'prod',
+            'mode' => 'test',
             'backends' => [],
         ], $config->jsonSerialize());
     }
@@ -37,7 +37,7 @@ final class LightningConfigTest extends TestCase
             ->setDomain('https://your-domain.com');
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
             'domain' => 'your-domain.com',
         ], $config->jsonSerialize());
@@ -49,7 +49,7 @@ final class LightningConfigTest extends TestCase
             ->setDomain('your-domain.com');
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
             'domain' => 'your-domain.com',
         ], $config->jsonSerialize());
@@ -61,7 +61,7 @@ final class LightningConfigTest extends TestCase
             ->setReceiver('custom-receiver');
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
             'receiver' => 'custom-receiver',
         ], $config->jsonSerialize());
@@ -73,7 +73,7 @@ final class LightningConfigTest extends TestCase
             ->setMinSendable(100_000);
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
             'min-sendable' => 100_000,
         ], $config->jsonSerialize());
@@ -85,7 +85,7 @@ final class LightningConfigTest extends TestCase
             ->setMaxSendable(10_000_000_000);
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [],
             'max-sendable' => 10_000_000_000,
         ], $config->jsonSerialize());
@@ -101,7 +101,7 @@ final class LightningConfigTest extends TestCase
             );
 
         self::assertSame([
-            'mode' => 'test',
+            'mode' => 'prod',
             'backends' => [
                 'lnbits' => [
                     'api_endpoint' => 'http://localhost:5000',
