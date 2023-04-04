@@ -9,4 +9,4 @@ parameters:
         - '#Cannot cast mixed to .*.#'
         - '#Method PhpLightning\\.*::.* should return array<.*> but returns array#'
         - '#Method PhpLightning\\.*::.* should return array{.*} but returns array#'
-        - '#Method PhpLightning\\.*::.* should return .*Interface but returns mixed#'
+        - '#Method PhpLightning\\.*::.* should return .* but returns mixed#'

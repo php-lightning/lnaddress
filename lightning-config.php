@@ -9,8 +9,7 @@ return (new LightningConfig())
     ->setMode('test')
     ->setDomain('your-domain.com')
     ->setReceiver('custom-receiver')
-    ->setMinSendable(100_000)
-    ->setMaxSendable(10_000_000_000)
+    ->setSendableRange(100_000, 10_000_000_000)
     ->addBackend(
         (new LnBitsBackendConfig())
             ->setApiEndpoint('http://localhost:5000')  // lnbits endpoint : protocol://host:port

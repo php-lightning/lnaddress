@@ -6,19 +6,18 @@ namespace PhpLightning\Config;
 
 use JsonSerializable;
 use PhpLightning\Config\Backend\BackendConfigInterface;
+use PhpLightning\Shared\Value\SendableRange;
 
 final class LightningConfig implements JsonSerializable
 {
-    private string $mode = 'prod';
+    private ?string $mode = null;
     private ?string $domain = null;
     private ?string $receiver = null;
-    private ?int $minSendable = null;
-    private ?int $maxSendable = null;
-    private BackendsConfig $backends;
+    private ?SendableRange $sendableRange = null;
+    private ?BackendsConfig $backends = null;
 
     public function __construct()
     {
-        $this->backends = new BackendsConfig();
     }
 
     public function setMode(string $mode): self
@@ -40,42 +39,36 @@ final class LightningConfig implements JsonSerializable
         return $this;
     }
 
-    public function setMinSendable(int $minSendable): self
+    public function setSendableRange(int $min, int $max): self
     {
-        $this->minSendable = $minSendable;
-        return $this;
-    }
-
-    public function setMaxSendable(int $maxSendable): self
-    {
-        $this->maxSendable = $maxSendable;
+        $this->sendableRange = SendableRange::withMinMax($min, $max);
         return $this;
     }
 
     public function addBackend(BackendConfigInterface $backendConfig): self
     {
+        $this->backends ??= new BackendsConfig();
         $this->backends->add($backendConfig);
         return $this;
     }
 
     public function jsonSerialize(): array
     {
-        $result = [
-            'mode' => $this->mode,
-            'backends' => $this->backends->jsonSerialize(),
-        ];
-
+        $result = [];
+        if ($this->mode !== null) {
+            $result['mode'] = $this->mode;
+        }
+        if ($this->backends !== null) {
+            $result['backends'] = $this->backends->jsonSerialize();
+        }
         if ($this->domain !== null) {
             $result['domain'] = $this->domain;
         }
         if ($this->receiver !== null) {
             $result['receiver'] = $this->receiver;
         }
-        if ($this->minSendable !== null) {
-            $result['min-sendable'] = $this->minSendable;
-        }
-        if ($this->maxSendable !== null) {
-            $result['max-sendable'] = $this->maxSendable;
+        if ($this->sendableRange !== null) {
+            $result['sendable-range'] = $this->sendableRange;
         }
 
         return $result;

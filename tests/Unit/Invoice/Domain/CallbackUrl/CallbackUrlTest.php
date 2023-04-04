@@ -6,7 +6,7 @@ namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
-use PhpLightning\Invoice\Domain\Transfer\SendableRange;
+use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
 
 final class CallbackUrlTest extends TestCase
