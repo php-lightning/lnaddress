@@ -11,9 +11,9 @@ use Gacela\Framework\Container\Container;
 use Gacela\Framework\Gacela;
 use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
-use PhpLightning\Http\Domain\HttpClientInterface;
-use PhpLightning\Http\HttpDependencyProvider;
+use PhpLightning\Invoice\InvoiceDependencyProvider;
 use PhpLightning\Lightning;
+use PhpLightningTest\Feature\Fake\FakeHttpApi;
 use PHPUnit\Framework\TestCase;
 
 final class LightningFeature extends TestCase
@@ -26,7 +26,7 @@ final class LightningFeature extends TestCase
         $json = Lightning::generateInvoice(amount: 2_000);
 
         self::assertEquals([
-            'pr' => 'lnbc10u1pjzh489...CUSTOM PAYMENT REQUEST',
+            'pr' => 'lnbc10u1pjzh489...fake payment_request',
             'status' => 'OK',
             'successAction' => [
                 'tag' => 'message',
@@ -56,21 +56,11 @@ final class LightningFeature extends TestCase
     private function mockLnPaymentRequest(): void
     {
         AnonymousGlobal::overrideExistingResolvedClass(
-            HttpDependencyProvider::class,
+            InvoiceDependencyProvider::class,
             new class() extends AbstractDependencyProvider {
                 public function provideModuleDependencies(Container $container): void
                 {
-                    $container->set(
-                        HttpDependencyProvider::HTTP_CLIENT,
-                        static fn () => new class() implements HttpClientInterface {
-                            public function post(string $url, array $options = []): string
-                            {
-                                return json_encode([
-                                    'payment_request' => 'lnbc10u1pjzh489...CUSTOM PAYMENT REQUEST',
-                                ], JSON_THROW_ON_ERROR);
-                            }
-                        },
-                    );
+                    $container->set(InvoiceDependencyProvider::HTTP_API, static fn () => new FakeHttpApi());
                 }
             },
         );

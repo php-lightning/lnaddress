@@ -24,7 +24,7 @@ $milliSats = (int)($argv[1] ?? $_GET['amount'] ?? 0);
 
 try {
     echo Lightning::generateInvoice($milliSats, $backend);
-    echo PHP_EOL;
 } catch (Throwable $e) {
-    dd($e); // Intentional to have a better output error in case of exception
+    echo $e->getMessage();
 }
+echo PHP_EOL;

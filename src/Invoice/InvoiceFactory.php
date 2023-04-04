@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice;
 
 use Gacela\Framework\AbstractFactory;
-use PhpLightning\Http\HttpFacadeInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\EmptyBackendInvoice;
 use PhpLightning\Invoice\Domain\BackendInvoice\LnbitsBackendInvoice;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
+use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
 
 /**
@@ -47,7 +47,7 @@ final class InvoiceFactory extends AbstractFactory
     private function createLnBitsBackendInvoice(): LnbitsBackendInvoice
     {
         return new LnbitsBackendInvoice(
-            $this->getHttpFacade(),
+            $this->getHttpApi(),
             $this->getConfig()->getBackendOptionsFor('lnbits'),
         );
     }
@@ -57,8 +57,8 @@ final class InvoiceFactory extends AbstractFactory
         return new EmptyBackendInvoice($backend);
     }
 
-    private function getHttpFacade(): HttpFacadeInterface
+    private function getHttpApi(): HttpApiInterface
     {
-        return $this->getProvidedDependency(InvoiceDependencyProvider::FACADE_HTTP);
+        return $this->getProvidedDependency(InvoiceDependencyProvider::HTTP_API);
     }
 }
