@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\LnAddress;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Invoice\Domain\Transfer\SendableRange;
+use PhpLightning\Shared\Value\SendableRange;
 
 final class InvoiceGenerator
 {

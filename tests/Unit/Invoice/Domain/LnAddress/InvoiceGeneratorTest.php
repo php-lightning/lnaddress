@@ -6,13 +6,11 @@ namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
-use PhpLightning\Invoice\Domain\Transfer\SendableRange;
+use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
 
 final class InvoiceGeneratorTest extends TestCase
 {
-    private const BACKEND = 'lnbits';
-
     public function test_unknown_backend(): void
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
@@ -23,7 +21,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
         );
-        $actual = $invoice->generateInvoice(2_000, 'unknown?');
+        $actual = $invoice->generateInvoice(2_000);
 
         self::assertSame([
             'status' => 'ERROR',
@@ -44,7 +42,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
         );
-        $actual = $invoice->generateInvoice(2_000, self::BACKEND);
+        $actual = $invoice->generateInvoice(2_000);
 
         self::assertSame([
             'pr' => 'any payment_request',
@@ -68,7 +66,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
         );
-        $actual = $invoice->generateInvoice(100, self::BACKEND);
+        $actual = $invoice->generateInvoice(100);
 
         self::assertSame([
             'status' => 'ERROR',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Domain\CallbackUrl;
 
-use PhpLightning\Invoice\Domain\Transfer\SendableRange;
+use PhpLightning\Shared\Value\SendableRange;
 
 final class CallbackUrl implements CallbackUrlInterface
 {

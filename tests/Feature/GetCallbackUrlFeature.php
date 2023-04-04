@@ -7,6 +7,7 @@ namespace PhpLightningTest\Feature;
 use Gacela\Framework\Bootstrap\GacelaConfig;
 use Gacela\Framework\Gacela;
 use PhpLightning\Invoice\Infrastructure\Command\CallbackUrlCommand;
+use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -24,8 +25,8 @@ final class GetCallbackUrlFeature extends TestCase
 
         self::assertEquals([
             'callback' => 'https://localhost/unknown-receiver',
-            'maxSendable' => 10000000000,
             'minSendable' => 100000,
+            'maxSendable' => 10000000000,
             'metadata' => '[["text/plain","Pay to unknown-receiver@localhost"],["text/identifier","unknown-receiver@localhost"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
@@ -39,8 +40,7 @@ final class GetCallbackUrlFeature extends TestCase
             $config->addAppConfigKeyValues([
                 'domain' => 'custom-domain',
                 'receiver' => 'custom-receiver',
-                'min-sendable' => 1_000,
-                'max-sendable' => 2_000,
+                'sendable-range' => SendableRange::withMinMax(1_000, 2_000),
             ]);
         });
 
@@ -50,8 +50,8 @@ final class GetCallbackUrlFeature extends TestCase
 
         self::assertEquals([
             'callback' => 'https://custom-domain/custom-receiver',
-            'maxSendable' => 2_000,
             'minSendable' => 1_000,
+            'maxSendable' => 2_000,
             'metadata' => '[["text/plain","Pay to custom-receiver@custom-domain"],["text/identifier","custom-receiver@custom-domain"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
