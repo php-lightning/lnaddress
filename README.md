@@ -2,19 +2,19 @@
 PHP Lightning Address is an easy way to get a [lightning address](https://lightningaddress.com/) in PHP.
 
 <p align="center">
-  <a href="https://github.com/php-lightning/lightning-address/actions">
-    <img src="https://github.com/php-lightning/lightning-address/workflows/CI/badge.svg" alt="GitHub Build Status">
+  <a href="https://github.com/php-lightning/lnaddress/actions">
+    <img src="https://github.com/php-lightning/lnaddress/workflows/CI/badge.svg" alt="GitHub Build Status">
   </a>
-  <a href="https://scrutinizer-ci.com/g/php-lightning/lightning-address/?branch=main">
-    <img src="https://scrutinizer-ci.com/g/php-lightning/lightning-address/badges/quality-score.png?b=main" alt="Scrutinizer Code Quality">
+  <a href="https://scrutinizer-ci.com/g/php-lightning/lnaddress/?branch=main">
+    <img src="https://scrutinizer-ci.com/g/php-lightning/lnaddress/badges/quality-score.png?b=main" alt="Scrutinizer Code Quality">
   </a>
-  <a href="https://scrutinizer-ci.com/g/php-lightning/lightning-address/?branch=main">
-    <img src="https://scrutinizer-ci.com/g/php-lightning/lightning-address/badges/coverage.png?b=main" alt="Scrutinizer Code Coverage">
+  <a href="https://scrutinizer-ci.com/g/php-lightning/lnaddress/?branch=main">
+    <img src="https://scrutinizer-ci.com/g/php-lightning/lnaddress/badges/coverage.png?b=main" alt="Scrutinizer Code Coverage">
   </a>
-  <a href="https://shepherd.dev/github/php-lightning/lightning-address">
-    <img src="https://shepherd.dev/github/php-lightning/lightning-address/coverage.svg" alt="Psalm Type-coverage Status">
+  <a href="https://shepherd.dev/github/php-lightning/lnaddress">
+    <img src="https://shepherd.dev/github/php-lightning/lnaddress/coverage.svg" alt="Psalm Type-coverage Status">
   </a>
-  <a href="https://github.com/php-lightning/lightning-address/blob/master/LICENSE">
+  <a href="https://github.com/php-lightning/lnaddress/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT Software License">
   </a>
 </p>
@@ -22,7 +22,7 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
 ## Installation
 
 ```bash
-composer require php-lightning/lightning-address
+composer require php-lightning/lnaddress
 ```
 
 Check the **demo template**: 
