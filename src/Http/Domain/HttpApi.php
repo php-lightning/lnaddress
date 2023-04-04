@@ -16,6 +16,18 @@ final class HttpApi implements HttpApiInterface
      */
     public function post(string $uri, array $options = []): ?string
     {
-        return $this->httpClient->post($uri, $options);
+        $options = [
+            explode(":", $uri)[0] => [ // extract protocol from $uri
+                'header' => implode("\r\n", array_map(
+                    function ($v, $k) { return sprintf("%s: %s", $k, $v); },
+                    $options['headers'],
+                    array_keys($options['headers'])
+                )),
+                'method' => 'POST',
+                'content' => $options["body"]
+            ]
+        ];
+        $context  = stream_context_create($options);
+        return file_get_contents($uri, false, $context);
     }
 }
