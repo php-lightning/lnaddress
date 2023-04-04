@@ -29,7 +29,8 @@ final class LightningConfig implements JsonSerializable
 
     public function setDomain(string $domain): self
     {
-        $this->domain = $domain;
+        $parseUrl = parse_url($domain);
+        $this->domain = $parseUrl['host'] ?? $domain;
         return $this;
     }
 
