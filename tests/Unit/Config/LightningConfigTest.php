@@ -63,7 +63,7 @@ final class LightningConfigTest extends TestCase
         $config = (new LightningConfig())
             ->addBackend(
                 (new LnBitsBackendConfig())
-                    ->setApiEndpoint('http://localhost:5000')
+                    ->setApiEndpoint('http://localhost:5000/')
                     ->setApiKey('XYZ'),
             );
 

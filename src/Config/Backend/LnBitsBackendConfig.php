@@ -11,7 +11,7 @@ final class LnBitsBackendConfig implements BackendConfigInterface
 
     public function setApiEndpoint(string $apiEndpoint): self
     {
-        $this->apiEndpoint = $apiEndpoint;
+        $this->apiEndpoint = rtrim($apiEndpoint, '/');
         return $this;
     }
 
