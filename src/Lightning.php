@@ -14,6 +14,13 @@ final class Lightning
 
     private const CONFIG_LOCAL_FILE = 'lightning-config-local.php';
 
+    public static function getCallbackUrl(): string
+    {
+        $invoice = (new InvoiceFacade())->getCallbackUrl();
+
+        return json_encode($invoice, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+    }
+
     public static function generateInvoice(int $amount, string $backend = 'lnbits'): string
     {
         $invoice = (new InvoiceFacade())->generateInvoice($amount, $backend);
@@ -22,6 +29,8 @@ final class Lightning
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return Closure(GacelaConfig):void
      */
     public static function configFn(): Closure
