@@ -10,21 +10,10 @@ use PhpLightning\Shared\Value\SendableRange;
 
 final class LightningConfig implements JsonSerializable
 {
-    private ?string $mode = null;
     private ?string $domain = null;
     private ?string $receiver = null;
     private ?SendableRange $sendableRange = null;
     private ?BackendsConfig $backends = null;
-
-    public function __construct()
-    {
-    }
-
-    public function setMode(string $mode): self
-    {
-        $this->mode = $mode;
-        return $this;
-    }
 
     public function setDomain(string $domain): self
     {
@@ -55,9 +44,6 @@ final class LightningConfig implements JsonSerializable
     public function jsonSerialize(): array
     {
         $result = [];
-        if ($this->mode !== null) {
-            $result['mode'] = $this->mode;
-        }
         if ($this->backends !== null) {
             $result['backends'] = $this->backends->jsonSerialize();
         }

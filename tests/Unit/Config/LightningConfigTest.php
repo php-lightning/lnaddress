@@ -18,16 +18,6 @@ final class LightningConfigTest extends TestCase
         self::assertSame([], $config->jsonSerialize());
     }
 
-    public function test_mode(): void
-    {
-        $config = (new LightningConfig())
-            ->setMode('test');
-
-        self::assertSame([
-            'mode' => 'test',
-        ], $config->jsonSerialize());
-    }
-
     public function test_domain_with_scheme(): void
     {
         $config = (new LightningConfig())
