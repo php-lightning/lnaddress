@@ -93,6 +93,8 @@ You might be able to configure your web server to let the PHP backend handle spe
 
 ## Usage
 
+> TL;DR: Video demo (~1 min): https://youtu.be/7HaTf5cknxM
+
 ### Rename & move the script to the right directory
 
 Once the web server is configured to rewrite url requests `.well-known/lnurlp/anything` to `.well-known/lnurlp/anything.php`, the `index.php` (inside `public/`) script needs to be renamed with the wanted username part of the [lightning address](https://lightningaddress.com/), such as for a wanted ln address `ben@anything.dne`, the script must be named `ben.php`.
