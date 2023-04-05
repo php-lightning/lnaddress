@@ -7,4 +7,4 @@ vendor/
 
 *.cache
 composer.lock
-lightning-config-local.php
+lightning-config.php
