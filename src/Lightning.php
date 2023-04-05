@@ -29,6 +29,8 @@ final class Lightning
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return Closure(GacelaConfig):void
      */
     public static function configFn(): Closure

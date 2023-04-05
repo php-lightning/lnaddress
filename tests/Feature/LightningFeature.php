@@ -18,6 +18,23 @@ use PHPUnit\Framework\TestCase;
 
 final class LightningFeature extends TestCase
 {
+    public function test_get_get_callback_url(): void
+    {
+        $this->bootstrapGacela();
+        $this->mockLnPaymentRequest();
+
+        $json = Lightning::getCallbackUrl();
+
+        self::assertEquals([
+            'callback' => 'https://domain.com/receiver',
+            'maxSendable' => 10_000,
+            'minSendable' => 1_000,
+            'metadata' => '[["text/plain","Pay to receiver@domain.com"],["text/identifier","receiver@domain.com"]]',
+            'tag' => 'payRequest',
+            'commentAllowed' => false,
+        ], json_decode($json, true));
+    }
+
     public function test_ln_bits_feature(): void
     {
         $this->bootstrapGacela();
@@ -43,6 +60,8 @@ final class LightningFeature extends TestCase
             $config->resetInMemoryCache();
             $config->addAppConfigKeyValues(
                 (new LightningConfig())
+                    ->setDomain('domain.com')
+                    ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
                     ->addBackend(
                         (new LnBitsBackendConfig())
