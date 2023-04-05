@@ -12,7 +12,7 @@ final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string
     {
-        return sprintf('https://%s/%s', $this->getDomain(), $this->getReceiver());
+        return $this->getCallbackUrl();
     }
 
     public function getLnAddress(): string
@@ -51,5 +51,10 @@ final class InvoiceConfig extends AbstractConfig
     private function getReceiver(): string
     {
         return (string)$this->get('receiver', $_SERVER['REQUEST_URI'] ?? 'unknown-receiver');
+    }
+
+    private function getCallbackUrl(): string
+    {
+        return (string)$this->get('callback-url');
     }
 }

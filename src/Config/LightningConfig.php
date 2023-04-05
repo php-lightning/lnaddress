@@ -13,6 +13,7 @@ final class LightningConfig implements JsonSerializable
     private ?string $domain = null;
     private ?string $receiver = null;
     private ?SendableRange $sendableRange = null;
+    private ?string $callbackUrl = null;
     private ?BackendsConfig $backends = null;
 
     public function setDomain(string $domain): self
@@ -31,6 +32,12 @@ final class LightningConfig implements JsonSerializable
     public function setSendableRange(int $min, int $max): self
     {
         $this->sendableRange = SendableRange::withMinMax($min, $max);
+        return $this;
+    }
+
+    public function setCallbackUrl(string $callbackUrl): self
+    {
+        $this->callbackUrl = $callbackUrl;
         return $this;
     }
 
@@ -55,6 +62,9 @@ final class LightningConfig implements JsonSerializable
         }
         if ($this->sendableRange !== null) {
             $result['sendable-range'] = $this->sendableRange;
+        }
+        if ($this->callbackUrl !== null) {
+            $result['callback-url'] = $this->callbackUrl;
         }
 
         return $result;
