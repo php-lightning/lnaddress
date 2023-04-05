@@ -23,7 +23,11 @@ $backend = 'lnbits';
 $milliSats = (int)($argv[1] ?? $_GET['amount'] ?? 0);
 
 try {
-    echo Lightning::generateInvoice($milliSats, $backend);
+    if ($milliSats === 0) {
+        echo Lightning::getCallbackUrl();
+    } else {
+        echo Lightning::generateInvoice($milliSats, $backend);
+    }
 } catch (Throwable $e) {
     echo $e->getMessage();
 }
