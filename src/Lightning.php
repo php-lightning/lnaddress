@@ -10,9 +10,9 @@ use PhpLightning\Invoice\InvoiceFacade;
 
 final class Lightning
 {
-    public const CONFIG_FILE = 'lightning-config.php';
+    public const CONFIG_FILE = 'lightning-config.dist.php';
 
-    private const CONFIG_LOCAL_FILE = 'lightning-config-local.php';
+    private const CONFIG_LOCAL_FILE = 'lightning-config.php';
 
     public static function getCallbackUrl(): string
     {
