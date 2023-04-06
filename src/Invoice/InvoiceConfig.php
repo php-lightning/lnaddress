@@ -12,7 +12,7 @@ final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string
     {
-        return sprintf('https://%s/%s', $this->getDomain(), $this->getReceiver());
+        return (string)$this->get('callback-url', 'undefined:callback-url');
     }
 
     public function getLnAddress(): string

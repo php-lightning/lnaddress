@@ -26,7 +26,7 @@ final class LightningFeature extends TestCase
         $json = Lightning::getCallbackUrl();
 
         self::assertEquals([
-            'callback' => 'https://domain.com/receiver',
+            'callback' => 'https://callback.url/receiver',
             'maxSendable' => 10_000,
             'minSendable' => 1_000,
             'metadata' => '[["text/plain","Pay to receiver@domain.com"],["text/identifier","receiver@domain.com"]]',
@@ -60,6 +60,7 @@ final class LightningFeature extends TestCase
             $config->resetInMemoryCache();
             $config->addAppConfigKeyValues(
                 (new LightningConfig())
+                    ->setCallbackUrl('https://callback.url/receiver')
                     ->setDomain('domain.com')
                     ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
