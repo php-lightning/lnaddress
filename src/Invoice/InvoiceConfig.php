@@ -12,7 +12,7 @@ final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string
     {
-        return $this->getCallbackUrl();
+        return (string)$this->get('callback-url', 'undefined:callback-url');
     }
 
     public function getLnAddress(): string
@@ -51,10 +51,5 @@ final class InvoiceConfig extends AbstractConfig
     private function getReceiver(): string
     {
         return (string)$this->get('receiver', $_SERVER['REQUEST_URI'] ?? 'unknown-receiver');
-    }
-
-    private function getCallbackUrl(): string
-    {
-        return (string)$this->get('callback-url');
     }
 }
