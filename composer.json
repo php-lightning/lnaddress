@@ -3,9 +3,7 @@
     "type": "library",
     "require": {
         "php": ">=8.0",
-        "gacela-project/gacela": "^1.1",
-        "symfony/http-client": "^5.4",
-        "symfony/console": "^5.4 || v6.2"
+        "gacela-project/gacela": "^1.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16",
@@ -25,9 +23,6 @@
             "PhpLightningTest\\": "tests/"
         }
     },
-    "bin": [
-        "bin/lnaddress"
-    ],
     "scripts": {
         "ctal": [
             "@static-clear-cache",
