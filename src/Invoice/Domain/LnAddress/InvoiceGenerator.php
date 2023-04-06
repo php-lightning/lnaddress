@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\LnAddress;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
+use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 use PhpLightning\Shared\Value\SendableRange;
 
 final class InvoiceGenerator
@@ -35,34 +36,23 @@ final class InvoiceGenerator
         $imageMetadata = '';
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
-        $invoice = $this->backendInvoice->requestInvoice($milliSats / 1000, $metadata);
+        $invoice = $this->backendInvoice->requestInvoice((int)($milliSats / 1000), $metadata);
 
-        if ($invoice['status'] === 'OK') {
-            return $this->okResponse($invoice);
-        }
-
-        return $this->errorResponse($invoice);
+        return $this->mapResponseAsArray($invoice);
     }
 
-    private function okResponse(array $invoice): array
+    private function mapResponseAsArray(BackendInvoiceResponse $invoice): array
     {
         return [
-            'pr' => $invoice['pr'],
-            'status' => 'OK',
+            'pr' => $invoice->getPaymentRequest(),
+            'status' => $invoice->getStatus(),
             'successAction' => [
                 'tag' => 'message',
                 'message' => self::MESSAGE_PAYMENT_RECEIVED,
             ],
             'routes' => [],
             'disposable' => false,
-        ];
-    }
-
-    private function errorResponse(array $invoice): array
-    {
-        return [
-            'status' => $invoice['status'],
-            'reason' => $invoice['reason'],
+            'reason' => $invoice->getReason(),
         ];
     }
 }

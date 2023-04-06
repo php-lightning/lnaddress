@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
+use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+
 interface BackendInvoiceInterface
 {
-    /**
-     * @return array {
-     *   status: string,
-     *   reason: string,
-     * }
-     */
-    public function requestInvoice(float $satsAmount, string $metadata): array;
+    public function requestInvoice(int $satsAmount, string $metadata): BackendInvoiceResponse;
 }
