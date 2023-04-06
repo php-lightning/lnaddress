@@ -51,6 +51,7 @@ final class LightningFeature extends TestCase
             ],
             'routes' => [],
             'disposable' => false,
+            'reason' => '',
         ], json_decode($json, true));
     }
 
