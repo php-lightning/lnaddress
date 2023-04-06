@@ -93,7 +93,11 @@ You might be able to configure your web server to let the PHP backend handle spe
 
 ## Usage
 
-> TL;DR: Video demo (~1 min): https://youtu.be/7HaTf5cknxM
+### TLDR
+
+Video demo (~2 min): https://youtu.be/9UtxKGGDLp8
+
+Check the **demo template**: [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
 
 ### Rename & move the script to the right directory
 
@@ -125,10 +129,6 @@ of your LN backend**
 ## To add a new address
 
 To add a new [lightning address](https://lightningaddress.com/), the only thing needed is copying and pasting the script, **don't forget to change the API Key if you want the funds to be received on another wallet**, and name the file with the user part of the [lightning address](https://lightningaddress.com/) wanted.
-
-## Demo template
-
-Check the **demo template**: [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
 
 ## Contributions
 
