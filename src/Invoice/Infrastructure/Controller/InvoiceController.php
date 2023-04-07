@@ -39,7 +39,10 @@ final class InvoiceController
                 $this->getFacade()->generateInvoice($username, $milliSats),
             );
         } catch (Throwable $e) {
-            dd($e); # temporal for debugging purposes...
+            return new JsonResponse([
+                'status' => 'ERROR',
+                'message' => $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }
