@@ -11,6 +11,7 @@ use PhpLightning\Config\LightningConfig;
 use PhpLightning\Lightning;
 
 $cwd = (string)getcwd();
+// $cwd = "/opt/lnaddress/demo/demo-lnaddress/";            // path to composer working directory (to be reviewed)
 if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
     exit("Cannot load composer's autoload file: " . $autoloadPath);
 }
