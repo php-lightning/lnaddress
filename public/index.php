@@ -24,8 +24,8 @@ $lightningConfig = (new LightningConfig())
     ->setCallbackUrl('https://'.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"])
     ->addBackend(
         (new LnBitsBackendConfig())
-            ->setApiEndpoint('http://localhost:5000')
-            ->setApiKey('feeddeadbeefcafe')
+            ->setApiEndpoint('http://localhost:5000')       // paste your lnbits endpoint here
+            ->setApiKey('Invoice LNbits API key goes here') // paste your lnbits invoice key here
     );
 
 Gacela::bootstrap($cwd, Lightning::configFn($lightningConfig));
