@@ -21,7 +21,7 @@ $lightningConfig = (new LightningConfig())
     ->setDomain($_SERVER['HTTP_HOST'] ?? '')
     ->setReceiver(str_replace('.php', '', basename(__FILE__)))
     ->setSendableRange(100_000, 10_000_000_000)
-    ->setCallbackUrl('https://sndbox.localhost.pe/.well-known/lnurlp/test')
+    ->setCallbackUrl('https://'.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"])
     ->addBackend(
         (new LnBitsBackendConfig())
             ->setApiEndpoint('http://localhost:5000')
