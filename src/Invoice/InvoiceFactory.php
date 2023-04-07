@@ -19,8 +19,12 @@ use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
  */
 final class InvoiceFactory extends AbstractFactory
 {
-    public function createCallbackUrl(): CallbackUrlInterface
+    public function createCallbackUrl(string $username): CallbackUrlInterface
     {
+        if ($username !== '') {
+            $this->validateUserExists($username);
+        }
+
         return new CallbackUrl(
             $this->getConfig()->getSendableRange(),
             $this->createLnAddressGenerator(),
@@ -56,5 +60,10 @@ final class InvoiceFactory extends AbstractFactory
     private function getHttpApi(): HttpApiInterface
     {
         return $this->getProvidedDependency(InvoiceDependencyProvider::HTTP_API);
+    }
+
+    private function validateUserExists(string $username): void
+    {
+        $this->getConfig()->getBackendOptionsFor($username);
     }
 }

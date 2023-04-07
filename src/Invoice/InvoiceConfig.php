@@ -21,6 +21,15 @@ final class InvoiceConfig extends AbstractConfig
     }
 
     /**
+     * @return array<string,array>
+     */
+    public function getBackends(): array
+    {
+        /** @psalm-suppress MixedReturnTypeCoercion */
+        return (array)$this->get('backends'); // @phpstan-ignore-line
+    }
+
+    /**
      * @return array{
      *     api_endpoint: string,
      *     api_key: string,
@@ -29,7 +38,7 @@ final class InvoiceConfig extends AbstractConfig
     public function getBackendOptionsFor(string $username): array
     {
         /** @var  array{api_endpoint?: string, api_key?: string} $result */
-        $result = $this->get('backends')[$username] ?? []; // @phpstan-ignore-line
+        $result = $this->getBackends()[$username] ?? [];
 
         if (!isset($result['api_endpoint'], $result['api_key'])) {
             throw new RuntimeException('Missing backend options for ' . $username);

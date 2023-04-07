@@ -14,7 +14,7 @@ final class InvoiceFacade extends AbstractFacade
     public function getCallbackUrl(string $username): array
     {
         return $this->getFactory()
-            ->createCallbackUrl()
+            ->createCallbackUrl($username)
             ->getCallbackUrl($username);
     }
 
