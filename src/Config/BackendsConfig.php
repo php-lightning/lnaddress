@@ -9,12 +9,12 @@ use PhpLightning\Config\Backend\BackendConfigInterface;
 
 final class BackendsConfig implements JsonSerializable
 {
-    /** @var list<BackendConfigInterface> */
+    /** @var array<string, BackendConfigInterface> */
     private array $configs = [];
 
-    public function add(BackendConfigInterface $backendConfig): self
+    public function add(string $username, BackendConfigInterface $backendConfig): self
     {
-        $this->configs[] = $backendConfig;
+        $this->configs[$username] = $backendConfig;
         return $this;
     }
 
@@ -28,9 +28,9 @@ final class BackendsConfig implements JsonSerializable
         /**  @var array<string,array> $result */
         $result = [];
 
-        foreach ($this->configs as $config) {
+        foreach ($this->configs as $username => $config) {
             /** @psalm-suppress MixedAssignment */
-            $result[$config->getBackendName()] = $config->jsonSerialize();
+            $result[$username] = $config->jsonSerialize();
         }
 
         return $result;

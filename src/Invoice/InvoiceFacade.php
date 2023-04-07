@@ -18,10 +18,10 @@ final class InvoiceFacade extends AbstractFacade
             ->getCallbackUrl($username);
     }
 
-    public function generateInvoice(string $username, int $milliSats, string $backend): array
+    public function generateInvoice(string $username, int $milliSats): array
     {
         return $this->getFactory()
-            ->createInvoiceGenerator($username, $backend)
+            ->createInvoiceGenerator($username)
             ->generateInvoice($milliSats);
     }
 }

@@ -41,10 +41,22 @@ final class LightningConfig implements JsonSerializable
         return $this;
     }
 
-    public function addBackend(BackendConfigInterface $backendConfig): self
+    /**
+     * @param array<string,BackendConfigInterface> $list
+     */
+    public function setBackends(array $list): self
     {
         $this->backends ??= new BackendsConfig();
-        $this->backends->add($backendConfig);
+        foreach ($list as $username => $config) {
+            $this->backends->add($username, $config);
+        }
+        return $this;
+    }
+
+    public function addBackend(string $username, BackendConfigInterface $backendConfig): self
+    {
+        $this->backends ??= new BackendsConfig();
+        $this->backends->add($username, $backendConfig);
         return $this;
     }
 

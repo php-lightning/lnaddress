@@ -25,7 +25,8 @@ final class InvoiceController
     {
         $username = (string)$request->get('username');
         $milliSats = (int)$request->get('amount', 0);
-        $backend = (string)$request->get('backend', 'lnbits');
+        //        TODO: Make it customizable
+        //        $backend = (string)$request->get('backend', 'lnbits');
 
         try {
             if ($milliSats === 0) {
@@ -35,7 +36,7 @@ final class InvoiceController
             }
 
             return new JsonResponse(
-                $this->getFacade()->generateInvoice($username, $milliSats, $backend),
+                $this->getFacade()->generateInvoice($username, $milliSats),
             );
         } catch (Throwable $e) {
             dd($e); # temporal for debugging purposes...
