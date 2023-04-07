@@ -6,6 +6,7 @@ namespace PhpLightning;
 
 use Closure;
 use Gacela\Framework\Bootstrap\GacelaConfig;
+use PhpLightning\Config\LightningConfig;
 use PhpLightning\Invoice\InvoiceFacade;
 
 final class Lightning
@@ -33,9 +34,13 @@ final class Lightning
      *
      * @return Closure(GacelaConfig):void
      */
-    public static function configFn(): Closure
+    public static function configFn(?LightningConfig $lightningConfig = null): Closure
     {
-        return static function (GacelaConfig $config): void {
+        return static function (GacelaConfig $config) use ($lightningConfig): void {
+            if ($lightningConfig !== null) {
+                /** @psalm-suppress MixedArgumentTypeCoercion */
+                $config->addAppConfigKeyValues($lightningConfig->jsonSerialize());
+            }
             $config->addAppConfig(self::CONFIG_FILE, self::CONFIG_LOCAL_FILE);
             $config->setFileCacheEnabled(true);
             $config->setFileCacheDirectory('data/.cache');
