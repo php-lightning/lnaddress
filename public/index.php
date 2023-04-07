@@ -47,3 +47,4 @@ try {
     echo $e->getMessage();
 }
 echo PHP_EOL;
+?>
