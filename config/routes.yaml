@@ -1,0 +1,7 @@
+generate_invoice:
+    path: /
+    controller: PhpLightning\Invoice\Infrastructure\Controller\InvoiceController::generateAction
+
+kernel:
+    resource: ../src/Kernel.php
+    type: annotation
