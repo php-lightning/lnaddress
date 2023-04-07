@@ -27,7 +27,7 @@ final class InvoiceFactory extends AbstractFactory
         );
     }
 
-    public function createInvoiceGenerator(string $backend): InvoiceGenerator
+    public function createInvoiceGenerator(string $username, string $backend): InvoiceGenerator
     {
         return new InvoiceGenerator(
             $this->createBackend($backend),

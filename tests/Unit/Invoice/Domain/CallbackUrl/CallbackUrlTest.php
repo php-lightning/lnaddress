@@ -33,6 +33,6 @@ final class CallbackUrlTest extends TestCase
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
             'tag' => 'payRequest',
             'commentAllowed' => false,
-        ], $callbackUrl->getCallbackUrl());
+        ], $callbackUrl->getCallbackUrl('username'));
     }
 }

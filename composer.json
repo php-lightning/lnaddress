@@ -3,18 +3,12 @@
     "type": "library",
     "require": {
         "php": ">=8.0.2",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
         "gacela-project/gacela": "^1.1",
-        "symfony/console": "6.0.*",
-        "symfony/dotenv": "6.0.*",
-        "symfony/flex": "^2",
         "symfony/framework-bundle": "6.0.*",
         "symfony/runtime": "6.0.*",
         "symfony/yaml": "6.0.*"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest",
         "friendsofphp/php-cs-fixer": "^3.16",
         "phpunit/phpunit": "^9.6",
         "phpstan/phpstan": "^1.10",
@@ -47,25 +41,7 @@
             "PhpLightningTest\\": "tests/"
         }
     },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*"
-    },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ],
         "ctal": [
             "@static-clear-cache",
             "@csfix",

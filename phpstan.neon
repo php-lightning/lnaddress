@@ -8,5 +8,4 @@ parameters:
     ignoreErrors:
         - '#Cannot cast mixed to .*.#'
         - '#Method PhpLightning\\.*::.* should return array<.*> but returns array#'
-        - '#Method PhpLightning\\.*::.* should return array{.*} but returns array#'
         - '#Method PhpLightning\\.*::.* should return .* but returns mixed#'

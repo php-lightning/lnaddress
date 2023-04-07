@@ -16,5 +16,5 @@ interface CallbackUrlInterface
      *     commentAllowed: bool,
      * }
      */
-    public function getCallbackUrl(): array;
+    public function getCallbackUrl(string $username): array;
 }

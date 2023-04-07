@@ -9,19 +9,19 @@ use Gacela\Framework\AbstractFacade;
 /**
  * @method InvoiceFactory getFactory()
  */
-final class InvoiceFacade extends AbstractFacade implements InvoiceFacadeInterface
+final class InvoiceFacade extends AbstractFacade
 {
-    public function getCallbackUrl(): array
+    public function getCallbackUrl(string $username): array
     {
         return $this->getFactory()
             ->createCallbackUrl()
-            ->getCallbackUrl();
+            ->getCallbackUrl($username);
     }
 
-    public function generateInvoice(int $milliSats, string $backend): array
+    public function generateInvoice(string $username, int $milliSats, string $backend): array
     {
         return $this->getFactory()
-            ->createInvoiceGenerator($backend)
+            ->createInvoiceGenerator($username, $backend)
             ->generateInvoice($milliSats);
     }
 }

@@ -17,7 +17,7 @@ final class CallbackUrl implements CallbackUrlInterface
     ) {
     }
 
-    public function getCallbackUrl(): array
+    public function getCallbackUrl(string $username): array
     {
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
