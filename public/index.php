@@ -2,33 +2,16 @@
 
 declare(strict_types=1);
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
-
 use Gacela\Framework\Gacela;
-use PhpLightning\Lightning;
+use PhpLightning\Kernel;
 
-$cwd = (string)getcwd();
-if (!file_exists($autoloadPath = $cwd . '/vendor/autoload.php')) {
-    exit("Cannot load composer's autoload file: " . $autoloadPath);
-}
+require_once getcwd() . '/vendor/autoload_runtime.php';
 
-require $autoloadPath;
+return static function (array $context) {
+    $kernel = new Kernel($context['APP_ENV'], (bool)$context['APP_DEBUG']);
 
-Gacela::bootstrap($cwd, Lightning::configFn());
+    Gacela::bootstrap(getcwd(), $kernel->gacelaConfigFn());
 
-// For now lnbits is the only backend supported
-$backend = 'lnbits';
+    return $kernel;
+};
 
-$milliSats = (int)($argv[1] ?? $_GET['amount'] ?? 0);
-
-try {
-    if ($milliSats === 0) {
-        echo Lightning::getCallbackUrl();
-    } else {
-        echo Lightning::generateInvoice($milliSats, $backend);
-    }
-} catch (Throwable $e) {
-    echo $e->getMessage();
-}
-echo PHP_EOL;

@@ -21,11 +21,6 @@ final class LnBitsBackendConfig implements BackendConfigInterface
         return $this;
     }
 
-    public function getBackendName(): string
-    {
-        return 'lnbits';
-    }
-
     /**
      * @return array{
      *     api_endpoint: string,
@@ -35,7 +30,6 @@ final class LnBitsBackendConfig implements BackendConfigInterface
     public function jsonSerialize(): array
     {
         return [
-            // lnbits endpoint : protocol://host:port
             'api_endpoint' => $this->apiEndpoint,
             'api_key' => $this->apiKey,
         ];

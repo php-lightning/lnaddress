@@ -15,9 +15,18 @@ final class InvoiceConfig extends AbstractConfig
         return (string)$this->get('callback-url', 'undefined:callback-url');
     }
 
-    public function getLnAddress(): string
+    public function getDefaultLnAddress(): string
     {
         return sprintf('%s@%s', $this->getReceiver(), $this->getDomain());
+    }
+
+    /**
+     * @return array<string,array>
+     */
+    public function getBackends(): array
+    {
+        /** @psalm-suppress MixedReturnTypeCoercion */
+        return (array)$this->get('backends'); // @phpstan-ignore-line
     }
 
     /**
@@ -26,13 +35,13 @@ final class InvoiceConfig extends AbstractConfig
      *     api_key: string,
      * }
      */
-    public function getBackendOptionsFor(string $backend): array
+    public function getBackendOptionsFor(string $username): array
     {
         /** @var  array{api_endpoint?: string, api_key?: string} $result */
-        $result = $this->get('backends')[$backend] ?? []; // @phpstan-ignore-line
+        $result = $this->getBackends()[$username] ?? [];
 
         if (!isset($result['api_endpoint'], $result['api_key'])) {
-            throw new RuntimeException('Missing backend options for ' . $backend);
+            throw new RuntimeException('Missing backend options for ' . $username);
         }
 
         return $result;
@@ -43,7 +52,7 @@ final class InvoiceConfig extends AbstractConfig
         return $this->get('sendable-range', SendableRange::default());
     }
 
-    private function getDomain(): string
+    public function getDomain(): string
     {
         return (string)$this->get('domain', $_SERVER['HTTP_HOST'] ?? 'localhost');
     }

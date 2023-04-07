@@ -8,5 +8,4 @@ use JsonSerializable;
 
 interface BackendConfigInterface extends JsonSerializable
 {
-    public function getBackendName(): string;
 }

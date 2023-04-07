@@ -12,21 +12,22 @@ final class CallbackUrl implements CallbackUrlInterface
 
     public function __construct(
         private SendableRange $sendableRange,
-        private string $lnAddress,
+        private LnAddressGeneratorInterface $lnAddressGenerator,
         private string $callback,
     ) {
     }
 
-    public function getCallbackUrl(): array
+    public function getCallbackUrl(string $username): array
     {
+        $lnAddress = $this->lnAddressGenerator->generate($username);
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $this->lnAddress;
+        $description = 'Pay to ' . $lnAddress;
 
         // TODO: images not implemented yet; `',["image/jpeg;base64","' . base64_encode($response) . '"]';`
         $imageMetadata = '';
-        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
+        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
 
         // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
         return [

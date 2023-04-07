@@ -6,10 +6,11 @@ namespace PhpLightning\Invoice;
 
 use Gacela\Framework\AbstractFactory;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Invoice\Domain\BackendInvoice\EmptyBackendInvoice;
 use PhpLightning\Invoice\Domain\BackendInvoice\LnbitsBackendInvoice;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
+use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGenerator;
+use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
 use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
 
@@ -18,47 +19,51 @@ use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
  */
 final class InvoiceFactory extends AbstractFactory
 {
-    public function createCallbackUrl(): CallbackUrlInterface
+    public function createCallbackUrl(string $username): CallbackUrlInterface
     {
+        if ($username !== '') {
+            $this->validateUserExists($username);
+        }
+
         return new CallbackUrl(
             $this->getConfig()->getSendableRange(),
-            $this->getConfig()->getLnAddress(),
+            $this->createLnAddressGenerator(),
             $this->getConfig()->getCallback(),
         );
     }
 
-    public function createInvoiceGenerator(string $backend): InvoiceGenerator
+    public function createInvoiceGenerator(string $username): InvoiceGenerator
     {
         return new InvoiceGenerator(
-            $this->createBackend($backend),
+            $this->getBackendForUser($username),
             $this->getConfig()->getSendableRange(),
-            $this->getConfig()->getLnAddress(),
+            $this->getConfig()->getDefaultLnAddress(),
         );
     }
 
-    private function createBackend(string $backend): BackendInvoiceInterface
+    private function createLnAddressGenerator(): LnAddressGeneratorInterface
     {
-        return match ($backend) {
-            'lnbits' => $this->createLnBitsBackendInvoice(),
-            default => $this->createEmptyBackendInvoice($backend),
-        };
+        return new LnAddressGenerator(
+            $this->getConfig()->getDefaultLnAddress(),
+            $this->getConfig()->getDomain(),
+        );
     }
 
-    private function createLnBitsBackendInvoice(): LnbitsBackendInvoice
+    private function getBackendForUser(string $username): BackendInvoiceInterface
     {
         return new LnbitsBackendInvoice(
             $this->getHttpApi(),
-            $this->getConfig()->getBackendOptionsFor('lnbits'),
+            $this->getConfig()->getBackendOptionsFor($username),
         );
-    }
-
-    private function createEmptyBackendInvoice(string $backend): EmptyBackendInvoice
-    {
-        return new EmptyBackendInvoice($backend);
     }
 
     private function getHttpApi(): HttpApiInterface
     {
         return $this->getProvidedDependency(InvoiceDependencyProvider::HTTP_API);
+    }
+
+    private function validateUserExists(string $username): void
+    {
+        $this->getConfig()->getBackendOptionsFor($username);
     }
 }

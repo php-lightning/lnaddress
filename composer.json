@@ -2,8 +2,12 @@
     "name": "php-lightning/lnaddress",
     "type": "library",
     "require": {
-        "php": ">=8.0",
-        "gacela-project/gacela": "^1.1"
+        "php": ">=8.0.2",
+        "gacela-project/gacela": "^1.1",
+        "symfony/framework-bundle": "6.0.*",
+        "symfony/http-client": "^6.0",
+        "symfony/runtime": "6.0.*",
+        "symfony/yaml": "6.0.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16",
@@ -12,6 +16,21 @@
         "psalm/plugin-phpunit": "^0.18",
         "symfony/var-dumper": "^5.4",
         "vimeo/psalm": "^5.9"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.2"
+        },
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "optimize-autoloader": true,
+            "preferred-install": {
+                    "*": "dist"
+                },
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -52,10 +71,13 @@
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
         "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run"
     },
-    "config": {
-        "preferred-install": "dist",
-        "platform": {
-            "php": "8.0.27"
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.0.*"
         }
     }
 }

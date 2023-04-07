@@ -12,18 +12,25 @@ use Gacela\Framework\Gacela;
 use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 use PhpLightning\Invoice\InvoiceDependencyProvider;
-use PhpLightning\Lightning;
+use PhpLightning\Invoice\InvoiceFacade;
 use PhpLightningTest\Feature\Fake\FakeHttpApi;
 use PHPUnit\Framework\TestCase;
 
-final class LightningFeature extends TestCase
+final class InvoiceFacadeTest extends TestCase
 {
+    private InvoiceFacade $facade;
+
+    protected function setUp(): void
+    {
+        $this->facade = new InvoiceFacade();
+    }
+
     public function test_get_get_callback_url(): void
     {
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = Lightning::getCallbackUrl();
+        $json = $this->facade->getCallbackUrl('username');
 
         self::assertEquals([
             'callback' => 'https://callback.url/receiver',
@@ -32,7 +39,7 @@ final class LightningFeature extends TestCase
             'metadata' => '[["text/plain","Pay to receiver@domain.com"],["text/identifier","receiver@domain.com"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
-        ], json_decode($json, true));
+        ], $json);
     }
 
     public function test_ln_bits_feature(): void
@@ -40,7 +47,7 @@ final class LightningFeature extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = Lightning::generateInvoice(amount: 2_000);
+        $json = $this->facade->generateInvoice('username', 2_000, 'lnbits');
 
         self::assertEquals([
             'pr' => 'lnbc10u1pjzh489...fake payment_request',
@@ -52,7 +59,7 @@ final class LightningFeature extends TestCase
             'routes' => [],
             'disposable' => false,
             'reason' => '',
-        ], json_decode($json, true));
+        ], $json);
     }
 
     private function bootstrapGacela(): void

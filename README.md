@@ -112,15 +112,18 @@ The following need to be changed according to your `apiEndpoint` and `apiKey` th
 ```php
 # lightning-config.php
 return (new LightningConfig())
-    ->setDomain('your-domain.com')
-    ->setReceiver('custom-receiver')
+    ->setDomain('localhost')
+    ->setReceiver('default-receiver')
     ->setSendableRange(min: 100_000, max: 10_000_000_000)
-    ->setCallbackUrl('https://your-domain.com/path/to/index.php')
-    ->addBackend(
-        (new LnBitsBackendConfig())
-            ->setApiEndpoint('http://localhost:5000') // lnbits endpoint : protocol://host:port
-            ->setApiKey('3h9e75cf...9eca373'),        // put your lnbits read key here
-    );
+    ->setCallbackUrl('localhost:8000/callback')
+    ->setBackends([
+        'user-1' => (new LnBitsBackendConfig())
+            ->setApiEndpoint('http://localhost:5000')
+            ->setApiKey('api_key-1'),
+        'user-2' => (new LnBitsBackendConfig())
+            ->setApiEndpoint('http://localhost:5000')
+            ->setApiKey('api_key-2')
+    ]);
 ```
 
 > **Please note that the `min` and `max` do not reflect the actual min/max sendable amount, it depends on the capacity
