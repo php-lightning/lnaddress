@@ -4,25 +4,46 @@ declare(strict_types=1);
 
 namespace PhpLightning\Router;
 
-use function call_user_func_array;
 use function count;
 
 final class Router
 {
-    public function __construct(
+    /** @var array<string, array<string, array{action:callable, args?:array}>> */
+    private array $routes = [];
+
+    private function __construct(
         private string $requestMethod,
         private string $requestUri,
     ) {
     }
 
-    public function get(string $route, callable $callback): void
+    public static function withServer(array $server = []): self
     {
-        if ($this->requestMethod === 'GET') {
-            $this->route($route, $callback);
-        }
+        return new self(
+            (string)($server['REQUEST_METHOD'] ?? ''),
+            (string)($server['REQUEST_URI'] ?? ''),
+        );
     }
 
-    private function route(string $route, callable $callback): void
+    public function listen(): void
+    {
+        $requestUrl = $this->requestUrl();
+
+        $notFoundFn = static fn (): string => "404: route '{$requestUrl}' not found";
+
+        $current = $this->routes[$requestUrl][$this->requestMethod]
+            ?? ['action' => $notFoundFn, 'args' => []];
+
+        /** @psalm-suppress TooManyArguments */
+        echo (string)$current['action'](...$current['args'] ?? []);
+    }
+
+    public function get(string $route, callable $callback): void
+    {
+        $this->route('GET', $route, $callback);
+    }
+
+    private function route(string $method, string $route, callable $callback): void
     {
         $requestUrl = $this->requestUrl();
         $routeParts = explode('/', $route);
@@ -31,8 +52,11 @@ final class Router
         array_shift($requestUrlParts);
 
         if ($routeParts[0] === '' && count($requestUrlParts) === 0) {
-            call_user_func_array($callback, []);
-            exit();
+            $this->routes[$requestUrl][$method] = [
+                'action' => $callback,
+                'args' => [],
+            ];
+            return;
         }
 
         if (count($routeParts) !== count($requestUrlParts)) {
@@ -40,11 +64,10 @@ final class Router
         }
 
         $parameters = $this->parameters($routeParts, $requestUrlParts);
-        if ($parameters === []) {
-            return;
-        }
-        call_user_func_array($callback, $parameters);
-        exit();
+        $this->routes[$requestUrl][$method] = [
+            'action' => $callback,
+            'args' => $parameters,
+        ];
     }
 
     private function requestUrl(): string
@@ -64,9 +87,7 @@ final class Router
         for ($i = 0, $iMax = count($routeParts); $i < $iMax; ++$i) {
             $routePart = $routeParts[$i];
             if (preg_match('/^[$]/', $routePart)) {
-                $routePart = ltrim($routePart, '$');
                 $parameters[] = $requestUrlParts[$i];
-                $$routePart = $requestUrlParts[$i];
             } elseif ($routeParts[$i] !== $requestUrlParts[$i]) {
                 return [];
             }

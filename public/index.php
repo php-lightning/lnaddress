@@ -13,10 +13,7 @@ require_once getcwd() . '/vendor/autoload.php';
 
 Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
 
-$router = new Router(
-    $_SERVER['REQUEST_METHOD'],
-    $_SERVER['REQUEST_URI']
-);
+$router = Router::withServer($_SERVER);
 
 $router->get('/', static function () {
     echo (new InvoiceController)->__invoke();
@@ -26,3 +23,5 @@ $router->get('/$name', static function (string $name = '') {
     $amount = (int)($_GET['amount'] ?? 0);
     echo (new InvoiceController)->__invoke($name, $amount);
 });
+
+$router->listen();
