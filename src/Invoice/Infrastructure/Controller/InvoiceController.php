@@ -6,6 +6,7 @@ namespace PhpLightning\Invoice\Infrastructure\Controller;
 
 use Gacela\Framework\DocBlockResolverAwareTrait;
 use PhpLightning\Invoice\InvoiceFacade;
+use PhpLightning\Router\Router;
 use Throwable;
 
 /**
@@ -18,9 +19,10 @@ final class InvoiceController
     /**
      * @psalm-suppress InternalMethod
      */
-    public function __invoke(string $username = '', int $amount = 0): string
+    public function __invoke(string $username = ''): string
     {
         try {
+            $amount = Router::getInt('amount');
             if ($amount === 0) {
                 return $this->json(
                     $this->getFacade()->getCallbackUrl($username),
@@ -31,11 +33,16 @@ final class InvoiceController
                 $this->getFacade()->generateInvoice($username, $amount),
             );
         } catch (Throwable $e) {
-            return $this->json([
-                'status' => 'ERROR',
-                'message' => $e->getMessage(),
-            ]);
+            return $this->error($e);
         }
+    }
+
+    private function error(Throwable $e): string
+    {
+        return $this->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage(),
+        ]);
     }
 
     private function json(array $json): string
