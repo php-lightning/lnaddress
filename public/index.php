@@ -2,16 +2,22 @@
 
 declare(strict_types=1);
 
+header("Access-Control-Allow-Origin: *");
+
 use Gacela\Framework\Gacela;
+use PhpLightning\Invoice\Infrastructure\Controller\InvoiceController;
 use PhpLightning\Kernel;
 
-require_once getcwd() . '/vendor/autoload_runtime.php';
+require_once getcwd() . '/vendor/autoload.php';
+require_once __DIR__ . '/router.php';
 
-return static function (array $context) {
-    $kernel = new Kernel($context['APP_ENV'], (bool)$context['APP_DEBUG']);
+Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
 
-    Gacela::bootstrap(getcwd(), $kernel->gacelaConfigFn());
+get('/', static function () {
+    echo (new InvoiceController)->__invoke();
+});
 
-    return $kernel;
-};
-
+get('/$name', static function (string $name = '') {
+    $amount = (int)($_GET['amount'] ?? 0);
+    echo (new InvoiceController)->__invoke($name, $amount);
+});
