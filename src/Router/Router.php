@@ -34,14 +34,6 @@ final class Router
         );
     }
 
-    /**
-     * @psalm-suppress RiskyCast
-     */
-    public static function getInt(string $key, int $default = 0): int
-    {
-        return (int)($_GET[$key] ?? $default);
-    }
-
     public function listen(): void
     {
         $requestUrl = $this->requestUrl();
@@ -53,12 +45,11 @@ final class Router
         if (is_callable($current['controller'])) {
             /** @psalm-suppress TooManyArguments */
             echo (string)$current['controller'](...$current['args'] ?? []);
-            return;
+        } else {
+            /** @psalm-suppress TooManyArgument,InvalidStringClass,PossiblyUndefinedArrayOffset */
+            echo (string)(new $current['controller']())
+                ->{$current['action']}(...$current['args'] ?? []);
         }
-
-        /** @psalm-suppress TooManyArgument,InvalidStringClass,PossiblyUndefinedArrayOffset */
-        echo (string)(new $current['controller']())
-            ->{$current['action']}(...$current['args'] ?? []);
     }
 
     public function get(
@@ -92,13 +83,13 @@ final class Router
                 'action' => $action,
                 'args' => [],
             ];
-            return;
+        } else {
+            $this->routes[$method][$requestUrl] = [
+                'controller' => $controller,
+                'action' => $action,
+                'args' => $this->parameters($routeParts, $requestUrlParts),
+            ];
         }
-        $this->routes[$method][$requestUrl] = [
-            'controller' => $controller,
-            'action' => $action,
-            'args' => $this->parameters($routeParts, $requestUrlParts),
-        ];
     }
 
     private function requestUrl(): string

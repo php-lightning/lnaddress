@@ -6,7 +6,7 @@ namespace PhpLightning\Invoice\Infrastructure\Controller;
 
 use Gacela\Framework\DocBlockResolverAwareTrait;
 use PhpLightning\Invoice\InvoiceFacade;
-use PhpLightning\Router\Router;
+use PhpLightning\Router\Request;
 use Throwable;
 
 /**
@@ -22,7 +22,7 @@ final class InvoiceController
     public function __invoke(string $username = ''): string
     {
         try {
-            $amount = Router::getInt('amount');
+            $amount = Request::getInt('amount');
             if ($amount === 0) {
                 return $this->json(
                     $this->getFacade()->getCallbackUrl($username),
