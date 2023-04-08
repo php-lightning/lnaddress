@@ -80,9 +80,9 @@ final class Router
     private function requestUrl(): string
     {
         $requestUrl = (string)filter_var($this->requestUri, FILTER_SANITIZE_URL);
-        $requestUrl = rtrim($requestUrl, '/');
+        $requestUrl = (string)strtok($requestUrl, '?');
 
-        return (string)strtok($requestUrl, '?');
+        return rtrim($requestUrl, '/');
     }
 
     /**
