@@ -8,7 +8,14 @@ use function count;
 
 final class Router
 {
-    /** @var array<string, array<string, array{action:callable, args?:array}>> */
+    /**
+     * Eg: [method -> url -> [action, args]]
+     *
+     * @var array<string, array<string, array{
+     *     action: callable,
+     *     args?: array
+     * }>>
+     */
     private array $routes = [];
 
     private function __construct(
@@ -31,7 +38,7 @@ final class Router
 
         $notFoundFn = static fn (): string => "404: route '{$requestUrl}' not found";
 
-        $current = $this->routes[$requestUrl][$this->requestMethod]
+        $current = $this->routes[$this->requestMethod][$requestUrl]
             ?? ['action' => $notFoundFn, 'args' => []];
 
         /** @psalm-suppress TooManyArguments */
@@ -52,7 +59,7 @@ final class Router
         array_shift($requestUrlParts);
 
         if ($routeParts[0] === '' && count($requestUrlParts) === 0) {
-            $this->routes[$requestUrl][$method] = [
+            $this->routes[$method][$requestUrl] = [
                 'action' => $callback,
                 'args' => [],
             ];
@@ -64,7 +71,7 @@ final class Router
         }
 
         $parameters = $this->parameters($routeParts, $requestUrlParts);
-        $this->routes[$requestUrl][$method] = [
+        $this->routes[$method][$requestUrl] = [
             'action' => $callback,
             'args' => $parameters,
         ];
