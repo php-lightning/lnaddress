@@ -22,13 +22,12 @@
         },
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
-            "symfony/flex": true,
             "symfony/runtime": true
         },
         "optimize-autoloader": true,
             "preferred-install": {
-                    "*": "dist"
-                },
+                "*": "dist"
+            },
         "sort-packages": true
     },
     "autoload": {
@@ -69,14 +68,5 @@
         "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
         "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run"
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "6.0.*"
-        }
     }
 }
