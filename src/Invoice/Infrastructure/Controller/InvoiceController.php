@@ -6,9 +6,6 @@ namespace PhpLightning\Invoice\Infrastructure\Controller;
 
 use Gacela\Framework\DocBlockResolverAwareTrait;
 use PhpLightning\Invoice\InvoiceFacade;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -21,28 +18,30 @@ final class InvoiceController
     /**
      * @psalm-suppress InternalMethod
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(string $username = '', int $amount = 0): string
     {
-        $username = (string)$request->get('username');
-        $milliSats = (int)$request->get('amount', 0);
-        //        TODO: Make it customizable
-        //        $backend = (string)$request->get('backend', 'lnbits');
-
         try {
-            if ($milliSats === 0) {
-                return new JsonResponse(
+            if ($amount === 0) {
+                return $this->json(
                     $this->getFacade()->getCallbackUrl($username),
                 );
             }
 
-            return new JsonResponse(
-                $this->getFacade()->generateInvoice($username, $milliSats),
+            return $this->json(
+                $this->getFacade()->generateInvoice($username, $amount),
             );
         } catch (Throwable $e) {
-            return new JsonResponse([
+            return $this->json([
                 'status' => 'ERROR',
                 'message' => $e->getMessage(),
-            ], Response::HTTP_BAD_REQUEST);
+            ]);
         }
+    }
+
+    private function json(array $json): string
+    {
+        header('Content-Type: application/json');
+
+        return json_encode($json, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 }
