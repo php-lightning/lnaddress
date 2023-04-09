@@ -19,11 +19,13 @@ final class InvoiceController
     /**
      * @psalm-suppress InternalMethod
      */
-    public function __invoke(string $username = ''): string
+    public function __invoke(string $username = '', int $amount = 0): string
     {
         try {
-            $request = Request::fromGlobals();
-            $amount = (int)$request->get('amount');
+            if ($amount === 0) {
+                $request = Request::fromGlobals();
+                $amount = (int)$request->get('amount');
+            }
 
             if ($amount === 0) {
                 return $this->json(

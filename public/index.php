@@ -13,5 +13,6 @@ require_once getcwd() . '/vendor/autoload.php';
 
 Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
 
+Route::get('{username}/{amount}', InvoiceController::class);
 Route::get('{username}', InvoiceController::class);
 Route::get('/', InvoiceController::class);

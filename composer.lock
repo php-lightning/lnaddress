@@ -91,12 +91,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/gacela-project/router.git",
-                "reference": "76e11b37a9ca7266ea009b3f214ec73a9271b88a"
+                "reference": "fe77ac7787f6fffa44c7fc56504165613a353cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gacela-project/router/zipball/76e11b37a9ca7266ea009b3f214ec73a9271b88a",
-                "reference": "76e11b37a9ca7266ea009b3f214ec73a9271b88a",
+                "url": "https://api.github.com/repos/gacela-project/router/zipball/fe77ac7787f6fffa44c7fc56504165613a353cde",
+                "reference": "fe77ac7787f6fffa44c7fc56504165613a353cde",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,13 @@
                 "issues": "https://github.com/gacela-project/router/issues",
                 "source": "https://github.com/gacela-project/router/tree/main"
             },
-            "time": "2023-04-09T15:13:05+00:00"
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/chemaclass",
+                    "type": "custom"
+                }
+            ],
+            "time": "2023-04-09T15:38:24+00:00"
         },
         {
             "name": "psr/container",
