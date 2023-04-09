@@ -13,9 +13,5 @@ require_once getcwd() . '/vendor/autoload.php';
 
 Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
 
-$router = Router::withServer($_SERVER);
-
-$router->get('/', InvoiceController::class);
-$router->get('/$username', InvoiceController::class);
-
-$router->listen();
+Router::get('/', InvoiceController::class);
+Router::get('{username}', InvoiceController::class);
