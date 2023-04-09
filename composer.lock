@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d546874871930c5d8901c19f0f0666c",
+    "content-hash": "36eeaba65d48696cd6d0001b8fca15e2",
     "packages": [
         {
             "name": "gacela-project/gacela",
@@ -84,6 +84,45 @@
                 }
             ],
             "time": "2023-03-21T16:45:01+00:00"
+        },
+        {
+            "name": "gacela-project/router",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gacela-project/router.git",
+                "reference": "76e11b37a9ca7266ea009b3f214ec73a9271b88a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gacela-project/router/zipball/76e11b37a9ca7266ea009b3f214ec73a9271b88a",
+                "reference": "76e11b37a9ca7266ea009b3f214ec73a9271b88a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.2"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.16",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.6",
+                "psalm/plugin-phpunit": "^0.18",
+                "symfony/var-dumper": "^5.4",
+                "vimeo/psalm": "^5.9"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gacela\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/gacela-project/router/issues",
+                "source": "https://github.com/gacela-project/router/tree/main"
+            },
+            "time": "2023-04-09T15:13:05+00:00"
         },
         {
             "name": "psr/container",
@@ -5133,7 +5172,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gacela-project/router": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

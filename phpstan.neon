@@ -7,6 +7,5 @@ parameters:
 
     ignoreErrors:
         - '#Cannot cast mixed to .*.#'
-        - '#Match expression does not handle remaining value: string#'
         - '#Method PhpLightning\\.*::.* should return array<.*> but returns array#'
         - '#Method PhpLightning\\.*::.* should return .* but returns mixed#'
