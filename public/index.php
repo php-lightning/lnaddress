@@ -15,13 +15,7 @@ Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
 
 $router = Router::withServer($_SERVER);
 
-$router->get('/', static function () {
-    echo (new InvoiceController)->__invoke();
-});
-
-$router->get('/$name', static function (string $name = '') {
-    $amount = (int)($_GET['amount'] ?? 0);
-    echo (new InvoiceController)->__invoke($name, $amount);
-});
+$router->get('/', InvoiceController::class);
+$router->get('/$username', InvoiceController::class);
 
 $router->listen();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLightning\Router;
 
 use function count;
+use function is_callable;
 
 final class Router
 {
@@ -12,7 +13,8 @@ final class Router
      * Eg: [method -> url -> [action, args]]
      *
      * @var array<string, array<string, array{
-     *     action: callable,
+     *     controller: string|callable,
+     *     action: string,
      *     args?: array
      * }>>
      */
@@ -37,52 +39,64 @@ final class Router
         $requestUrl = $this->requestUrl();
 
         $notFoundFn = static fn (): string => "404: route '{$requestUrl}' not found";
-
         $current = $this->routes[$this->requestMethod][$requestUrl]
-            ?? ['action' => $notFoundFn, 'args' => []];
+            ?? ['controller' => $notFoundFn, 'action' => '', 'args' => []];
 
-        /** @psalm-suppress TooManyArguments */
-        echo (string)$current['action'](...$current['args'] ?? []);
-    }
-
-    public function get(string $route, callable $callback): void
-    {
-        $this->route('GET', $route, $callback);
-    }
-
-    private function route(string $method, string $route, callable $callback): void
-    {
-        $requestUrl = $this->requestUrl();
-        $routeParts = explode('/', $route);
-        $requestUrlParts = explode('/', $requestUrl);
-        array_shift($routeParts);
-        array_shift($requestUrlParts);
-
-        if ($routeParts[0] === '' && count($requestUrlParts) === 0) {
-            $this->routes[$method][$requestUrl] = [
-                'action' => $callback,
-                'args' => [],
-            ];
-            return;
+        if (is_callable($current['controller'])) {
+            /** @psalm-suppress TooManyArguments */
+            echo (string)$current['controller'](...$current['args'] ?? []);
+        } else {
+            /** @psalm-suppress TooManyArgument,InvalidStringClass,PossiblyUndefinedArrayOffset */
+            echo (string)(new $current['controller']())
+                ->{$current['action']}(...$current['args'] ?? []);
         }
+    }
+
+    public function get(
+        string $route,
+        callable|string $controller,
+        string $action = '__invoke',
+    ): void {
+        $this->route('GET', $route, $controller, $action);
+    }
+
+    private function route(
+        string $method,
+        string $route,
+        callable|string $controller,
+        string $action = '',
+    ): void {
+        $requestUrl = $this->requestUrl();
+        $requestUrlParts = explode('/', $requestUrl);
+        $routeParts = explode('/', $route);
 
         if (count($routeParts) !== count($requestUrlParts)) {
             return;
         }
 
-        $parameters = $this->parameters($routeParts, $requestUrlParts);
-        $this->routes[$method][$requestUrl] = [
-            'action' => $callback,
-            'args' => $parameters,
-        ];
+        array_shift($routeParts);
+        array_shift($requestUrlParts);
+
+        if ($routeParts[0] === '' && count($requestUrlParts) === 0) {
+            $this->routes[$method][$requestUrl] = [
+                'controller' => $controller,
+                'action' => $action,
+                'args' => [],
+            ];
+        } else {
+            $this->routes[$method][$requestUrl] = [
+                'controller' => $controller,
+                'action' => $action,
+                'args' => $this->parameters($routeParts, $requestUrlParts),
+            ];
+        }
     }
 
     private function requestUrl(): string
     {
         $requestUrl = (string)filter_var($this->requestUri, FILTER_SANITIZE_URL);
         $requestUrl = (string)strtok($requestUrl, '?');
-
-        return rtrim($requestUrl, '/');
+        return rtrim($requestUrl, '/') ?: '/';
     }
 
     /**
