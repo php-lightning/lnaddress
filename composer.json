@@ -1,6 +1,7 @@
 {
     "name": "php-lightning/lnaddress",
     "type": "library",
+    "license": "MIT",
     "require": {
         "php": ">=8.0.2",
         "gacela-project/gacela": "^1.1",
