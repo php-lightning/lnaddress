@@ -43,8 +43,6 @@ final class InvoiceController
 
     private function json(array $json): string
     {
-        header('Content-Type: application/json');
-
         return json_encode($json, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 

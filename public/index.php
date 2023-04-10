@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json');
 
 use Gacela\Framework\Gacela;
 use Gacela\Router\Route;
