@@ -23,8 +23,7 @@ final class InvoiceController
     {
         try {
             if ($amount === 0) {
-                $request = Request::fromGlobals();
-                $amount = (int)$request->get('amount');
+                $amount = (int)Request::instance()->get('amount');
             }
 
             if ($amount === 0) {
