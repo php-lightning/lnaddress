@@ -20,6 +20,10 @@ PHP Lightning Address is an easy way to get a [lightning address](https://lightn
   </a>
 </p>
 
+### Demo template
+
+Check the **demo template**: [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
+
 ## Table of contents
 
 - [Prerequisite](#prerequisite)
@@ -92,12 +96,6 @@ Please note that `.htaccess` file will not be read if the Apache configuration d
 You might be able to configure your web server to let the PHP backend handle specific files, in that way the script can be named without `.php` extension and URL rewriting is thus not needed.
 
 ## Usage
-
-### TLDR
-
-Video demo (~2 min): https://youtu.be/9UtxKGGDLp8
-
-Check the **demo template**: [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
 
 ### Rename & move the script to the right directory
 
