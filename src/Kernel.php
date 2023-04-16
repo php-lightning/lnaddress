@@ -8,6 +8,9 @@ use Gacela\Framework\Bootstrap\GacelaConfig;
 
 final class Kernel
 {
+    /**
+     * @return callable(GacelaConfig):void
+     */
     public static function gacelaConfigFn(): callable
     {
         return static function (GacelaConfig $config): void {

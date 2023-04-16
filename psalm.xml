@@ -24,5 +24,7 @@
         <MoreSpecificReturnType errorLevel="suppress" />
         <MixedInferredReturnType errorLevel="suppress" />
         <MixedReturnStatement errorLevel="suppress" />
+        <ArgumentTypeCoercion errorLevel="suppress" />
+        <UnresolvableInclude errorLevel="suppress" />
     </issueHandlers>
 </psalm>

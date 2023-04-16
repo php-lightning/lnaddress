@@ -6,16 +6,18 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 use Gacela\Framework\Gacela;
-use Gacela\Router\Routing;
-use Gacela\Router\RoutingConfigurator;
+use Gacela\Router\Router;
+use Gacela\Router\Routes;
 use PhpLightning\Invoice\Infrastructure\Controller\InvoiceController;
 use PhpLightning\Kernel;
 
-require_once getcwd() . '/vendor/autoload.php';
+$cwd = (string)getcwd();
 
-Gacela::bootstrap(getcwd(), Kernel::gacelaConfigFn());
+require_once $cwd . '/vendor/autoload.php';
 
-Routing::configure(static function (RoutingConfigurator $routes): void {
+Gacela::bootstrap($cwd, Kernel::gacelaConfigFn());
+
+Router::configure(static function (Routes $routes): void {
     $routes->get('{username}/{amount}', InvoiceController::class);
     $routes->get('{username}', InvoiceController::class);
     $routes->get('/', InvoiceController::class);

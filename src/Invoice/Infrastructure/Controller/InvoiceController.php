@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Infrastructure\Controller;
 
 use Gacela\Framework\DocBlockResolverAwareTrait;
-use Gacela\Router\Request;
+use Gacela\Router\Entities\Request;
 use PhpLightning\Invoice\InvoiceFacade;
 use Throwable;
 
@@ -16,6 +16,11 @@ final class InvoiceController
 {
     use DocBlockResolverAwareTrait;
 
+    public function __construct(
+        private Request $request,
+    ) {
+    }
+
     /**
      * @psalm-suppress InternalMethod
      */
@@ -23,7 +28,7 @@ final class InvoiceController
     {
         try {
             if ($amount === 0) {
-                $amount = (int)Request::instance()->get('amount');
+                $amount = (int)$this->request->get('amount');
             }
 
             if ($amount === 0) {
