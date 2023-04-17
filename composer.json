@@ -64,6 +64,7 @@
         "psalm": "XDEBUG_MODE=off ./vendor/bin/psalm",
         "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
-        "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run"
+        "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run",
+        "serve": "php -S localhost:8080 public/index.php"
     }
 }
