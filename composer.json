@@ -5,7 +5,7 @@
     "require": {
         "php": ">=8.0.2",
         "gacela-project/gacela": "^1.1",
-        "gacela-project/router": "^0.5",
+        "gacela-project/router": "^0.6",
         "symfony/http-client": "^6.0"
     },
     "require-dev": {
