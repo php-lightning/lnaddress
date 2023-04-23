@@ -36,7 +36,7 @@ final class InvoiceFacadeTest extends TestCase
             'callback' => 'https://callback.url/receiver',
             'maxSendable' => 10_000,
             'minSendable' => 1_000,
-            'metadata' => '[["text/plain","Pay to receiver@domain.com"],["text/identifier","receiver@domain.com"]]',
+            'metadata' => '[["text/plain","Pay to username@domain.com"],["text/identifier","username@domain.com"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
         ], $json);
@@ -73,6 +73,7 @@ final class InvoiceFacadeTest extends TestCase
                     ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
                     ->addBackend(
+                        'username',
                         (new LnBitsBackendConfig())
                             ->setApiEndpoint('http://localhost:5000')
                             ->setApiKey('XYZ'),
@@ -88,7 +89,7 @@ final class InvoiceFacadeTest extends TestCase
             new class() extends AbstractDependencyProvider {
                 public function provideModuleDependencies(Container $container): void
                 {
-                    $container->set(InvoiceDependencyProvider::HTTP_API, static fn () => new FakeHttpApi());
+                    $container->set(InvoiceDependencyProvider::HTTP_API, static fn() => new FakeHttpApi());
                 }
             },
         );
