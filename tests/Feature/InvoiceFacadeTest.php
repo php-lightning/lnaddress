@@ -89,7 +89,7 @@ final class InvoiceFacadeTest extends TestCase
             new class() extends AbstractDependencyProvider {
                 public function provideModuleDependencies(Container $container): void
                 {
-                    $container->set(InvoiceDependencyProvider::HTTP_API, static fn() => new FakeHttpApi());
+                    $container->set(InvoiceDependencyProvider::HTTP_API, static fn () => new FakeHttpApi());
                 }
             },
         );
