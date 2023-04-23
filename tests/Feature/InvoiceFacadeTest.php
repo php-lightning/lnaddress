@@ -29,13 +29,13 @@ final class InvoiceFacadeTest extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = $this->facade->getCallbackUrl('username');
+        $json = $this->facade->getCallbackUrl('bob');
 
         self::assertEquals([
             'callback' => 'https://callback.url/receiver',
             'maxSendable' => 10_000,
             'minSendable' => 1_000,
-            'metadata' => '[["text/plain","Pay to username@domain.com"],["text/identifier","username@domain.com"]]',
+            'metadata' => '[["text/plain","Pay to bob@domain.com"],["text/identifier","bob@domain.com"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
         ], $json);
@@ -46,7 +46,7 @@ final class InvoiceFacadeTest extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = $this->facade->generateInvoice('username', 2_000, 'lnbits');
+        $json = $this->facade->generateInvoice('alice', 2_000, 'lnbits');
 
         self::assertEquals([
             'pr' => 'lnbc10u1pjzh489...fake payment_request',

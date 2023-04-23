@@ -70,7 +70,7 @@ final class LightningConfig implements JsonSerializable
         foreach ($json as $user => $settings) {
             $this->addBackend(
                 $user,
-                LnBitsBackendConfig::withApiEndpointAndKey(
+                LnBitsBackendConfig::withEndpointAndKey(
                     $settings['api_endpoint'] ?? '',
                     $settings['api_key'] ?? '',
                 ),

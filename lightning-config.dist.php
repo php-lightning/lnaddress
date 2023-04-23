@@ -11,10 +11,6 @@ return (new LightningConfig())
     ->setSendableRange(min: 100_000, max: 10_000_000_000)
     ->setCallbackUrl('localhost:8000/callback')
     ->setBackends([
-        'user-1' => (new LnBitsBackendConfig())
-            ->setApiEndpoint('http://localhost:5000')
-            ->setApiKey('api_key-1'),
-        'user-2' => (new LnBitsBackendConfig())
-            ->setApiEndpoint('http://localhost:5000')
-            ->setApiKey('api_key-2')
+        'user-1' => LnBitsBackendConfig::withEndpointAndKey('http://localhost:5000', 'api_key-1'),
+        'user-2' => LnBitsBackendConfig::withEndpointAndKey('http://localhost:5000', 'api_key-2'),
     ]);
