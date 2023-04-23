@@ -9,6 +9,13 @@ final class LnBitsBackendConfig implements BackendConfigInterface
     private string $apiEndpoint = 'http://localhost:5000';
     private string $apiKey = '';
 
+    public static function withApiEndpointAndKey(string $endpoint, string $key): self
+    {
+        return (new self())
+            ->setApiEndpoint($endpoint)
+            ->setApiKey($key);
+    }
+
     public function setApiEndpoint(string $apiEndpoint): self
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');

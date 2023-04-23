@@ -9,7 +9,6 @@ use Gacela\Framework\Bootstrap\GacelaConfig;
 use Gacela\Framework\ClassResolver\GlobalInstance\AnonymousGlobal;
 use Gacela\Framework\Container\Container;
 use Gacela\Framework\Gacela;
-use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 use PhpLightning\Invoice\InvoiceDependencyProvider;
 use PhpLightning\Invoice\InvoiceFacade;
@@ -72,12 +71,8 @@ final class InvoiceFacadeTest extends TestCase
                     ->setDomain('domain.com')
                     ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
-                    ->addBackend(
-                        'username',
-                        (new LnBitsBackendConfig())
-                            ->setApiEndpoint('http://localhost:5000')
-                            ->setApiKey('XYZ'),
-                    )->jsonSerialize(),
+                    ->addBackendsAsJson(__DIR__ . DIRECTORY_SEPARATOR . 'nostr.json')
+                    ->jsonSerialize(),
             );
         });
     }

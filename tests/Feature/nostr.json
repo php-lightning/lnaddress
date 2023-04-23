@@ -1,0 +1,6 @@
+{
+    "username": {
+        "api_key": "abc...123",
+        "api_endpoint": "http://localhost:5000"
+    }
+}
