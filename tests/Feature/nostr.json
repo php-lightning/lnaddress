@@ -1,0 +1,10 @@
+{
+    "bob": {
+        "api_key": "abc...123",
+        "api_endpoint": "http://localhost:5000"
+    },
+    "alice": {
+        "api_key": "def...456",
+        "api_endpoint": "http://localhost:5000"
+    }
+}

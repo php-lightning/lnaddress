@@ -9,7 +9,6 @@ use Gacela\Framework\Bootstrap\GacelaConfig;
 use Gacela\Framework\ClassResolver\GlobalInstance\AnonymousGlobal;
 use Gacela\Framework\Container\Container;
 use Gacela\Framework\Gacela;
-use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 use PhpLightning\Invoice\InvoiceDependencyProvider;
 use PhpLightning\Invoice\InvoiceFacade;
@@ -30,13 +29,13 @@ final class InvoiceFacadeTest extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = $this->facade->getCallbackUrl('username');
+        $json = $this->facade->getCallbackUrl('bob');
 
         self::assertEquals([
             'callback' => 'https://callback.url/receiver',
             'maxSendable' => 10_000,
             'minSendable' => 1_000,
-            'metadata' => '[["text/plain","Pay to username@domain.com"],["text/identifier","username@domain.com"]]',
+            'metadata' => '[["text/plain","Pay to bob@domain.com"],["text/identifier","bob@domain.com"]]',
             'tag' => 'payRequest',
             'commentAllowed' => false,
         ], $json);
@@ -47,7 +46,7 @@ final class InvoiceFacadeTest extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = $this->facade->generateInvoice('username', 2_000, 'lnbits');
+        $json = $this->facade->generateInvoice('alice', 2_000, 'lnbits');
 
         self::assertEquals([
             'pr' => 'lnbc10u1pjzh489...fake payment_request',
@@ -72,12 +71,8 @@ final class InvoiceFacadeTest extends TestCase
                     ->setDomain('domain.com')
                     ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
-                    ->addBackend(
-                        'username',
-                        (new LnBitsBackendConfig())
-                            ->setApiEndpoint('http://localhost:5000')
-                            ->setApiKey('XYZ'),
-                    )->jsonSerialize(),
+                    ->addBackendsAsJson(__DIR__ . DIRECTORY_SEPARATOR . 'nostr.json')
+                    ->jsonSerialize(),
             );
         });
     }

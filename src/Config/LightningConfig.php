@@ -6,6 +6,7 @@ namespace PhpLightning\Config;
 
 use JsonSerializable;
 use PhpLightning\Config\Backend\BackendConfigInterface;
+use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Shared\Value\SendableRange;
 
 final class LightningConfig implements JsonSerializable
@@ -57,6 +58,25 @@ final class LightningConfig implements JsonSerializable
     {
         $this->backends ??= new BackendsConfig();
         $this->backends->add($username, $backendConfig);
+        return $this;
+    }
+
+    public function addBackendsAsJson(string $path): self
+    {
+        $jsonAsString = (string)file_get_contents($path);
+        /** @var array<string, array{api_endpoint?:string, api_key?: string}> $json */
+        $json = json_decode($jsonAsString, true);
+
+        foreach ($json as $user => $settings) {
+            $this->addBackend(
+                $user,
+                LnBitsBackendConfig::withEndpointAndKey(
+                    $settings['api_endpoint'] ?? '',
+                    $settings['api_key'] ?? '',
+                ),
+            );
+        }
+
         return $this;
     }
 
