@@ -5,12 +5,12 @@
     "require": {
         "php": ">=8.0.2",
         "gacela-project/gacela": "^1.1",
-        "gacela-project/router": "^0.7",
+        "gacela-project/router": "^0.9",
         "symfony/http-client": "^6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.16",
-        "gacela-project/phpstan-extension": "^0.3.0",
+        "gacela-project/phpstan-extension": "^0.3",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6",
         "psalm/plugin-phpunit": "^0.18",
