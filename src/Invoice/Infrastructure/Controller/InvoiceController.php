@@ -25,12 +25,10 @@ final class InvoiceController
     /**
      * @psalm-suppress InternalMethod
      */
-    public function __invoke(string $username = '', int $amount = 0): JsonResponse
+    public function __invoke(string $username = ''): JsonResponse
     {
         try {
-            if ($amount === 0) {
-                $amount = (int)$this->request->get('amount');
-            }
+            $amount = (int)$this->request->get('amount');
 
             if ($amount === 0) {
                 return new JsonResponse(
