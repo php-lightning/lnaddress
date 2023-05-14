@@ -8,6 +8,7 @@ use JsonSerializable;
 use PhpLightning\Config\Backend\BackendConfigInterface;
 use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Shared\Value\SendableRange;
+use RuntimeException;
 
 final class LightningConfig implements JsonSerializable
 {
@@ -42,39 +43,31 @@ final class LightningConfig implements JsonSerializable
         return $this;
     }
 
-    /**
-     * @param array<string,BackendConfigInterface> $list
-     */
-    public function setBackends(array $list): self
-    {
-        $this->backends ??= new BackendsConfig();
-        foreach ($list as $username => $config) {
-            $this->backends->add($username, $config);
-        }
-        return $this;
-    }
-
-    public function addBackend(string $username, BackendConfigInterface $backendConfig): self
-    {
-        $this->backends ??= new BackendsConfig();
-        $this->backends->add($username, $backendConfig);
-        return $this;
-    }
-
-    public function addBackendsAsJson(string $path): self
+    public function addBackendsFile(string $path): self
     {
         $jsonAsString = (string)file_get_contents($path);
-        /** @var array<string, array{api_endpoint?:string, api_key?: string}> $json */
+        /** @var array<string, array{
+         *     type: ?string,
+         *     api_endpoint?: string,
+         *     api_key?: string,
+         * }> $json
+         */
         $json = json_decode($jsonAsString, true);
 
         foreach ($json as $user => $settings) {
-            $this->addBackend(
-                $user,
-                LnBitsBackendConfig::withEndpointAndKey(
-                    $settings['api_endpoint'] ?? '',
-                    $settings['api_key'] ?? '',
-                ),
-            );
+            if (!isset($settings['type'])) {
+                throw new RuntimeException('"type" missing');
+            }
+
+            if ($settings['type'] === 'lnbits') { // TODO: refactor
+                $this->addBackend(
+                    $user,
+                    LnBitsBackendConfig::withEndpointAndKey(
+                        $settings['api_endpoint'] ?? '',
+                        $settings['api_key'] ?? '',
+                    ),
+                );
+            }
         }
 
         return $this;
@@ -100,5 +93,12 @@ final class LightningConfig implements JsonSerializable
         }
 
         return $result;
+    }
+
+    private function addBackend(string $username, BackendConfigInterface $backendConfig): self
+    {
+        $this->backends ??= new BackendsConfig();
+        $this->backends->add($username, $backendConfig);
+        return $this;
     }
 }

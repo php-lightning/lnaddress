@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Config;
 
-use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
@@ -55,24 +54,6 @@ final class LightningConfigTest extends TestCase
 
         self::assertEquals([
             'sendable-range' => SendableRange::withMinMax(1_000, 5_000),
-        ], $config->jsonSerialize());
-    }
-
-    public function test_ln_bits_backend(): void
-    {
-        $config = (new LightningConfig())
-            ->addBackend(
-                'username',
-                LnBitsBackendConfig::withEndpointAndKey('http://localhost:5000/', 'XYZ'),
-            );
-
-        self::assertEquals([
-            'backends' => [
-                'username' => [
-                    'api_endpoint' => 'http://localhost:5000',
-                    'api_key' => 'XYZ',
-                ],
-            ],
         ], $config->jsonSerialize());
     }
 }
