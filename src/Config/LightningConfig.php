@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace PhpLightning\Config;
 
 use JsonSerializable;
-use PhpLightning\Config\Backend\BackendConfigInterface;
 use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Shared\Value\SendableRange;
 use RuntimeException;
 
 final class LightningConfig implements JsonSerializable
 {
+    private ?BackendsConfig $backends = null;
     private ?string $domain = null;
     private ?string $receiver = null;
     private ?SendableRange $sendableRange = null;
     private ?string $callbackUrl = null;
-    private ?BackendsConfig $backends = null;
 
     public function setDomain(string $domain): self
     {
@@ -45,6 +44,8 @@ final class LightningConfig implements JsonSerializable
 
     public function addBackendsFile(string $path): self
     {
+        $this->backends ??= new BackendsConfig();
+
         $jsonAsString = (string)file_get_contents($path);
         /** @var array<string, array{
          *     type: ?string,
@@ -60,7 +61,7 @@ final class LightningConfig implements JsonSerializable
             }
 
             if ($settings['type'] === 'lnbits') { // TODO: refactor
-                $this->addBackend(
+                $this->backends->add(
                     $user,
                     LnBitsBackendConfig::withEndpointAndKey(
                         $settings['api_endpoint'] ?? '',
@@ -93,12 +94,5 @@ final class LightningConfig implements JsonSerializable
         }
 
         return $result;
-    }
-
-    private function addBackend(string $username, BackendConfigInterface $backendConfig): self
-    {
-        $this->backends ??= new BackendsConfig();
-        $this->backends->add($username, $backendConfig);
-        return $this;
     }
 }
