@@ -18,8 +18,7 @@ final class InvoiceRoutesPlugin
     public function __invoke(): void
     {
         $this->router->configure(static function (Routes $routes): void {
-            $routes->get('{username}', InvoiceController::class);
-            $routes->get('/', InvoiceController::class);
+            $routes->get('{username?}', InvoiceController::class);
         });
     }
 }
