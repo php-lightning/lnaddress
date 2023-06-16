@@ -26,6 +26,8 @@ Set up your custom config:
 
 ```bash
 cp lightning-config.dist.php lightning-config.php
+# or just simply the nostr.json to define the backends/user-settings
+cp nostr.dist.json nostr.json
 ```
 
 Run a local PHP server listening `public/index.php`
