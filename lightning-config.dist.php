@@ -9,4 +9,4 @@ return (new LightningConfig())
     ->setReceiver('default-receiver')
     ->setSendableRange(min: 100_000, max: 10_000_000_000)
     ->setCallbackUrl('localhost:8000/callback')
-    ->addBackendsFile(__DIR__ . DIRECTORY_SEPARATOR . 'nostr.json');
+    ->addBackendsFile(getcwd() . DIRECTORY_SEPARATOR . 'nostr.json');
