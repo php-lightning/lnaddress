@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 
+use PhpLightning\Invoice\Application\InvoiceGenerator;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;

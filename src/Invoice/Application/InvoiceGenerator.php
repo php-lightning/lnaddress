@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice\Domain\LnAddress;
+namespace PhpLightning\Invoice\Application;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;

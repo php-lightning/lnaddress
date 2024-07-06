@@ -44,6 +44,8 @@
             "@csfix",
             "@test-all"
         ],
+        "fix": "@csfix",
+        "test": "@test-all",
         "test-all": [
             "@quality",
             "@phpunit"

@@ -7,10 +7,17 @@ namespace PhpLightning\Shared\Transfer;
 final class BackendInvoiceResponse
 {
     private string $status = 'OK';
+
     private string $paymentRequest = '';
+
+    /** @var list<string> */
     private array $successAction = [];
+
+    /** @var list<string> */
     private array $routes = [];
+
     private bool $disposable = false;
+
     private string $reason = '';
 
     public function getPaymentRequest(): string
@@ -35,22 +42,34 @@ final class BackendInvoiceResponse
         return $this;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getSuccessAction(): array
     {
         return $this->successAction;
     }
 
+    /**
+     * @param list<string> $successAction
+     */
     public function setSuccessAction(array $successAction): self
     {
         $this->successAction = $successAction;
         return $this;
     }
 
+    /**
+     * @return list<string>
+     */
     public function getRoutes(): array
     {
         return $this->routes;
     }
 
+    /**
+     * @param list<string> $routes
+     */
     public function setRoutes(array $routes): self
     {
         $this->routes = $routes;

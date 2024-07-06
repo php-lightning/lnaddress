@@ -14,7 +14,7 @@ final class LnAddressGenerator implements LnAddressGeneratorInterface
 
     public function generate(?string $username): string
     {
-        if (empty($username)) {
+        if ($username === null || $username === '') {
             return $this->defaultLnAddress;
         }
 

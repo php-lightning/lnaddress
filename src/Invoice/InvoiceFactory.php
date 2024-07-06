@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice;
 
 use Gacela\Framework\AbstractFactory;
+use PhpLightning\Invoice\Application\CallbackUrl;
+use PhpLightning\Invoice\Application\InvoiceGenerator;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\BackendInvoice\LnbitsBackendInvoice;
-use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGenerator;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
-use PhpLightning\Invoice\Domain\LnAddress\InvoiceGenerator;
 
 /**
  * @method InvoiceConfig getConfig()

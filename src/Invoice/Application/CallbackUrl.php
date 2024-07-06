@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpLightning\Invoice\Domain\CallbackUrl;
+namespace PhpLightning\Invoice\Application;
 
+use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
+use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Shared\Value\SendableRange;
 
 final class CallbackUrl implements CallbackUrlInterface

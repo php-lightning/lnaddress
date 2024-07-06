@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 
+use PhpLightning\Invoice\Application\CallbackUrl;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrl;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 use PhpLightning\Shared\Value\SendableRange;
