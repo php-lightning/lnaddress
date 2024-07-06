@@ -39,6 +39,9 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "[ ! -f nostr.json ] && cp nostr.dist.json nostr.json || true"
+        ],
         "ctal": [
             "@static-clear-cache",
             "@csfix",
