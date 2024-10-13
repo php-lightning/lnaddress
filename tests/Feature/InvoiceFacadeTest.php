@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Feature;
 
-use Gacela\Framework\AbstractDependencyProvider;
+use Gacela\Framework\AbstractProvider;
 use Gacela\Framework\Bootstrap\GacelaConfig;
-use Gacela\Framework\ClassResolver\GlobalInstance\AnonymousGlobal;
 use Gacela\Framework\Container\Container;
 use Gacela\Framework\Gacela;
 use PhpLightning\Config\LightningConfig;
@@ -79,9 +78,9 @@ final class InvoiceFacadeTest extends TestCase
 
     private function mockLnPaymentRequest(): void
     {
-        AnonymousGlobal::overrideExistingResolvedClass(
+        Gacela::overrideExistingResolvedClass(
             InvoiceDependencyProvider::class,
-            new class() extends AbstractDependencyProvider {
+            new class() extends AbstractProvider {
                 public function provideModuleDependencies(Container $container): void
                 {
                     $container->set(InvoiceDependencyProvider::HTTP_API, static fn () => new FakeHttpApi());
