@@ -8,6 +8,8 @@ use Gacela\Framework\AbstractConfig;
 use PhpLightning\Shared\Value\SendableRange;
 use RuntimeException;
 
+use function sprintf;
+
 final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string

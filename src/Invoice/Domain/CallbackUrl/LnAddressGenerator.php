@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Domain\CallbackUrl;
 
+use function sprintf;
+
 final class LnAddressGenerator implements LnAddressGeneratorInterface
 {
     public function __construct(

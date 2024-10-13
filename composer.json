@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.1",
-        "gacela-project/gacela": "^1.7",
+        "gacela-project/gacela": "^1.8",
         "gacela-project/router": "^0.12",
         "symfony/http-client": "^6.0"
     },
