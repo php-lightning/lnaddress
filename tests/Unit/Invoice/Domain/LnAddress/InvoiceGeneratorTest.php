@@ -98,7 +98,7 @@ final class InvoiceGeneratorTest extends TestCase
         $backend = $this->createMock(BackendInvoiceInterface::class);
         $backend->expects(self::once())
             ->method('requestInvoice')
-            ->with(2000, $this->anything(), 'Custom memo')
+            ->with(2, $this->anything(), 'Custom memo')
             ->willReturn(new InvoiceTransfer());
 
         $invoice = new InvoiceGenerator(
@@ -109,6 +109,7 @@ final class InvoiceGeneratorTest extends TestCase
             'Payment received!',
             'Custom memo',
         );
+
         $invoice->generateInvoice(2_000);
     }
 }
