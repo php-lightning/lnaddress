@@ -19,6 +19,7 @@ final readonly class InvoiceGenerator
         private string $lnAddress,
         private string $descriptionTemplate,
         private string $successMessage,
+        private string $memo,
     ) {
     }
 
@@ -36,7 +37,7 @@ final readonly class InvoiceGenerator
         $imageMetadata = '';
         $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $this->lnAddress . '"]' . $imageMetadata . ']';
 
-        $invoice = $this->backendInvoice->requestInvoice((int)($milliSats / 1000), $metadata);
+        $invoice = $this->backendInvoice->requestInvoice((int)($milliSats / 1000), $metadata, $this->memo);
 
         return $this->mapResponseAsArray($invoice);
     }

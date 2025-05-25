@@ -18,13 +18,14 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
     ) {
     }
 
-    public function requestInvoice(int $satsAmount, string $metadata = ''): InvoiceTransfer
+    public function requestInvoice(int $satsAmount, string $metadata = '', string $memo = ''): InvoiceTransfer
     {
         $endpoint = $this->options['api_endpoint'] . '/api/v1/payments';
 
         $content = [
             'out' => false,
             'amount' => $satsAmount,
+            'memo' => $memo,
             'unhashed_description' => bin2hex($metadata),
             'description_hash' => hash('sha256', $metadata),
         ];

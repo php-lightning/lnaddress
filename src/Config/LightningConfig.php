@@ -18,6 +18,7 @@ final class LightningConfig implements JsonSerializable
     private ?string $callbackUrl = null;
     private ?string $descriptionTemplate = null;
     private ?string $successMessage = null;
+    private ?string $invoiceMemo = null;
 
     public function setDomain(string $domain): self
     {
@@ -53,6 +54,12 @@ final class LightningConfig implements JsonSerializable
     public function setSuccessMessage(string $message): self
     {
         $this->successMessage = $message;
+        return $this;
+    }
+
+    public function setInvoiceMemo(string $memo): self
+    {
+        $this->invoiceMemo = $memo;
         return $this;
     }
 
@@ -111,6 +118,9 @@ final class LightningConfig implements JsonSerializable
         }
         if ($this->successMessage !== null) {
             $result['success-message'] = $this->successMessage;
+        }
+        if ($this->invoiceMemo !== null) {
+            $result['invoice-memo'] = $this->invoiceMemo;
         }
 
         return $result;
