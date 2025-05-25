@@ -41,7 +41,6 @@ final class InvoiceFactory extends AbstractFactory
             $this->getConfig()->getDefaultLnAddress(),
             $this->getConfig()->getDescriptionTemplate(),
             $this->getConfig()->getSuccessMessage(),
-            $this->getConfig()->getInvoiceMemo(),
         );
     }
 

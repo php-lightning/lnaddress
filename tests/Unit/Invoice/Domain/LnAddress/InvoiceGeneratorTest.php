@@ -22,8 +22,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
             'Pay to %s',
-            'Payment received!',
-            '',
+            'Payment received!'
         );
         $actual = $invoice->generateInvoice(100);
 
@@ -44,8 +43,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
             'Pay to %s',
-            'Payment received!',
-            '',
+            'Payment received!'
         );
         $actual = $invoice->generateInvoice(2_000);
 
@@ -74,8 +72,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
             'Pay to %s',
-            'Payment received!',
-            '',
+            'Payment received!'
         );
         $actual = $invoice->generateInvoice(2_000);
 
@@ -93,12 +90,12 @@ final class InvoiceGeneratorTest extends TestCase
         ], $actual);
     }
 
-    public function test_passes_memo_to_backend(): void
+    public function test_passes_description_as_memo_to_backend(): void
     {
         $backend = $this->createMock(BackendInvoiceInterface::class);
         $backend->expects(self::once())
             ->method('requestInvoice')
-            ->with(2, $this->anything(), 'Custom memo')
+            ->with(2, $this->anything(), 'Pay to ln@address')
             ->willReturn(new InvoiceTransfer());
 
         $invoice = new InvoiceGenerator(
@@ -106,8 +103,7 @@ final class InvoiceGeneratorTest extends TestCase
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
             'Pay to %s',
-            'Payment received!',
-            'Custom memo',
+            'Payment received!'
         );
 
         $invoice->generateInvoice(2_000);
