@@ -49,7 +49,7 @@ composer serve
 
 ### Demo template
 
-We prepared a demo template, so you can use this project as a dependency. The benefits from this approach is that you can easily update your project with `composer update` whenever there are new features or improvements on this `lnaddress` repository.
+We prepared a demo template, so you can use this project as a dependency. The benefits from this approach is that you can update your project with `composer update` whenever there are new features or improvements on this `lnaddress` repository.
 
 > [https://github.com/php-lightning/demo-lnaddress](https://github.com/php-lightning/demo-lnaddress)
 

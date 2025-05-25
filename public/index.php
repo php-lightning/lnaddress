@@ -15,4 +15,6 @@ if (is_file($cwd . '/gacela.php')) {
     Gacela::bootstrap(\dirname(__DIR__));
 }
 
-Gacela::get(Router::class)?->run();
+/** @var Router $router */
+$router = Gacela::get(Router::class);
+$router->run();
