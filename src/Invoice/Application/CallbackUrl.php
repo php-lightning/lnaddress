@@ -7,6 +7,7 @@ namespace PhpLightning\Invoice\Application;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Shared\Value\SendableRange;
+
 use function sprintf;
 
 final class CallbackUrl implements CallbackUrlInterface

@@ -7,6 +7,7 @@ namespace PhpLightning\Invoice\Application;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 use PhpLightning\Shared\Value\SendableRange;
+
 use function sprintf;
 
 final class InvoiceGenerator
