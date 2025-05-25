@@ -40,6 +40,7 @@ final class InvoiceController
                 $this->getFacade()->generateInvoice($username, $amount),
             );
         } catch (Throwable $e) {
+            dump($e);
             return new JsonResponse([
                 'status' => 'ERROR',
                 'message' => $e->getMessage(),

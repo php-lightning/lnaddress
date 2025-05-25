@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 
 final class LnbitsBackendInvoice implements BackendInvoiceInterface
 {
     /**
-     * @param array{api_key:string, api_endpoint:string} $options
+     * @param  array{api_key:string, api_endpoint:string}  $options
      */
     public function __construct(
         private readonly HttpApiInterface $httpApi,
@@ -18,7 +19,7 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
     ) {
     }
 
-    public function requestInvoice(int $satsAmount, string $metadata = ''): BackendInvoiceResponse
+    public function requestInvoice(int $satsAmount, string $metadata = ''): InvoiceTransfer
     {
         $endpoint = $this->options['api_endpoint'] . '/api/v1/payments';
 
@@ -39,18 +40,9 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
         );
 
         if ($response === null) {
-            return (new BackendInvoiceResponse())
-                ->setStatus('ERROR')
-                ->setPaymentRequest('Backend "LnBits" unreachable');
+            return new InvoiceTransfer(status: 'ERROR', error: 'Backend "LnBits" unreachable');
         }
 
-        if (!isset($response['payment_request'])) {
-            return (new BackendInvoiceResponse())
-                ->setStatus('ERROR')
-                ->setPaymentRequest('No payment_request found');
-        }
-
-        return (new BackendInvoiceResponse())
-            ->setPaymentRequest($response['payment_request']);
+        return InvoiceTransfer::fromArray($response);
     }
 }

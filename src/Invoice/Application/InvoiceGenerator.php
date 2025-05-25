@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Application;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 use PhpLightning\Shared\Value\SendableRange;
 
 use function sprintf;
@@ -40,18 +41,19 @@ final readonly class InvoiceGenerator
         return $this->mapResponseAsArray($invoice);
     }
 
-    private function mapResponseAsArray(BackendInvoiceResponse $invoice): array
+    private function mapResponseAsArray(InvoiceTransfer $invoice): array
     {
         return [
-            'pr' => $invoice->getPaymentRequest(),
-            'status' => $invoice->getStatus(),
+            'bolt11' => $invoice->bolt11,
+            'status' => $invoice->status,
+            'memo' => $invoice->memo,
             'successAction' => [
                 'tag' => 'message',
                 'message' => $this->successMessage,
             ],
             'routes' => [],
             'disposable' => false,
-            'reason' => $invoice->getReason(),
+            'error' => $invoice->error,
         ];
     }
 }

@@ -7,7 +7,8 @@ namespace PhpLightningTest\Unit\Invoice\Domain\CallbackUrl;
 use PhpLightning\Invoice\Application\CallbackUrl;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,7 @@ final class CallbackUrlTest extends TestCase
     public function test_get_callback_url(): void
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
-        $invoiceFacade->method('requestInvoice')->willReturn(new BackendInvoiceResponse());
+        $invoiceFacade->method('requestInvoice')->willReturn(new InvoiceTransfer());
 
         $lnAddressGenerator = $this->createStub(LnAddressGeneratorInterface::class);
         $lnAddressGenerator->method('generate')->willReturn('ln@address');

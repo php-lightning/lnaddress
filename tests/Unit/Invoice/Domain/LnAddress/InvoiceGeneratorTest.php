@@ -6,7 +6,7 @@ namespace PhpLightningTest\Unit\Invoice\Domain\LnAddress;
 
 use PhpLightning\Invoice\Application\InvoiceGenerator;
 use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ final class InvoiceGeneratorTest extends TestCase
     public function test_invalid_amount(): void
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
-        $invoiceFacade->method('requestInvoice')->willReturn(new BackendInvoiceResponse());
+        $invoiceFacade->method('requestInvoice')->willReturn(new InvoiceTransfer());
 
         $invoice = new InvoiceGenerator(
             $invoiceFacade,
@@ -36,9 +36,7 @@ final class InvoiceGeneratorTest extends TestCase
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')
-            ->willReturn((new BackendInvoiceResponse())
-                ->setStatus('ERROR')
-                ->setReason('some reason'));
+            ->willReturn(new InvoiceTransfer(error: 'some reason', status: 'ERROR'));
 
         $invoice = new InvoiceGenerator(
             $invoiceFacade,
@@ -50,15 +48,16 @@ final class InvoiceGeneratorTest extends TestCase
         $actual = $invoice->generateInvoice(2_000);
 
         self::assertEquals([
-            'pr' => '',
+            'bolt11' => '',
             'status' => 'ERROR',
+            'memo' => '',
             'successAction' => [
                 'tag' => 'message',
                 'message' => 'Payment received!',
             ],
             'routes' => [],
             'disposable' => false,
-            'reason' => 'some reason',
+            'error' => 'some reason',
         ], $actual);
     }
 
@@ -66,9 +65,7 @@ final class InvoiceGeneratorTest extends TestCase
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')
-            ->willReturn((new BackendInvoiceResponse())
-                ->setStatus('OK')
-                ->setPaymentRequest('ln123456789'));
+            ->willReturn(new InvoiceTransfer(bolt11: 'ln123456789', memo: 'Custom memo'));
 
         $invoice = new InvoiceGenerator(
             $invoiceFacade,
@@ -79,16 +76,17 @@ final class InvoiceGeneratorTest extends TestCase
         );
         $actual = $invoice->generateInvoice(2_000);
 
-        self::assertSame([
-            'pr' => 'ln123456789',
+        self::assertEquals([
+            'bolt11' => 'ln123456789',
             'status' => 'OK',
+            'memo' => 'Custom memo',
             'successAction' => [
                 'tag' => 'message',
                 'message' => 'Payment received!',
             ],
             'routes' => [],
             'disposable' => false,
-            'reason' => '',
+            'error' => null,
         ], $actual);
     }
 }

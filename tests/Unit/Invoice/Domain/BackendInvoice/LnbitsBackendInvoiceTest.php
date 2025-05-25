@@ -6,7 +6,7 @@ namespace PhpLightningTest\Unit\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Invoice\Domain\BackendInvoice\LnbitsBackendInvoice;
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 use PHPUnit\Framework\TestCase;
 
 final class LnbitsBackendInvoiceTest extends TestCase
@@ -20,29 +20,9 @@ final class LnbitsBackendInvoiceTest extends TestCase
             'api_endpoint' => 'endpoint',
             'api_key' => 'key',
         ]);
+
         $actual = $invoice->requestInvoice(100);
-
-        $expected = (new BackendInvoiceResponse())
-            ->setStatus('ERROR')
-            ->setPaymentRequest('Backend "LnBits" unreachable');
-
-        self::assertEquals($expected, $actual);
-    }
-
-    public function test_request_invoice_when_api_returns_no_payment_request(): void
-    {
-        $httpApi = $this->createStub(HttpApiInterface::class);
-        $httpApi->method('postRequestInvoice')->willReturn([]);
-
-        $invoice = new LnbitsBackendInvoice($httpApi, [
-            'api_endpoint' => 'endpoint',
-            'api_key' => 'key',
-        ]);
-        $actual = $invoice->requestInvoice(100);
-
-        $expected = (new BackendInvoiceResponse())
-            ->setStatus('ERROR')
-            ->setPaymentRequest('No payment_request found');
+        $expected = new InvoiceTransfer(error: 'Backend "LnBits" unreachable', status: 'ERROR');
 
         self::assertEquals($expected, $actual);
     }
@@ -51,17 +31,17 @@ final class LnbitsBackendInvoiceTest extends TestCase
     {
         $httpApi = $this->createStub(HttpApiInterface::class);
         $httpApi->method('postRequestInvoice')->willReturn([
-            'payment_request' => 'ln1234567890',
+            'bolt11' => 'ln1234567890',
+            'status' => 'OK',
         ]);
 
         $invoice = new LnbitsBackendInvoice($httpApi, [
             'api_endpoint' => 'endpoint',
             'api_key' => 'key',
         ]);
-        $actual = $invoice->requestInvoice(100);
 
-        $expected = (new BackendInvoiceResponse())
-            ->setPaymentRequest('ln1234567890');
+        $actual = $invoice->requestInvoice(100);
+        $expected = new InvoiceTransfer(bolt11: 'ln1234567890');
 
         self::assertEquals($expected, $actual);
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
-use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
+use PhpLightning\Shared\Transfer\InvoiceTransfer;
 
 final readonly class EmptyBackendInvoice implements BackendInvoiceInterface
 {
@@ -12,10 +12,8 @@ final readonly class EmptyBackendInvoice implements BackendInvoiceInterface
     {
     }
 
-    public function requestInvoice(int $satsAmount, string $metadata): BackendInvoiceResponse
+    public function requestInvoice(int $satsAmount, string $metadata): InvoiceTransfer
     {
-        return (new BackendInvoiceResponse())
-            ->setStatus('ERROR')
-            ->setReason('Unknown Backend: ' . $this->name);
+        return new InvoiceTransfer(status: 'ERROR', error: 'Unknown Backend: ' . $this->name);
     }
 }
