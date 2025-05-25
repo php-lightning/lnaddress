@@ -16,6 +16,8 @@ final class LightningConfig implements JsonSerializable
     private ?string $receiver = null;
     private ?SendableRange $sendableRange = null;
     private ?string $callbackUrl = null;
+    private ?string $descriptionTemplate = null;
+    private ?string $successMessage = null;
 
     public function setDomain(string $domain): self
     {
@@ -39,6 +41,18 @@ final class LightningConfig implements JsonSerializable
     public function setCallbackUrl(string $callbackUrl): self
     {
         $this->callbackUrl = $callbackUrl;
+        return $this;
+    }
+
+    public function setDescriptionTemplate(string $template): self
+    {
+        $this->descriptionTemplate = $template;
+        return $this;
+    }
+
+    public function setSuccessMessage(string $message): self
+    {
+        $this->successMessage = $message;
         return $this;
     }
 
@@ -91,6 +105,12 @@ final class LightningConfig implements JsonSerializable
         }
         if ($this->callbackUrl !== null) {
             $result['callback-url'] = $this->callbackUrl;
+        }
+        if ($this->descriptionTemplate !== null) {
+            $result['description-template'] = $this->descriptionTemplate;
+        }
+        if ($this->successMessage !== null) {
+            $result['success-message'] = $this->successMessage;
         }
 
         return $result;

@@ -30,6 +30,17 @@ cp lightning-config.dist.php lightning-config.php
 cp nostr.dist.json nostr.json
 ```
 
+You can customize the invoice description and the success message by editing
+`lightning-config.php`:
+
+```php
+use PhpLightning\Config\LightningConfig;
+
+return (new LightningConfig())
+    ->setDescriptionTemplate('Pay to %s on mynode')
+    ->setSuccessMessage('Thanks for the payment!');
+```
+
 Run a local PHP server listening `public/index.php`
 
 ```bash

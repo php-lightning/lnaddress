@@ -21,6 +21,8 @@ final class InvoiceGeneratorTest extends TestCase
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
+            'Pay to %s',
+            'Payment received!',
         );
         $actual = $invoice->generateInvoice(100);
 
@@ -42,6 +44,8 @@ final class InvoiceGeneratorTest extends TestCase
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
+            'Pay to %s',
+            'Payment received!',
         );
         $actual = $invoice->generateInvoice(2_000);
 
@@ -70,6 +74,8 @@ final class InvoiceGeneratorTest extends TestCase
             $invoiceFacade,
             SendableRange::withMinMax(1_000, 3_000),
             'ln@address',
+            'Pay to %s',
+            'Payment received!',
         );
         $actual = $invoice->generateInvoice(2_000);
 

@@ -7,6 +7,7 @@ namespace PhpLightning\Invoice\Application;
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Shared\Value\SendableRange;
+use function sprintf;
 
 final class CallbackUrl implements CallbackUrlInterface
 {
@@ -16,6 +17,7 @@ final class CallbackUrl implements CallbackUrlInterface
         private SendableRange $sendableRange,
         private LnAddressGeneratorInterface $lnAddressGenerator,
         private string $callback,
+        private string $descriptionTemplate,
     ) {
     }
 
@@ -25,7 +27,7 @@ final class CallbackUrl implements CallbackUrlInterface
         // Modify the description if you want to custom it
         // This will be the description on the wallet that pays your ln address
         // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $lnAddress;
+        $description = sprintf($this->descriptionTemplate, $lnAddress);
 
         // TODO: images not implemented yet; `',["image/jpeg;base64","' . base64_encode($response) . '"]';`
         $imageMetadata = '';

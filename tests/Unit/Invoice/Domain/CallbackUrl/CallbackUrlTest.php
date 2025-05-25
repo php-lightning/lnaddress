@@ -25,6 +25,7 @@ final class CallbackUrlTest extends TestCase
             SendableRange::withMinMax(1_000, 5_000),
             $lnAddressGenerator,
             'https://domain/receiver',
+            'Pay to %s',
         );
 
         self::assertEquals([
