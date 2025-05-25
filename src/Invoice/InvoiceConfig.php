@@ -64,6 +64,11 @@ final class InvoiceConfig extends AbstractConfig
         return (string)$this->get('success-message', 'Payment received!');
     }
 
+    public function getInvoiceMemo(): string
+    {
+        return (string)$this->get('invoice-memo', '');
+    }
+
     public function getDomain(): string
     {
         return (string)$this->get('domain', $_SERVER['HTTP_HOST'] ?? 'localhost');

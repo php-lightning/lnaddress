@@ -8,5 +8,5 @@ use PhpLightning\Shared\Transfer\InvoiceTransfer;
 
 interface BackendInvoiceInterface
 {
-    public function requestInvoice(int $satsAmount, string $metadata): InvoiceTransfer;
+    public function requestInvoice(int $satsAmount, string $metadata, string $memo = ''): InvoiceTransfer;
 }

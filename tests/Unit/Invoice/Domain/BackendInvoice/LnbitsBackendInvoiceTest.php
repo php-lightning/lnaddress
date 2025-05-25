@@ -21,7 +21,7 @@ final class LnbitsBackendInvoiceTest extends TestCase
             'api_key' => 'key',
         ]);
 
-        $actual = $invoice->requestInvoice(100);
+        $actual = $invoice->requestInvoice(100, '', '');
         $expected = new InvoiceTransfer(error: 'Backend "LnBits" unreachable', status: 'ERROR');
 
         self::assertEquals($expected, $actual);
@@ -40,7 +40,7 @@ final class LnbitsBackendInvoiceTest extends TestCase
             'api_key' => 'key',
         ]);
 
-        $actual = $invoice->requestInvoice(100);
+        $actual = $invoice->requestInvoice(100, '', '');
         $expected = new InvoiceTransfer(bolt11: 'ln1234567890');
 
         self::assertEquals($expected, $actual);

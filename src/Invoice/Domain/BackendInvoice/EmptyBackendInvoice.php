@@ -12,7 +12,7 @@ final readonly class EmptyBackendInvoice implements BackendInvoiceInterface
     {
     }
 
-    public function requestInvoice(int $satsAmount, string $metadata): InvoiceTransfer
+    public function requestInvoice(int $satsAmount, string $metadata, string $memo = ''): InvoiceTransfer
     {
         return new InvoiceTransfer(status: 'ERROR', error: 'Unknown Backend: ' . $this->name);
     }
