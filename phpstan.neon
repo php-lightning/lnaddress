@@ -5,8 +5,6 @@ parameters:
     level: max
     paths:
         - %currentWorkingDirectory%/src/
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false
 
     gacela:
         modulesNamespace: PhpLightning
@@ -14,6 +12,7 @@ parameters:
             - PhpLightning\Shared
 
     ignoreErrors:
+        - identifier: missingType.iterableValue
         - '#Cannot cast mixed to .*.#'
         - '#Method PhpLightning\\.*::.* should return array<.*> but returns array#'
         - '#Method PhpLightning\\.*::.* should return .* but returns mixed#'
