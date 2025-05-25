@@ -91,7 +91,7 @@ final class LightningConfig implements JsonSerializable
     public function jsonSerialize(): array
     {
         $result = [];
-        if ($this->backends !== null) {
+        if ($this->backends instanceof BackendsConfig) {
             $result['backends'] = $this->backends->jsonSerialize();
         }
         if ($this->domain !== null) {
@@ -100,7 +100,7 @@ final class LightningConfig implements JsonSerializable
         if ($this->receiver !== null) {
             $result['receiver'] = $this->receiver;
         }
-        if ($this->sendableRange !== null) {
+        if ($this->sendableRange instanceof SendableRange) {
             $result['sendable-range'] = $this->sendableRange;
         }
         if ($this->callbackUrl !== null) {

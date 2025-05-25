@@ -8,7 +8,7 @@ use Gacela\Router\Configure\Routes;
 use Gacela\Router\RouterInterface;
 use PhpLightning\Invoice\Infrastructure\Controller\InvoiceController;
 
-final class InvoiceRoutesPlugin
+final readonly class InvoiceRoutesPlugin
 {
     public function __construct(
         private RouterInterface $router,

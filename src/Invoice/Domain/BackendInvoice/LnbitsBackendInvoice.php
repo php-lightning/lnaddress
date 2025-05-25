@@ -13,7 +13,7 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
      * @param array{api_key:string, api_endpoint:string} $options
      */
     public function __construct(
-        private HttpApiInterface $httpApi,
+        private readonly HttpApiInterface $httpApi,
         private array $options,
     ) {
     }

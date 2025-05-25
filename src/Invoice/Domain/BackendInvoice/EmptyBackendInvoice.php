@@ -6,13 +6,10 @@ namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 
-final class EmptyBackendInvoice implements BackendInvoiceInterface
+final readonly class EmptyBackendInvoice implements BackendInvoiceInterface
 {
-    private string $name;
-
-    public function __construct(string $name)
+    public function __construct(private string $name)
     {
-        $this->name = $name;
     }
 
     public function requestInvoice(int $satsAmount, string $metadata): BackendInvoiceResponse

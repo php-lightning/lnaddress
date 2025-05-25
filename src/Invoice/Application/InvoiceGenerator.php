@@ -10,7 +10,7 @@ use PhpLightning\Shared\Value\SendableRange;
 
 use function sprintf;
 
-final class InvoiceGenerator
+final readonly class InvoiceGenerator
 {
     public function __construct(
         private BackendInvoiceInterface $backendInvoice,

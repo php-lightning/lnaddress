@@ -10,7 +10,7 @@ use PhpLightning\Shared\Value\SendableRange;
 
 use function sprintf;
 
-final class CallbackUrl implements CallbackUrlInterface
+final readonly class CallbackUrl implements CallbackUrlInterface
 {
     private const TAG_PAY_REQUEST = 'payRequest';
 

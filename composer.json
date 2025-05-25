@@ -13,14 +13,14 @@
         "gacela-project/phpstan-extension": "^0.3",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^9.6",
-        "psalm/plugin-phpunit": "^0.18",
+        "psalm/plugin-phpunit": "^0.19",
         "rector/rector": "^1.2",
         "symfony/var-dumper": "^7.2",
-        "vimeo/psalm": "^5.26"
+        "vimeo/psalm": "^6.11"
     },
     "config": {
         "platform": {
-            "php": "8.2"
+            "php": "8.2.27"
         },
         "allow-plugins": {
             "composer/package-versions-deprecated": true
@@ -48,11 +48,12 @@
             "@csfix",
             "@test-all"
         ],
-        "fix": "@csfix",
+        "fix": ["@csfix", "@rector"],
         "test": "@test-all",
         "test-all": [
             "@quality",
-            "@phpunit"
+            "@phpunit",
+            "@rector:dry"
         ],
         "quality": [
             "@csrun",
@@ -72,6 +73,8 @@
         "phpstan": "XDEBUG_MODE=off ./vendor/bin/phpstan analyze",
         "csfix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
         "csrun": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run",
+        "rector": "./vendor/bin/rector",
+        "rector:dry": "./vendor/bin/rector --dry-run",
         "serve": "php -S localhost:8080 public/index.php"
     }
 }

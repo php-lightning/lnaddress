@@ -6,7 +6,7 @@ use Gacela\Framework\Bootstrap\GacelaConfig;
 use Gacela\Router\Config\RouterGacelaConfig;
 use PhpLightning\Invoice\Infrastructure\Plugin\InvoiceRoutesPlugin;
 
-return static function (GacelaConfig $config) : void {
+return static function (GacelaConfig $config): void {
     $config
         ->enableFileCache()
         ->addAppConfig('lightning-config.dist.php', 'lightning-config.php')

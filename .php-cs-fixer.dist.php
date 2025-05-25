@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = Finder::create()
     ->files()
@@ -12,16 +13,21 @@ $finder = Finder::create()
     ->in(__DIR__ . '/tests');
 
 return (new Config())
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setFinder($finder)
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR12' => true,
         'array_syntax' => ['syntax' => 'short'],
         'backtick_to_shell_exec' => true,
-        'braces' => [
-            'allow_single_line_closure' => true,
-            'allow_single_line_anonymous_class_with_empty_body' => true,
-        ],
+        'single_space_around_construct' => true,
+        'control_structure_braces' => true,
+        'control_structure_continuation_position' => true,
+        'declare_parentheses' => true,
+        'no_multiple_statements_per_line' => true,
+        'braces_position' => true,
+        'statement_indentation' => true,
+        'no_extra_blank_lines' => true,
         'class_definition' => ['single_line' => true],
         'concat_space' => ['spacing' => 'one'],
         'declare_strict_types' => true,
@@ -30,7 +36,7 @@ return (new Config())
         'ereg_to_preg' => true,
         'explicit_string_variable' => true,
         'fully_qualified_strict_types' => true,
-        'function_typehint_space' => true,
+        'type_declaration_spaces' => true,
         'general_phpdoc_annotation_remove' => [
             'annotations' => [
                 'author',
@@ -48,13 +54,12 @@ return (new Config())
         'native_function_invocation' => [
             'include' => ['@compiler_optimized'],
         ],
-        'native_function_type_declaration_casing' => true,
-        'new_with_braces' => true,
+        'native_type_declaration_casing' => true,
+        'new_with_parentheses' => true,
         'no_blank_lines_after_class_opening' => true,
         'no_empty_comment' => true,
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
-        'no_extra_blank_lines' => true,
         'no_homoglyph_names' => true,
         'no_leading_import_slash' => true,
         'no_leading_namespace_whitespace' => true,
@@ -113,7 +118,11 @@ return (new Config())
         'ternary_to_elvis_operator' => true,
         'ternary_to_null_coalescing' => true,
         'trailing_comma_in_multiline' => [
-            'elements' => ['arguments', 'arrays', 'match', 'parameters'],
+            'elements' => [
+                'arrays',
+                'arguments',
+                'parameters',
+            ],
         ],
         'trim_array_spaces' => true,
         'unary_operator_spaces' => true,

@@ -11,6 +11,16 @@ use Gacela\Framework\AbstractFacade;
  */
 final class InvoiceFacade extends AbstractFacade
 {
+    /**
+     * @return array{
+     *     callback: string,
+     *     maxSendable: int,
+     *     minSendable: int,
+     *     metadata: string,
+     *     tag: string,
+     *     commentAllowed: bool,
+     * }
+     */
     public function getCallbackUrl(string $username): array
     {
         return $this->getFactory()
