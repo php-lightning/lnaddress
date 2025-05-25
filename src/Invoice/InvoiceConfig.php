@@ -54,6 +54,16 @@ final class InvoiceConfig extends AbstractConfig
         return $this->get('sendable-range', SendableRange::default());
     }
 
+    public function getDescriptionTemplate(): string
+    {
+        return (string)$this->get('description-template', 'Pay to %s');
+    }
+
+    public function getSuccessMessage(): string
+    {
+        return (string)$this->get('success-message', 'Payment received!');
+    }
+
     public function getDomain(): string
     {
         return (string)$this->get('domain', $_SERVER['HTTP_HOST'] ?? 'localhost');

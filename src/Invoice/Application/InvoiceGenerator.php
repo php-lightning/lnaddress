@@ -8,14 +8,16 @@ use PhpLightning\Invoice\Domain\BackendInvoice\BackendInvoiceInterface;
 use PhpLightning\Shared\Transfer\BackendInvoiceResponse;
 use PhpLightning\Shared\Value\SendableRange;
 
+use function sprintf;
+
 final class InvoiceGenerator
 {
-    public const MESSAGE_PAYMENT_RECEIVED = 'Payment received!';
-
     public function __construct(
         private BackendInvoiceInterface $backendInvoice,
         private SendableRange $sendableRange,
         private string $lnAddress,
+        private string $descriptionTemplate,
+        private string $successMessage,
     ) {
     }
 
@@ -27,10 +29,7 @@ final class InvoiceGenerator
                 'reason' => 'Amount is not between minimum and maximum sendable amount',
             ];
         }
-        // Modify the description if you want to custom it
-        // This will be the description on the wallet that pays your ln address
-        // TODO: Make this customizable from some external configuration file
-        $description = 'Pay to ' . $this->lnAddress;
+        $description = sprintf($this->descriptionTemplate, $this->lnAddress);
 
         // TODO: images not implemented yet
         $imageMetadata = '';
@@ -48,7 +47,7 @@ final class InvoiceGenerator
             'status' => $invoice->getStatus(),
             'successAction' => [
                 'tag' => 'message',
-                'message' => self::MESSAGE_PAYMENT_RECEIVED,
+                'message' => $this->successMessage,
             ],
             'routes' => [],
             'disposable' => false,

@@ -29,6 +29,7 @@ final class InvoiceFactory extends AbstractFactory
             $this->getConfig()->getSendableRange(),
             $this->createLnAddressGenerator(),
             $this->getConfig()->getCallback(),
+            $this->getConfig()->getDescriptionTemplate(),
         );
     }
 
@@ -38,6 +39,8 @@ final class InvoiceFactory extends AbstractFactory
             $this->getBackendForUser($username),
             $this->getConfig()->getSendableRange(),
             $this->getConfig()->getDefaultLnAddress(),
+            $this->getConfig()->getDescriptionTemplate(),
+            $this->getConfig()->getSuccessMessage(),
         );
     }
 

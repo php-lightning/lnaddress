@@ -56,4 +56,16 @@ final class LightningConfigTest extends TestCase
             'sendable-range' => SendableRange::withMinMax(1_000, 5_000),
         ], $config->jsonSerialize());
     }
+
+    public function test_description_and_success_message(): void
+    {
+        $config = (new LightningConfig())
+            ->setDescriptionTemplate('Pay to %s on example')
+            ->setSuccessMessage('Thanks!');
+
+        self::assertSame([
+            'description-template' => 'Pay to %s on example',
+            'success-message' => 'Thanks!',
+        ], $config->jsonSerialize());
+    }
 }

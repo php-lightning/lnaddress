@@ -45,7 +45,7 @@ final class InvoiceFacadeTest extends TestCase
         $this->bootstrapGacela();
         $this->mockLnPaymentRequest();
 
-        $json = $this->facade->generateInvoice('alice', 2_000, 'lnbits');
+        $json = $this->facade->generateInvoice('alice', 2_000);
 
         self::assertEquals([
             'pr' => 'lnbc10u1pjzh489...fake payment_request',
