@@ -66,7 +66,7 @@ final class InvoiceFacadeTest extends TestCase
         Gacela::bootstrap(__DIR__, static function (GacelaConfig $config): void {
             $config->resetInMemoryCache();
             $config->addAppConfigKeyValues(
-                (new LightningConfig())
+                (new LightningConfig()) // @phpstan-ignore-line
                     ->setCallbackUrl('https://callback.url/receiver')
                     ->setDomain('domain.com')
                     ->setReceiver('receiver')

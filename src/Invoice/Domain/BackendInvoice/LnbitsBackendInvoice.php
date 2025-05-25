@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice\Domain\BackendInvoice;
 
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
-
 use PhpLightning\Shared\Transfer\InvoiceTransfer;
 
 final class LnbitsBackendInvoice implements BackendInvoiceInterface
@@ -27,7 +26,7 @@ final class LnbitsBackendInvoice implements BackendInvoiceInterface
             'out' => false,
             'amount' => $satsAmount,
             'unhashed_description' => bin2hex($metadata),
-            // 'description_hash' => hash('sha256', $metadata),
+            'description_hash' => hash('sha256', $metadata),
         ];
 
         $response = $this->httpApi->postRequestInvoice(
