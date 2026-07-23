@@ -22,7 +22,7 @@ final class LnbitsBackendInvoiceTest extends TestCase
         ]);
 
         $actual = $invoice->requestInvoice(100, '', '');
-        $expected = new InvoiceTransfer(error: 'Backend "LnBits" unreachable', status: 'ERROR');
+        $expected = new InvoiceTransfer(status: 'ERROR', error: 'Backend "LnBits" unreachable');
 
         self::assertEquals($expected, $actual);
     }

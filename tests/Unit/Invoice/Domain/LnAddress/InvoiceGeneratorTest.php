@@ -37,7 +37,7 @@ final class InvoiceGeneratorTest extends TestCase
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')
-            ->willReturn(new InvoiceTransfer(error: 'some reason', status: 'ERROR'));
+            ->willReturn(new InvoiceTransfer(status: 'ERROR', error: 'some reason'));
 
         $invoice = new InvoiceGenerator(
             $invoiceFacade,

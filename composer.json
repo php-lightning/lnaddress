@@ -11,11 +11,10 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.75",
         "gacela-project/phpstan-extension": "^0.4",
-        "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^9.6",
+        "phpstan/phpstan": "^2.2",
+        "phpunit/phpunit": "^10.5",
         "psalm/plugin-phpunit": "^0.19",
-        "rector/rector": "^1.2",
-        "symfony/var-dumper": "^7.2",
+        "rector/rector": "^2.0",
         "vimeo/psalm": "^6.11"
     },
     "config": {

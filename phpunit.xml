@@ -1,34 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         executionOrder="random"
-         processIsolation="false"
-         resolveDependencies="true"
-         stopOnFailure="false"
-         verbose="true"
->
-    <php>
-        <ini name="error_reporting" value="-1" />
-        <ini name="memory_limit" value="-1" />
-    </php>
-
-    <testsuites>
-        <testsuite name="unit">
-            <directory suffix="Test.php">tests/Unit</directory>
-        </testsuite>
-        <testsuite name="feature">
-            <directory suffix="Test.php">tests/Feature</directory>
-        </testsuite>
-    </testsuites>
-
-    <coverage>
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" colors="true" executionOrder="random" processIsolation="false" resolveDependencies="true" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <ini name="memory_limit" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="unit">
+      <directory suffix="Test.php">tests/Unit</directory>
+    </testsuite>
+    <testsuite name="feature">
+      <directory suffix="Test.php">tests/Feature</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
 </phpunit>
