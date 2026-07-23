@@ -4,13 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
-- fix: enable coverage driver (`XDEBUG_MODE=coverage`) for Scrutinizer build
-- chore: modernize dev tooling (PHPUnit 10, PHPStan 2, Rector 2)
-- feat: add CORS middleware and global exception handler (router 0.13)
-- fix: use LUD-06 `pr` key for the invoice callback response
-- feat: DX overhaul and upgrade to gacela 1.19 / router 0.13
+**Full Changelog**: https://github.com/php-lightning/lnaddress/compare/0.9.0...main
 
-**Full Changelog**: https://github.com/php-lightning/lnaddress/compare/0.8.0...main
+## [0.9.0] - 2026-07-23
+
+- feat: DX overhaul and upgrade to gacela 1.19 / router 0.13
+- fix: use LUD-06 `pr` key for the invoice callback response
+- feat: add CORS middleware and global exception handler (router 0.13)
+- chore: modernize dev tooling (PHPUnit 10, PHPStan 2, Rector 2)
+- fix: enable coverage driver (`XDEBUG_MODE=coverage`) for Scrutinizer build
+- docs: add CHANGELOG.md with release history
+
+**Full Changelog**: https://github.com/php-lightning/lnaddress/compare/0.8.0...0.9.0
 
 ## [0.8.0] - 2025-05-25
 
@@ -80,7 +85,8 @@ Thanks to @Bashy, @JesusValera and @Chemaclass.
 - Improve `README.md`
 - Add `$success_msg` as a customizable variable
 
-[Unreleased]: https://github.com/php-lightning/lnaddress/compare/0.8.0...main
+[Unreleased]: https://github.com/php-lightning/lnaddress/compare/0.9.0...main
+[0.9.0]: https://github.com/php-lightning/lnaddress/releases/tag/0.9.0
 [0.8.0]: https://github.com/php-lightning/lnaddress/releases/tag/0.8.0
 [0.7.0]: https://github.com/php-lightning/lnaddress/releases/tag/0.7.0
 [0.6.0]: https://github.com/php-lightning/lnaddress/releases/tag/0.6.0
