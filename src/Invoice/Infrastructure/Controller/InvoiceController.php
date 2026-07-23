@@ -8,7 +8,6 @@ use Gacela\Framework\ServiceResolverAwareTrait;
 use Gacela\Router\Entities\JsonResponse;
 use Gacela\Router\Entities\Request;
 use PhpLightning\Invoice\InvoiceFacade;
-use Throwable;
 
 /**
  * @method InvoiceFacade getFacade()
@@ -27,23 +26,17 @@ final class InvoiceController
      */
     public function __invoke(string $username = ''): JsonResponse
     {
-        try {
-            $amount = (int)$this->request->get('amount');
+        // Errors bubble to InvoiceExceptionHandler (registered in InvoiceRoutesPlugin).
+        $amount = (int)$this->request->get('amount');
 
-            if ($amount === 0) {
-                return new JsonResponse(
-                    $this->getFacade()->getCallbackUrl($username),
-                );
-            }
-
+        if ($amount === 0) {
             return new JsonResponse(
-                $this->getFacade()->generateInvoice($username, $amount),
+                $this->getFacade()->getCallbackUrl($username),
             );
-        } catch (Throwable $e) {
-            return new JsonResponse([
-                'status' => 'ERROR',
-                'reason' => $e->getMessage(),
-            ]);
         }
+
+        return new JsonResponse(
+            $this->getFacade()->generateInvoice($username, $amount),
+        );
     }
 }

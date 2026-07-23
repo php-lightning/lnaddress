@@ -97,6 +97,8 @@ This starts `php -S localhost:8080 public/index.php`.
 
 One route serves the full LNURL-pay flow: `GET /{username?}`. The username is optional — when omitted, the request resolves to the default `receiver@domain` from your config.
 
+Every response carries permissive CORS headers (`Access-Control-Allow-Origin: *`) so browser-based wallets can call it, and `OPTIONS` preflight requests are answered directly. Uncaught errors are turned into the LNURL error object by a global handler.
+
 ### Step 1 — pay params
 
 `GET /bob` (no `amount`) returns the LNURL-pay parameters:
