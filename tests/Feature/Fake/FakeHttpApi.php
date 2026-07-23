@@ -8,7 +8,7 @@ use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
 
 final class FakeHttpApi implements HttpApiInterface
 {
-    public function postRequestInvoice(string $uri, string $body, array $headers = []): ?array
+    public function postRequestInvoice(string $uri, string $body, array $headers = []): array
     {
         return [
             'checking_id' => '8efa8998bca6e298ae63dc7425c8a34b5373511d88a70f6f29ba98f833a63f04',

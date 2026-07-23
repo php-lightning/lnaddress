@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace PhpLightningTest\Unit\Config;
 
+use PhpLightning\Config\Backend\LnBitsBackendConfig;
 use PhpLightning\Config\LightningConfig;
 use PhpLightning\Shared\Value\SendableRange;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 final class LightningConfigTest extends TestCase
 {
@@ -67,5 +69,42 @@ final class LightningConfigTest extends TestCase
             'description-template' => 'Pay to %s on example',
             'success-message' => 'Thanks!',
         ], $config->jsonSerialize());
+    }
+
+    public function test_add_backend_programmatically_without_a_file(): void
+    {
+        $config = (new LightningConfig())
+            ->addBackend('bob', LnBitsBackendConfig::withEndpointAndKey('http://localhost:5000', 'key-123'));
+
+        self::assertSame([
+            'backends' => [
+                'bob' => [
+                    'api_endpoint' => 'http://localhost:5000',
+                    'api_key' => 'key-123',
+                ],
+            ],
+        ], $config->jsonSerialize());
+    }
+
+    public function test_add_backends_file_reports_missing_path(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Backends file not found: "/does/not/exist.json"');
+
+        (new LightningConfig())->addBackendsFile('/does/not/exist.json');
+    }
+
+    public function test_add_backends_file_reports_missing_type(): void
+    {
+        $path = (string)tempnam(sys_get_temp_dir(), 'lnaddr');
+        file_put_contents($path, (string)json_encode(['bob' => ['api_key' => 'x']]));
+
+        try {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Missing "type" for backend "bob"');
+            (new LightningConfig())->addBackendsFile($path);
+        } finally {
+            unlink($path);
+        }
     }
 }

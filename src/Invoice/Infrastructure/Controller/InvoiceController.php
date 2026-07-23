@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace PhpLightning\Invoice\Infrastructure\Controller;
 
-use Gacela\Framework\DocBlockResolverAwareTrait;
+use Gacela\Framework\ServiceResolverAwareTrait;
 use Gacela\Router\Entities\JsonResponse;
 use Gacela\Router\Entities\Request;
 use PhpLightning\Invoice\InvoiceFacade;
-use Throwable;
 
 /**
  * @method InvoiceFacade getFacade()
  */
 final class InvoiceController
 {
-    use DocBlockResolverAwareTrait;
+    use ServiceResolverAwareTrait;
 
     public function __construct(
         private Request $request,
@@ -27,24 +26,17 @@ final class InvoiceController
      */
     public function __invoke(string $username = ''): JsonResponse
     {
-        try {
-            $amount = (int)$this->request->get('amount');
+        // Errors bubble to InvoiceExceptionHandler (registered in InvoiceRoutesPlugin).
+        $amount = (int)$this->request->get('amount');
 
-            if ($amount === 0) {
-                return new JsonResponse(
-                    $this->getFacade()->getCallbackUrl($username),
-                );
-            }
-
+        if ($amount === 0) {
             return new JsonResponse(
-                $this->getFacade()->generateInvoice($username, $amount),
+                $this->getFacade()->getCallbackUrl($username),
             );
-        } catch (Throwable $e) {
-            dump($e);
-            return new JsonResponse([
-                'status' => 'ERROR',
-                'message' => $e->getMessage(),
-            ]);
         }
+
+        return new JsonResponse(
+            $this->getFacade()->generateInvoice($username, $amount),
+        );
     }
 }

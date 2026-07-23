@@ -10,4 +10,6 @@ var/
 *.cache
 composer.lock
 lightning-config.php
-nostr.json
+backends.json
+.phpunit.cache
+.phpunit.result.cache

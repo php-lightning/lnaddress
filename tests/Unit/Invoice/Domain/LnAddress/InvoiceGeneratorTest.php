@@ -37,7 +37,7 @@ final class InvoiceGeneratorTest extends TestCase
     {
         $invoiceFacade = $this->createStub(BackendInvoiceInterface::class);
         $invoiceFacade->method('requestInvoice')
-            ->willReturn(new InvoiceTransfer(error: 'some reason', status: 'ERROR'));
+            ->willReturn(new InvoiceTransfer(status: 'ERROR', error: 'some reason'));
 
         $invoice = new InvoiceGenerator(
             $invoiceFacade,
@@ -50,7 +50,7 @@ final class InvoiceGeneratorTest extends TestCase
         $actual = $invoice->generateInvoice(2_000);
 
         self::assertEquals([
-            'bolt11' => '',
+            'pr' => '',
             'status' => 'ERROR',
             'memo' => '',
             'successAction' => [
@@ -80,7 +80,7 @@ final class InvoiceGeneratorTest extends TestCase
         $actual = $invoice->generateInvoice(2_000);
 
         self::assertEquals([
-            'bolt11' => 'ln123456789',
+            'pr' => 'ln123456789',
             'status' => 'OK',
             'memo' => 'Custom memo',
             'successAction' => [

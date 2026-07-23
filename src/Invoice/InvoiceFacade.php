@@ -7,6 +7,8 @@ namespace PhpLightning\Invoice;
 use Gacela\Framework\AbstractFacade;
 
 /**
+ * @extends AbstractFacade<InvoiceFactory>
+ *
  * @method InvoiceFactory getFactory()
  */
 final class InvoiceFacade extends AbstractFacade
@@ -28,6 +30,17 @@ final class InvoiceFacade extends AbstractFacade
             ->getCallbackUrl($username);
     }
 
+    /**
+     * @return array{
+     *     pr: string,
+     *     status: string,
+     *     memo: string,
+     *     successAction: array{tag: string, message: string},
+     *     routes: list<mixed>,
+     *     disposable: bool,
+     *     error: string|null,
+     * }|array{status: string, reason: string}
+     */
     public function generateInvoice(string $username, int $milliSats): array
     {
         return $this->getFactory()

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpLightning\Invoice;
 
 use Gacela\Framework\AbstractConfig;
+use PhpLightning\Shared\Config\ConfigKey;
 use PhpLightning\Shared\Value\SendableRange;
 use RuntimeException;
 
@@ -14,7 +15,7 @@ final class InvoiceConfig extends AbstractConfig
 {
     public function getCallback(): string
     {
-        return (string)$this->get('callback-url', 'undefined:callback-url');
+        return (string)$this->get(ConfigKey::CALLBACK_URL, 'undefined:callback-url');
     }
 
     public function getDefaultLnAddress(): string
@@ -28,7 +29,7 @@ final class InvoiceConfig extends AbstractConfig
     public function getBackends(): array
     {
         /** @psalm-suppress MixedReturnTypeCoercion */
-        return (array)$this->get('backends'); // @phpstan-ignore-line
+        return (array)$this->get(ConfigKey::BACKENDS); // @phpstan-ignore-line
     }
 
     /**
@@ -51,31 +52,31 @@ final class InvoiceConfig extends AbstractConfig
 
     public function getSendableRange(): SendableRange
     {
-        return $this->get('sendable-range', SendableRange::default());
+        return $this->get(ConfigKey::SENDABLE_RANGE, SendableRange::default());
     }
 
     public function getDescriptionTemplate(): string
     {
-        return (string)$this->get('description-template', 'Pay to %s');
+        return (string)$this->get(ConfigKey::DESCRIPTION_TEMPLATE, 'Pay to %s');
     }
 
     public function getSuccessMessage(): string
     {
-        return (string)$this->get('success-message', 'Payment received!');
+        return (string)$this->get(ConfigKey::SUCCESS_MESSAGE, 'Payment received!');
     }
 
     public function getInvoiceMemo(): string
     {
-        return (string)$this->get('invoice-memo', '');
+        return (string)$this->get(ConfigKey::INVOICE_MEMO, '');
     }
 
     public function getDomain(): string
     {
-        return (string)$this->get('domain', $_SERVER['HTTP_HOST'] ?? 'localhost');
+        return (string)$this->get(ConfigKey::DOMAIN, $_SERVER['HTTP_HOST'] ?? 'localhost');
     }
 
     private function getReceiver(): string
     {
-        return (string)$this->get('receiver', $_SERVER['REQUEST_URI'] ?? 'unknown-receiver');
+        return (string)$this->get(ConfigKey::RECEIVER, 'unknown-receiver');
     }
 }

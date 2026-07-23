@@ -6,9 +6,8 @@ namespace PhpLightning\Invoice\Application;
 
 use PhpLightning\Invoice\Domain\CallbackUrl\CallbackUrlInterface;
 use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
+use PhpLightning\Shared\Value\LnurlPayMetadata;
 use PhpLightning\Shared\Value\SendableRange;
-
-use function sprintf;
 
 final readonly class CallbackUrl implements CallbackUrlInterface
 {
@@ -25,21 +24,14 @@ final readonly class CallbackUrl implements CallbackUrlInterface
     public function getCallbackUrl(string $username): array
     {
         $lnAddress = $this->lnAddressGenerator->generate($username);
-        // Modify the description if you want to custom it
-        // This will be the description on the wallet that pays your ln address
-        // TODO: Make this customizable from some external configuration file
-        $description = sprintf($this->descriptionTemplate, $lnAddress);
+        $metadata = new LnurlPayMetadata($this->descriptionTemplate, $lnAddress);
 
-        // TODO: images not implemented yet; `',["image/jpeg;base64","' . base64_encode($response) . '"]';`
-        $imageMetadata = '';
-        $metadata = '[["text/plain","' . $description . '"],["text/identifier","' . $lnAddress . '"]' . $imageMetadata . ']';
-
-        // payRequest json data, spec : https://github.com/lnurl/luds/blob/luds/06.md
+        // payRequest json data, spec: https://github.com/lnurl/luds/blob/luds/06.md
         return [
             'callback' => $this->callback,
             'maxSendable' => $this->sendableRange->max(),
             'minSendable' => $this->sendableRange->min(),
-            'metadata' => $metadata,
+            'metadata' => (string)$metadata,
             'tag' => self::TAG_PAY_REQUEST,
             'commentAllowed' => false, // TODO: Not implemented yet
         ];
