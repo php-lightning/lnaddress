@@ -71,7 +71,7 @@ final class InvoiceFacadeTest extends TestCase
                     ->setDomain('domain.com')
                     ->setReceiver('receiver')
                     ->setSendableRange(1_000, 10_000)
-                    ->addBackendsFile(__DIR__ . DIRECTORY_SEPARATOR . 'nostr.json')
+                    ->addBackendsFile(__DIR__ . DIRECTORY_SEPARATOR . 'backends.json')
                     ->jsonSerialize(),
             );
         });

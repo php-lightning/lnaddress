@@ -8,6 +8,9 @@ use Gacela\Framework\AbstractProvider;
 use Gacela\Framework\Container\Container;
 use PhpLightning\Invoice\Infrastructure\Http\HttpApi;
 
+/**
+ * @extends AbstractProvider<InvoiceConfig>
+ */
 final class InvoiceDependencyProvider extends AbstractProvider
 {
     public const HTTP_API = 'HTTP_API';

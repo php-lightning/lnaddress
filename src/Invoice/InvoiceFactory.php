@@ -15,6 +15,8 @@ use PhpLightning\Invoice\Domain\CallbackUrl\LnAddressGeneratorInterface;
 use PhpLightning\Invoice\Domain\Http\HttpApiInterface;
 
 /**
+ * @extends AbstractFactory<InvoiceConfig>
+ *
  * @method InvoiceConfig getConfig()
  */
 final class InvoiceFactory extends AbstractFactory

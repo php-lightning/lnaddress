@@ -18,6 +18,16 @@ final readonly class SendableRange
     ) {
     }
 
+    /**
+     * Rehydrates the instance from Gacela's var_export'd merged-config file cache.
+     *
+     * @param array{min: int, max: int} $state
+     */
+    public static function __set_state(array $state): self
+    {
+        return new self($state['min'], $state['max']);
+    }
+
     public static function default(): self
     {
         return self::withMinMax(

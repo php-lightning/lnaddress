@@ -4,13 +4,13 @@
     "license": "MIT",
     "require": {
         "php": ">=8.2",
-        "gacela-project/gacela": "^1.9",
-        "gacela-project/router": "^0.12",
+        "gacela-project/gacela": "^1.19",
+        "gacela-project/router": "^0.13",
         "symfony/http-client": "^7.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.75",
-        "gacela-project/phpstan-extension": "^0.3",
+        "gacela-project/phpstan-extension": "^0.4",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^9.6",
         "psalm/plugin-phpunit": "^0.19",
@@ -41,7 +41,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "[ ! -f nostr.json ] && cp nostr.dist.json nostr.json || true"
+            "[ ! -f backends.json ] && cp backends.dist.json backends.json || true"
         ],
         "ctal": [
             "@static-clear-cache",
