@@ -118,7 +118,7 @@ One route serves the full LNURL-pay flow: `GET /{username?}`. The username is op
 
 ```json
 {
-  "bolt11": "lnbc20n1p...",
+  "pr": "lnbc20n1p...",
   "status": "OK",
   "memo": "",
   "successAction": { "tag": "message", "message": "Thanks for the payment!" },

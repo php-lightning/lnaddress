@@ -32,7 +32,7 @@ final class InvoiceFacade extends AbstractFacade
 
     /**
      * @return array{
-     *     bolt11: string,
+     *     pr: string,
      *     status: string,
      *     memo: string,
      *     successAction: array{tag: string, message: string},

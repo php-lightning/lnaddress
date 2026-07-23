@@ -50,7 +50,7 @@ final class InvoiceGeneratorTest extends TestCase
         $actual = $invoice->generateInvoice(2_000);
 
         self::assertEquals([
-            'bolt11' => '',
+            'pr' => '',
             'status' => 'ERROR',
             'memo' => '',
             'successAction' => [
@@ -80,7 +80,7 @@ final class InvoiceGeneratorTest extends TestCase
         $actual = $invoice->generateInvoice(2_000);
 
         self::assertEquals([
-            'bolt11' => 'ln123456789',
+            'pr' => 'ln123456789',
             'status' => 'OK',
             'memo' => 'Custom memo',
             'successAction' => [

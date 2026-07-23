@@ -23,7 +23,7 @@ final readonly class InvoiceGenerator
 
     /**
      * @return array{
-     *     bolt11: string,
+     *     pr: string,
      *     status: string,
      *     memo: string,
      *     successAction: array{tag: string, message: string},
@@ -50,7 +50,7 @@ final readonly class InvoiceGenerator
 
     /**
      * @return array{
-     *     bolt11: string,
+     *     pr: string,
      *     status: string,
      *     memo: string,
      *     successAction: array{tag: string, message: string},
@@ -62,7 +62,8 @@ final readonly class InvoiceGenerator
     private function mapResponseAsArray(InvoiceTransfer $invoice): array
     {
         return [
-            'bolt11' => $invoice->bolt11,
+            // LUD-06 names the invoice field "pr" (bech32 bolt11); wallets read this key.
+            'pr' => $invoice->bolt11,
             'status' => $invoice->status,
             'memo' => $invoice->memo,
             'successAction' => [
