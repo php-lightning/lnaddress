@@ -1,0 +1,28 @@
+build:
+  environment:
+    php: 8.2
+  nodes:
+    analysis:
+      project_setup:
+        override:
+          - 'true'
+      tests:
+        override:
+          - php-scrutinizer-run
+    tests: true
+    coverage:
+      tests:
+        override:
+          -
+            # xdebug is installed but mode=off; PHPUnit 10 exits 1 when coverage
+            # is requested without a driver, so enable it explicitly.
+            command: 'XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage.clover --configuration phpunit.xml'
+            coverage:
+              file: 'coverage.clover'
+              format: 'clover'
+
+checks:
+  php: true
+
+tools:
+  php_cs_fixer: true
