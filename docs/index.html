@@ -55,6 +55,7 @@
     border-radius: 5px;
     padding: 1px 5px;
     font-size: 0.9em;
+    overflow-wrap: anywhere;
   }
   h1, h2, h3 { line-height: 1.25; letter-spacing: -0.015em; }
   h2 { margin-top: 3.2rem; font-size: 1.6rem; }
@@ -121,6 +122,119 @@
   }
   @media (prefers-color-scheme: dark) { .steps li::before { color: #14161a; } }
   .steps h3 { margin: 0 0 4px; }
+
+  /* ---- figures: address anatomy + payment flow ---- */
+  .fig {
+    margin: 1.8rem 0 0;
+    padding: 18px 16px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-soft);
+  }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig text { font-family: var(--sans); fill: var(--fg); }
+  .fig-note { font-size: 13px; fill: var(--fg-soft); }
+
+  .addr-part { font-family: var(--mono); font-size: 34px; font-weight: 700; }
+  .addr-at { font-family: var(--mono); font-size: 34px; fill: var(--fg-soft); }
+  .addr-part.user { fill: var(--accent); }
+  .addr-part.host { fill: #2f7d6d; }
+  .hint { fill: none; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .hint.user { stroke: var(--accent); }
+  .hint.host { stroke: #2f7d6d; }
+
+  .part rect { fill: var(--bg); stroke-width: 1.5; }
+  .part.user rect { stroke: var(--accent); }
+  .part.host rect { stroke: #2f7d6d; }
+  .part-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .part.user .part-label { fill: var(--accent); }
+  .part.host .part-label { fill: #2f7d6d; }
+  .part-value { font-family: var(--mono); font-size: 15px; fill: var(--fg); }
+
+  @media (prefers-color-scheme: dark) {
+    .addr-part.host { fill: #62c3ab; }
+    .hint.host { stroke: #62c3ab; }
+    .part.host rect { stroke: #62c3ab; }
+    .part.host .part-label { fill: #62c3ab; }
+  }
+
+  .flow .lifeline { stroke: var(--line); stroke-width: 2; }
+  .flow .actor rect { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+  .flow .actor text { font-size: 14px; font-weight: 600; text-anchor: middle; }
+  .flow .actor .sub { font-size: 11px; font-weight: 400; fill: var(--fg-soft); }
+  .flow .actor.mine rect { fill: var(--accent-soft); stroke: var(--accent); }
+
+  .flow .msg path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2;
+    marker-end: url(#arrow-idle);
+  }
+  .flow .msg text {
+    font-size: 12.5px;
+    fill: var(--fg-soft);
+    text-anchor: middle;
+  }
+  .flow .msg.pay path { stroke-dasharray: 6 5; }
+  .flow .msg.done path { stroke: var(--fg-soft); opacity: 0.55; }
+  .flow .msg.active path { stroke: var(--accent); stroke-width: 3; marker-end: url(#arrow-active); }
+  .flow .msg.active text { fill: var(--fg); font-weight: 600; }
+  .flow .head.idle { fill: var(--line); }
+  .flow .head.active { fill: var(--accent); }
+
+  .flow .packet {
+    fill: var(--accent);
+    stroke: var(--bg);
+    stroke-width: 2;
+    transition: transform 900ms cubic-bezier(.45,.05,.35,1);
+  }
+  .flow.paused .packet { opacity: 0.45; }
+
+  .flow-caption {
+    min-height: 3.2em;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 9px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .flow-caption b { color: var(--accent); }
+
+  .flow-controls { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .flow-controls button {
+    font: inherit;
+    font-size: 0.9rem;
+    min-width: 38px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .flow-controls button:hover { border-color: var(--accent); color: var(--accent); }
+  .flow-dots { display: flex; gap: 6px; list-style: none; margin: 0 0 0 6px; padding: 0; }
+  .flow-dots button {
+    min-width: 0;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    color: var(--fg-soft);
+  }
+  .flow-dots button[aria-current="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+  @media (prefers-color-scheme: dark) { .flow-dots button[aria-current="true"] { color: #14161a; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flow .packet { transition: none; }
+  }
 
   footer {
     margin-top: 4rem;
@@ -193,19 +307,131 @@
     <li><strong>Multiple identities, one deployment.</strong> Family, team, or project addresses can share a domain while each keeps its own backend.</li>
   </ul>
 
-  <h2>How it works</h2>
-  <ol class="steps">
-    <li>
-      <h3>The wallet resolves the address</h3>
-      <p>
-        <code>bob@example.com</code> becomes
-        <code>GET https://example.com/.well-known/lnurlp/bob</code>, which your server
-        routes to this library.
-      </p>
-    </li>
-    <li>
-      <h3>The server returns pay parameters</h3>
-      <p>Minimum and maximum sendable amounts, a description, and the callback URL to use next.</p>
+  <h2>Anatomy of an address</h2>
+  <p>
+    Nothing about a Lightning Address is new protocol — it is a naming convention on top
+    of plain HTTPS. The two halves of the address tell a wallet exactly which URL to open.
+  </p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 700 250" role="img" aria-labelledby="anatomy-title">
+      <title id="anatomy-title">The address bob@example.com maps to https://example.com/.well-known/lnurlp/bob</title>
+
+      <text class="addr-line" x="350" y="48" text-anchor="middle"><tspan class="addr-part user">bob</tspan><tspan class="addr-at">@</tspan><tspan class="addr-part host">example.com</tspan></text>
+
+      <path class="hint host" d="M390 60 L390 92 L180 92 L180 122" />
+      <path class="hint user" d="M240 60 L240 104 L520 104 L520 122" />
+
+      <g class="part host">
+        <rect x="30" y="122" width="300" height="70" rx="10" />
+        <text class="part-label" x="46" y="146">your domain</text>
+        <text class="part-value" x="46" y="174">https://example.com</text>
+      </g>
+      <g class="part user">
+        <rect x="370" y="122" width="300" height="70" rx="10" />
+        <text class="part-label" x="386" y="146">username → path</text>
+        <text class="part-value" x="386" y="174">/.well-known/lnurlp/bob</text>
+      </g>
+
+      <text class="fig-note" x="30" y="226">
+        Join the two and you have the URL the wallet opens — this library answers it.
+      </text>
+    </svg>
+  </figure>
+
+  <h2>How a payment happens</h2>
+  <p>
+    Two HTTP round trips, then a normal Lightning payment. Step through it:
+  </p>
+
+  <figure class="fig flow" id="flow">
+    <svg viewBox="0 0 720 470" role="img" aria-labelledby="flow-title">
+      <title id="flow-title">Sequence diagram of the LNURL-pay flow between the payer's wallet, this library and your node</title>
+
+      <defs>
+        <marker id="arrow-idle" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" class="head idle" />
+        </marker>
+        <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" class="head active" />
+        </marker>
+      </defs>
+
+      <!-- lifelines -->
+      <line class="lifeline" x1="100" y1="76" x2="100" y2="452" />
+      <line class="lifeline" x1="360" y1="76" x2="360" y2="452" />
+      <line class="lifeline" x1="620" y1="76" x2="620" y2="452" />
+
+      <!-- actors -->
+      <g class="actor">
+        <rect x="24" y="18" width="152" height="46" rx="9" />
+        <text x="100" y="40">Payer's wallet</text>
+        <text class="sub" x="100" y="55">phone or browser</text>
+      </g>
+      <g class="actor mine">
+        <rect x="272" y="18" width="176" height="46" rx="9" />
+        <text x="360" y="40">Your domain</text>
+        <text class="sub" x="360" y="55">this library</text>
+      </g>
+      <g class="actor">
+        <rect x="544" y="18" width="152" height="46" rx="9" />
+        <text x="620" y="40">Your node</text>
+        <text class="sub" x="620" y="55">LNbits wallet</text>
+      </g>
+
+      <!-- messages: data-from / data-to drive the travelling dot -->
+      <g class="msg" data-step="0" data-from="100" data-to="360" data-y="120">
+        <path d="M100 120 L360 120" />
+        <text x="230" y="110">GET /.well-known/lnurlp/bob</text>
+      </g>
+      <g class="msg back" data-step="1" data-from="360" data-to="100" data-y="170">
+        <path d="M360 170 L100 170" />
+        <text x="230" y="160">pay params: min, max, callback</text>
+      </g>
+      <g class="msg" data-step="2" data-from="100" data-to="360" data-y="220">
+        <path d="M100 220 L360 220" />
+        <text x="230" y="210">GET /bob?amount=2000</text>
+      </g>
+      <g class="msg" data-step="3" data-from="360" data-to="620" data-y="270">
+        <path d="M360 270 L620 270" />
+        <text x="490" y="260">POST /api/v1/payments</text>
+      </g>
+      <g class="msg back" data-step="4" data-from="620" data-to="360" data-y="320">
+        <path d="M620 320 L360 320" />
+        <text x="490" y="310">bolt11 invoice</text>
+      </g>
+      <g class="msg back" data-step="5" data-from="360" data-to="100" data-y="370">
+        <path d="M360 370 L100 370" />
+        <text x="230" y="360">{ "pr": "lnbc20n1p…" }</text>
+      </g>
+      <g class="msg pay" data-step="6" data-from="100" data-to="620" data-y="428">
+        <path d="M100 428 L620 428" />
+        <text x="360" y="418">⚡ pays the invoice over Lightning</text>
+      </g>
+
+      <circle class="packet" r="7" cx="0" cy="0" />
+    </svg>
+
+    <div class="flow-caption" id="flow-caption" role="status" aria-live="polite"></div>
+
+    <div class="flow-controls">
+      <button type="button" id="flow-prev" aria-label="Previous step">‹</button>
+      <button type="button" id="flow-toggle" aria-label="Pause or play the animation">Pause</button>
+      <button type="button" id="flow-next" aria-label="Next step">›</button>
+      <ol class="flow-dots" id="flow-dots"></ol>
+    </div>
+  </figure>
+
+  <p>
+    Steps 1, 2, 3 and 6 are what this library answers. Step 4 and 5 happen against your
+    own node — the sats in step 7 travel from the payer straight to your wallet, never
+    through the library.
+  </p>
+
+  <h3>What travels on the wire</h3>
+  <p>The pay parameters (step 2), straight from a running instance:</p>
 <pre><code>{
   "callback": "https://example.com",
   "maxSendable": 10000000000,
@@ -214,21 +440,8 @@
   "tag": "payRequest",
   "commentAllowed": false
 }</code></pre>
-    </li>
-    <li>
-      <h3>The wallet asks for an invoice</h3>
-      <p>
-        It calls the callback with the chosen amount in millisatoshis:
-        <code>GET /bob?amount=2000</code>.
-      </p>
-    </li>
-    <li>
-      <h3>Your node issues it</h3>
-      <p>
-        The library requests a bolt11 invoice from the backend configured for that
-        username and hands it back under <code>pr</code>. The wallet pays it directly —
-        the library never touches funds.
-      </p>
+
+  <p>And the invoice (step 6), with the bolt11 string under <code>pr</code> as LUD-06 requires:</p>
 <pre><code>{
   "pr": "lnbc20n1p…",
   "status": "OK",
@@ -237,8 +450,6 @@
   "disposable": false,
   "error": null
 }</code></pre>
-    </li>
-  </ol>
 
   <h2>Quick start</h2>
   <p>Requires PHP 8.3 or newer and an LNbits wallet API key.</p>
@@ -376,6 +587,118 @@ $invoice = $facade-&gt;generateInvoice('bob', 2_000); // millisats</code></pre>
     <p>Not affiliated with LNbits or lightningaddress.com. Run your own node responsibly.</p>
   </div>
 </footer>
+
+<script>
+(function () {
+  var flow = document.getElementById('flow');
+  if (!flow) { return; }
+
+  var msgs = Array.prototype.slice.call(flow.querySelectorAll('.msg'));
+  var packet = flow.querySelector('.packet');
+  var caption = document.getElementById('flow-caption');
+  var dotsList = document.getElementById('flow-dots');
+  var prevBtn = document.getElementById('flow-prev');
+  var nextBtn = document.getElementById('flow-next');
+  var toggleBtn = document.getElementById('flow-toggle');
+
+  var captions = [
+    'The wallet turns <b>bob@example.com</b> into a URL and asks your domain for the pay parameters. This is the only thing that makes an address an address.',
+    'The library answers with the minimum and maximum sendable amounts, the description the payer will see, and the callback URL to use next.',
+    'The payer picks an amount. The wallet calls that callback with it, in millisatoshis.',
+    'Now the library asks the backend configured for <b>bob</b> — and only for bob — to create an invoice for amount / 1000 sats.',
+    'Your node returns a bolt11 invoice, bound by a description hash to the metadata from step 2 so the payer\'s wallet can verify it.',
+    'The library hands the invoice back under <b>pr</b>, together with the success message the payer sees once it settles.',
+    'The wallet pays the invoice over Lightning. The sats go from the payer straight to your node — <b>the library never holds funds</b>.'
+  ];
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = 0;
+  var timer = null;
+  var playing = false;
+  var userPaused = reduced;
+  var onScreen = true;
+
+  var dotButtons = msgs.map(function (msg, i) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = String(i + 1);
+    btn.setAttribute('aria-label', 'Step ' + (i + 1));
+    btn.addEventListener('click', function () { stop(); show(i); });
+    li.appendChild(btn);
+    dotsList.appendChild(li);
+    return btn;
+  });
+
+  function show(i) {
+    current = (i + msgs.length) % msgs.length;
+
+    msgs.forEach(function (msg, index) {
+      msg.classList.toggle('active', index === current);
+      msg.classList.toggle('done', index < current);
+    });
+    dotButtons.forEach(function (btn, index) {
+      btn.setAttribute('aria-current', index === current ? 'true' : 'false');
+    });
+
+    var msg = msgs[current];
+    var from = msg.getAttribute('data-from');
+    var to = msg.getAttribute('data-to');
+    var y = msg.getAttribute('data-y');
+
+    // jump to the start of the message, then transition across it
+    packet.style.transition = 'none';
+    packet.style.transform = 'translate(' + from + 'px,' + y + 'px)';
+    void packet.getBoundingClientRect();
+    packet.style.transition = '';
+    packet.style.transform = 'translate(' + to + 'px,' + y + 'px)';
+
+    caption.innerHTML = '<b>Step ' + (current + 1) + '.</b> ' + captions[current];
+  }
+
+  function start() {
+    if (playing) { return; }
+    playing = true;
+    flow.classList.remove('paused');
+    toggleBtn.textContent = 'Pause';
+    timer = window.setInterval(function () { show(current + 1); }, 3200);
+  }
+
+  function stop() {
+    playing = false;
+    flow.classList.add('paused');
+    toggleBtn.textContent = 'Play';
+    if (timer) { window.clearInterval(timer); timer = null; }
+  }
+
+  prevBtn.addEventListener('click', function () { userPaused = true; stop(); show(current - 1); });
+  nextBtn.addEventListener('click', function () { userPaused = true; stop(); show(current + 1); });
+  toggleBtn.addEventListener('click', function () {
+    if (playing) { userPaused = true; stop(); } else { userPaused = false; start(); }
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { stop(); } else if (!userPaused && onScreen) { start(); }
+  });
+
+  show(0);
+
+  if (reduced) {
+    stop();
+  } else if ('IntersectionObserver' in window) {
+    // only animate while the diagram is on screen
+    onScreen = false;
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        onScreen = entry.isIntersecting;
+        if (onScreen && !userPaused) { start(); } else { stop(); }
+      });
+    }, { threshold: 0.35 }).observe(flow);
+  } else {
+    start();
+  }
+})();
+</script>
 
 </body>
 </html>

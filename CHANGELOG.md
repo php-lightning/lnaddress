@@ -11,6 +11,8 @@ All notable changes to this project are documented in this file.
 - docs: split the README into `docs/` (getting started, configuration, HTTP API,
   architecture, development)
 - chore: drop Scrutinizer (`.scrutinizer.yml`, badges) — GitHub Actions is the only CI gate
+- docs: publish a project page on GitHub Pages, with an animated LNURL-pay flow diagram
+  and an address-anatomy graphic
 
 **Full Changelog**: https://github.com/php-lightning/lnaddress/compare/0.9.0...main
 
