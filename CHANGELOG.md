@@ -10,6 +10,7 @@ All notable changes to this project are documented in this file.
 - chore: run CI on PHP 8.3, 8.4 and 8.5 (the matrix listed 8.2 twice)
 - docs: split the README into `docs/` (getting started, configuration, HTTP API,
   architecture, development)
+- chore: drop Scrutinizer (`.scrutinizer.yml`, badges) — GitHub Actions is the only CI gate
 
 **Full Changelog**: https://github.com/php-lightning/lnaddress/compare/0.9.0...main
 
