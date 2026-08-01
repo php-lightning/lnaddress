@@ -13,7 +13,7 @@ use PhpLightning\Invoice\Infrastructure\Http\HttpApi;
  */
 final class InvoiceDependencyProvider extends AbstractProvider
 {
-    public const HTTP_API = 'HTTP_API';
+    public const string HTTP_API = 'HTTP_API';
 
     public function provideModuleDependencies(Container $container): void
     {
