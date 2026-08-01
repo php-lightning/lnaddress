@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHP Lightning Address — self-host your own Lightning Address</title>
+<meta name="description" content="A PHP library that turns a domain you control into a Lightning Address provider: LNURL-pay (LUD-06), multi-user, backend-agnostic.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f7f9;
+    --bg-code: #f2f3f5;
+    --fg: #1b1d21;
+    --fg-soft: #5b6470;
+    --line: #e2e5ea;
+    --accent: #b4690e;
+    --accent-soft: #fdf3e3;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --bg-soft: #1b1e24;
+      --bg-code: #1e2229;
+      --fg: #e8eaed;
+      --fg-soft: #a0a8b4;
+      --line: #2b3038;
+      --accent: #f0a63c;
+      --accent-soft: #2a2117;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.65 var(--sans);
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+  code, pre { font-family: var(--mono); font-size: 14px; }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    line-height: 1.55;
+  }
+  p code, li code, td code {
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 5px;
+    font-size: 0.9em;
+  }
+  h1, h2, h3 { line-height: 1.25; letter-spacing: -0.015em; }
+  h2 { margin-top: 3.2rem; font-size: 1.6rem; }
+  h3 { margin-top: 2rem; font-size: 1.12rem; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 3rem 0; }
+
+  header {
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--accent-soft), transparent);
+  }
+  .hero { padding: 72px 0 56px; }
+  .bolt { font-size: 40px; line-height: 1; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 2.9rem); margin: 14px 0 12px; }
+  .tagline { font-size: 1.15rem; color: var(--fg-soft); margin: 0 0 28px; max-width: 46em; }
+  .addr {
+    display: inline-block;
+    font-family: var(--mono);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: var(--accent);
+  }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-soft);
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn.primary { color: #14161a; } }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    background: var(--bg-soft);
+  }
+  .card h3 { margin: 0 0 6px; font-size: 1rem; }
+  .card p { margin: 0; color: var(--fg-soft); font-size: 0.95rem; }
+
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--fg-soft); }
+  .scroll { overflow-x: auto; }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding-left: 44px; margin-bottom: 22px; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 1px;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--accent); color: #fff;
+    font-size: 0.85rem; font-weight: 700;
+  }
+  @media (prefers-color-scheme: dark) { .steps li::before { color: #14161a; } }
+  .steps h3 { margin: 0 0 4px; }
+
+  footer {
+    margin-top: 4rem;
+    border-top: 1px solid var(--line);
+    padding: 28px 0 48px;
+    color: var(--fg-soft);
+    font-size: 0.92rem;
+  }
+  footer a { color: var(--fg-soft); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hero">
+    <div class="bolt">⚡</div>
+    <h1>PHP Lightning Address</h1>
+    <p class="tagline">
+      Self-host <span class="addr">you@yourdomain.com</span> as a Bitcoin Lightning
+      payment address. A small PHP library that implements LNURL-pay (LUD-06), serves any
+      number of users from one domain, and issues invoices through your own node.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/php-lightning/lnaddress">GitHub repository</a>
+      <a class="btn" href="https://github.com/php-lightning/lnaddress/blob/main/docs/getting-started.md">Getting started</a>
+      <a class="btn" href="https://github.com/php-lightning/demo-lnaddress">Demo template</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2>What it is</h2>
+  <p>
+    A Lightning Address looks like an email address and works like one for payments: anyone
+    can type <code>bob@example.com</code> into a wallet and pay you, without QR codes,
+    invoices pasted over chat, or a new invoice for every payment.
+  </p>
+  <p>
+    Under the hood it is just HTTPS. A wallet turns <code>bob@example.com</code> into a
+    request to <code>https://example.com/.well-known/lnurlp/bob</code>, reads the payment
+    parameters it gets back, and then asks the same server for a bolt11 invoice of the
+    amount the payer chose. This library is that server, written in PHP.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Spec-compliant</h3>
+      <p>Implements <a href="https://github.com/lnurl/luds/blob/luds/06.md">LNURL-pay (LUD-06)</a>, the format wallets already speak.</p>
+    </div>
+    <div class="card">
+      <h3>Multi-user</h3>
+      <p>One deployment serves many usernames, each mapped to its own invoice backend and API key.</p>
+    </div>
+    <div class="card">
+      <h3>Backend-agnostic</h3>
+      <p>LNbits ships today; other backends are an interface implementation away.</p>
+    </div>
+    <div class="card">
+      <h3>Small and typed</h3>
+      <p>PHP 8.3+, Psalm errorLevel 1 and PHPStan level max on every commit.</p>
+    </div>
+  </div>
+
+  <h2>Why self-host it</h2>
+  <ul>
+    <li><strong>The address is yours.</strong> It lives on your domain, so no provider can rename, rate-limit, or discontinue it.</li>
+    <li><strong>Payments go straight to your node.</strong> The library asks <em>your</em> wallet backend for invoices; nobody custodies the sats on the way.</li>
+    <li><strong>No new stack.</strong> If you already run PHP, this is one route and two config files, not another service to operate.</li>
+    <li><strong>Multiple identities, one deployment.</strong> Family, team, or project addresses can share a domain while each keeps its own backend.</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>
+      <h3>The wallet resolves the address</h3>
+      <p>
+        <code>bob@example.com</code> becomes
+        <code>GET https://example.com/.well-known/lnurlp/bob</code>, which your server
+        routes to this library.
+      </p>
+    </li>
+    <li>
+      <h3>The server returns pay parameters</h3>
+      <p>Minimum and maximum sendable amounts, a description, and the callback URL to use next.</p>
+<pre><code>{
+  "callback": "https://example.com",
+  "maxSendable": 10000000000,
+  "minSendable": 100000,
+  "metadata": "[[\"text/plain\",\"Pay to bob@example.com\"], …]",
+  "tag": "payRequest",
+  "commentAllowed": false
+}</code></pre>
+    </li>
+    <li>
+      <h3>The wallet asks for an invoice</h3>
+      <p>
+        It calls the callback with the chosen amount in millisatoshis:
+        <code>GET /bob?amount=2000</code>.
+      </p>
+    </li>
+    <li>
+      <h3>Your node issues it</h3>
+      <p>
+        The library requests a bolt11 invoice from the backend configured for that
+        username and hands it back under <code>pr</code>. The wallet pays it directly —
+        the library never touches funds.
+      </p>
+<pre><code>{
+  "pr": "lnbc20n1p…",
+  "status": "OK",
+  "successAction": { "tag": "message", "message": "Payment received!" },
+  "routes": [],
+  "disposable": false,
+  "error": null
+}</code></pre>
+    </li>
+  </ol>
+
+  <h2>Quick start</h2>
+  <p>Requires PHP 8.3 or newer and an LNbits wallet API key.</p>
+<pre><code>composer require php-lightning/lnaddress
+
+cp lightning-config.dist.php lightning-config.php   # settings
+cp backends.dist.json backends.json                 # per-user invoice backends
+
+composer serve                                      # http://localhost:8080</code></pre>
+
+  <h3>Settings — <code>lightning-config.php</code></h3>
+<pre><code>use PhpLightning\Config\LightningConfig;
+
+return (new LightningConfig())
+    -&gt;setDomain('yourdomain.com')
+    -&gt;setReceiver('default-receiver')
+    -&gt;setDescriptionTemplate('Pay to %s')                 // %s = the lightning address
+    -&gt;setSuccessMessage('Thanks for the payment!')
+    -&gt;setSendableRange(min: 100_000, max: 10_000_000_000) // millisats
+    -&gt;setCallbackUrl('https://yourdomain.com')
+    -&gt;addBackendsFile(getcwd() . '/backends.json');</code></pre>
+
+  <h3>Backends — <code>backends.json</code></h3>
+<pre><code>{
+  "bob":   { "type": "lnbits", "api_key": "abc...123", "api_endpoint": "http://localhost:5000" },
+  "alice": { "type": "lnbits", "api_key": "def...456", "api_endpoint": "http://localhost:5000" }
+}</code></pre>
+
+  <p>
+    Then point <code>/.well-known/lnurlp/{username}</code> at the app's
+    <code>/{username}</code> route, over HTTPS, and the address is live.
+  </p>
+
+  <h2>Under the hood</h2>
+  <p>
+    Built on the <a href="https://gacela-project.com">Gacela</a> framework as a small
+    modular monolith. Each module exposes a facade; the domain layer is pure PHP that
+    knows nothing about HTTP, which is what makes swapping the invoice backend — or
+    calling the library directly instead of over HTTP — straightforward.
+  </p>
+<pre><code>public/index.php → Router → InvoiceRoutesPlugin
+                              ├─ CorsMiddleware            wallets call cross-origin
+                              ├─ InvoiceExceptionHandler   errors → LNURL error object
+                              └─ InvoiceController
+                                   └─ InvoiceFacade
+                                        ├─ CallbackUrl       → pay parameters
+                                        └─ InvoiceGenerator  → bolt11 invoice
+                                             └─ LnbitsBackendInvoice → your node</code></pre>
+
+  <p>Using it as a library, without the HTTP layer:</p>
+<pre><code>use Gacela\Framework\Gacela;
+use PhpLightning\Invoice\InvoiceFacade;
+
+Gacela::bootstrap(__DIR__);
+
+$facade = new InvoiceFacade();
+$payParams = $facade-&gt;getCallbackUrl('bob');
+$invoice = $facade-&gt;generateInvoice('bob', 2_000); // millisats</code></pre>
+
+  <h2>Documentation</h2>
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Guide</th><th>Contents</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="https://github.com/php-lightning/lnaddress/blob/main/docs/getting-started.md">Getting started</a></td>
+        <td>Install, configure, run locally, deploy behind a real domain</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/php-lightning/lnaddress/blob/main/docs/configuration.md">Configuration</a></td>
+        <td>Every setter, its default, and the backends file format</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/php-lightning/lnaddress/blob/main/docs/api.md">HTTP API</a></td>
+        <td>Routes, payloads, CORS, LNURL error objects, nginx rewrite</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/php-lightning/lnaddress/blob/main/docs/architecture.md">Architecture</a></td>
+        <td>Modules, layers, request flow, adding a backend</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/php-lightning/lnaddress/blob/main/docs/development.md">Development</a></td>
+        <td>Composer scripts, tests, static analysis, releasing</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>FAQ</h2>
+
+  <h3>Does the library hold my money?</h3>
+  <p>
+    No. It asks your configured backend for an invoice and returns it. The payment settles
+    between the payer's wallet and your node.
+  </p>
+
+  <h3>Do I need LNbits?</h3>
+  <p>
+    LNbits is the backend implemented today. Adding another means a case in the
+    <code>BackendType</code> enum and an implementation of
+    <code>BackendInvoiceInterface</code> — the rest of the code depends on the interface,
+    not on LNbits.
+  </p>
+
+  <h3>Can one domain serve several people?</h3>
+  <p>
+    Yes. Every entry in <code>backends.json</code> is a username with its own endpoint and
+    API key, so <code>bob@</code> and <code>alice@</code> can point at different wallets.
+  </p>
+
+  <h3>Does it work in a browser wallet?</h3>
+  <p>
+    Yes — every response carries permissive CORS headers and <code>OPTIONS</code>
+    preflights are answered directly.
+  </p>
+
+  <h3>What is not implemented?</h3>
+  <p>
+    LNURL comments (LUD-12): <code>commentAllowed</code> is always <code>false</code>.
+  </p>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      MIT licensed ·
+      <a href="https://github.com/php-lightning/lnaddress">Source</a> ·
+      <a href="https://github.com/php-lightning/lnaddress/blob/main/CHANGELOG.md">Changelog</a> ·
+      <a href="https://github.com/php-lightning/lnaddress/wiki">Wiki</a> ·
+      <a href="https://github.com/php-lightning/lnaddress/issues">Issues</a>
+    </p>
+    <p>Not affiliated with LNbits or lightningaddress.com. Run your own node responsibly.</p>
+  </div>
+</footer>
+
+</body>
+</html>

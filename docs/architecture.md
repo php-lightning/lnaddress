@@ -69,7 +69,7 @@ src/
 | `Application\InvoiceGenerator` | Validates the amount, converts msat → sat, maps `InvoiceTransfer` to the response |
 | `Domain\CallbackUrl\LnAddressGenerator` | Resolves `username@domain`, falling back to the configured receiver |
 | `Domain\BackendInvoice\LnbitsBackendInvoice` | `POST {api_endpoint}/api/v1/payments` with `X-Api-Key`, `description_hash`, `unhashed_description` |
-| `Domain\BackendInvoice\EmptyBackendInvoice` | Null object for users without a usable backend |
+| `Domain\BackendInvoice\EmptyBackendInvoice` | No-op implementation of the interface; currently unused by the factory |
 | `Infrastructure\Middleware\CorsMiddleware` | `Access-Control-Allow-Origin: *`; answers `OPTIONS` preflight |
 | `Infrastructure\Handler\InvoiceExceptionHandler` | Turns any `Throwable` into `{status: ERROR, reason: …}` |
 | `Shared\Value\SendableRange` | Min/max msat bounds and `contains()` |
@@ -90,5 +90,5 @@ The Application layer stays untouched — it only knows the interface.
 
 ## Not implemented
 
-Marked as TODO in the code: LNURL comments (`commentAllowed` is always `false`) and image
-metadata in the pay params.
+LNURL comments: `commentAllowed` is always `false` (LUD-12), marked as TODO in
+`Application\CallbackUrl`.

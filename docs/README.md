@@ -1,5 +1,9 @@
 # Documentation
 
+The landing page for this folder is published at
+<https://php-lightning.github.io/lnaddress/> (`index.html`, deployed by
+`.github/workflows/pages.yml`).
+
 `php-lightning/lnaddress` turns a domain you control into a
 [Lightning Address](https://lightningaddress.com/) provider: it implements
 [LNURL-pay (LUD-06)](https://github.com/lnurl/luds/blob/luds/06.md) and issues invoices

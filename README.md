@@ -70,7 +70,8 @@ Wallets resolve `bob@yourdomain.com` through
 | [Architecture](docs/architecture.md) | Modules, layers, adding a backend |
 | [Development](docs/development.md) | Scripts, tests, static analysis, releasing |
 
-Also: [CHANGELOG](CHANGELOG.md) ·
+Also: [project page](https://php-lightning.github.io/lnaddress/) ·
+[CHANGELOG](CHANGELOG.md) ·
 [wiki](https://github.com/php-lightning/lnaddress/wiki) ·
 [demo template](https://github.com/php-lightning/demo-lnaddress)
 
