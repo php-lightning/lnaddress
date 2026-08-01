@@ -3,23 +3,23 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": ">=8.2",
-        "gacela-project/gacela": "^1.19",
+        "php": ">=8.3",
+        "gacela-project/gacela": "^1.21",
         "gacela-project/router": "^0.13",
-        "symfony/http-client": "^7.2"
+        "symfony/http-client": "^7.4"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.75",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "gacela-project/phpstan-extension": "^0.4",
         "phpstan/phpstan": "^2.2",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^12.5",
         "psalm/plugin-phpunit": "^0.19",
-        "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.11"
+        "rector/rector": "^2.5",
+        "vimeo/psalm": "^6.16"
     },
     "config": {
         "platform": {
-            "php": "8.2.27"
+            "php": "8.3.16"
         },
         "allow-plugins": {
             "composer/package-versions-deprecated": true

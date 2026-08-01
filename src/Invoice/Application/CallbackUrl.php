@@ -11,7 +11,7 @@ use PhpLightning\Shared\Value\SendableRange;
 
 final readonly class CallbackUrl implements CallbackUrlInterface
 {
-    private const TAG_PAY_REQUEST = 'payRequest';
+    private const string TAG_PAY_REQUEST = 'payRequest';
 
     public function __construct(
         private SendableRange $sendableRange,

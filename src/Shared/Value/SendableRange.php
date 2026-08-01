@@ -7,10 +7,10 @@ namespace PhpLightning\Shared\Value;
 final readonly class SendableRange
 {
     /** @var int 100 Minimum in msat (sat/1000) */
-    private const DEFAULT_MIN_SENDABLE_IN_MILLISATS = 100_000;
+    private const int DEFAULT_MIN_SENDABLE_IN_MILLISATS = 100_000;
 
     /** @var int 10 000 000 Maximum in msat (sat/1000) */
-    private const DEFAULT_MAX_SENDABLE_IN_MILLISATS = 10_000_000_000;
+    private const int DEFAULT_MAX_SENDABLE_IN_MILLISATS = 10_000_000_000;
 
     private function __construct(
         private int $min,

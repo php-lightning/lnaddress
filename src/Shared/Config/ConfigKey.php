@@ -11,12 +11,12 @@ namespace PhpLightning\Shared\Config;
  */
 final class ConfigKey
 {
-    public const BACKENDS = 'backends';
-    public const DOMAIN = 'domain';
-    public const RECEIVER = 'receiver';
-    public const SENDABLE_RANGE = 'sendable-range';
-    public const CALLBACK_URL = 'callback-url';
-    public const DESCRIPTION_TEMPLATE = 'description-template';
-    public const SUCCESS_MESSAGE = 'success-message';
-    public const INVOICE_MEMO = 'invoice-memo';
+    public const string BACKENDS = 'backends';
+    public const string DOMAIN = 'domain';
+    public const string RECEIVER = 'receiver';
+    public const string SENDABLE_RANGE = 'sendable-range';
+    public const string CALLBACK_URL = 'callback-url';
+    public const string DESCRIPTION_TEMPLATE = 'description-template';
+    public const string SUCCESS_MESSAGE = 'success-message';
+    public const string INVOICE_MEMO = 'invoice-memo';
 }
