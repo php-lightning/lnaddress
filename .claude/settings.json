@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "includeCoAuthoredBy": false,
+  "env": {
+    "XDEBUG_MODE": "off"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(composer test:*)",
+      "Bash(composer test-all:*)",
+      "Bash(composer quality:*)",
+      "Bash(composer phpunit:*)",
+      "Bash(composer psalm:*)",
+      "Bash(composer phpstan:*)",
+      "Bash(composer csrun:*)",
+      "Bash(composer csfix:*)",
+      "Bash(composer fix:*)",
+      "Bash(composer rector:*)",
+      "Bash(composer ctal:*)",
+      "Bash(composer static-clear-cache:*)",
+      "Bash(composer test-coverage:*)",
+      "Bash(composer validate:*)",
+      "Bash(composer outdated:*)",
+      "Bash(composer show:*)",
+      "Bash(composer dump-autoload:*)",
+      "Bash(vendor/bin/phpunit:*)",
+      "Bash(vendor/bin/psalm:*)",
+      "Bash(vendor/bin/phpstan:*)",
+      "Bash(vendor/bin/php-cs-fixer:*)",
+      "Bash(vendor/bin/rector:*)",
+      "Bash(php -v)",
+      "Bash(php -r:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh issue view:*)"
+    ],
+    "ask": [
+      "Bash(composer update:*)",
+      "Bash(composer require:*)",
+      "Bash(composer remove:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)"
+    ],
+    "deny": [
+      "Read(./lightning-config.php)",
+      "Read(./nostr.json)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  }
+}
