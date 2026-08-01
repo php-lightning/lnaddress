@@ -4,12 +4,6 @@
   <a href="https://github.com/php-lightning/lnaddress/actions">
     <img src="https://github.com/php-lightning/lnaddress/workflows/CI/badge.svg" alt="GitHub Build Status">
   </a>
-  <a href="https://scrutinizer-ci.com/g/php-lightning/lnaddress/?branch=main">
-    <img src="https://scrutinizer-ci.com/g/php-lightning/lnaddress/badges/quality-score.png?b=main" alt="Scrutinizer Code Quality">
-  </a>
-  <a href="https://scrutinizer-ci.com/g/php-lightning/lnaddress/?branch=main">
-    <img src="https://scrutinizer-ci.com/g/php-lightning/lnaddress/badges/coverage.png?b=main" alt="Scrutinizer Code Coverage">
-  </a>
   <a href="https://shepherd.dev/github/php-lightning/lnaddress">
     <img src="https://shepherd.dev/github/php-lightning/lnaddress/coverage.svg" alt="Psalm Type-coverage Status">
   </a>

@@ -86,7 +86,7 @@ out-of-memory error inside `resultCache.php`, the cause is a stale result cache 
 2. **Type Checker** — Psalm (with Shepherd) and PHPStan
 3. **Tests** — PHPUnit on PHP 8.3, 8.4 and 8.5, with locked and highest dependencies
 
-Scrutinizer (`.scrutinizer.yml`) collects coverage separately.
+Coverage is not collected in CI; run `composer test-coverage` locally for an HTML report.
 
 ## Releasing
 
